@@ -1,4 +1,22 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <catalog xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog" prefer="system">
     <nextCatalog catalog="nbproject/private/cache/retriever/catalog.xml"/>
+    <system systemId="file:/I:/Workspaces/NetBeansProjects/WS_Project/NiceViewService/src/java/ws/niceview/NiceViewWSDL.wsdl" uri="src/conf/xml-resources/web-services/NiceViewWebServiceFromWSDL/wsdl/NiceViewWSDL.wsdl"/>
+    <system systemId="file:/I:/Workspaces/NetBeansProjects/WS_Project/NiceViewService/src/java/ws/niceview/types/NiceViewXSD.xsd" uri="src/conf/xml-resources/web-services/NiceViewWebServiceFromWSDL/wsdl/types/NiceViewXSD.xsd"/>
+    <system systemId="http://fastmoney.imm.dtu.dk:8080/BankService?xsd=1" uri="src/conf/xml-resources/web-services/NiceViewWebServiceFromWSDL/wsdl/fastmoney.imm.dtu.dk_8080/BankService.xsd_1.xsd"/>
 </catalog>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

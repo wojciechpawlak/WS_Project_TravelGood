@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions name="NiceViewWSDL" targetNamespace="http://niceview.ws"
+    xmlns="http://schemas.xmlsoap.org/wsdl/"
+    xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+    xmlns:tns="http://niceview.ws" xmlns:ns1="urn://types.fastmoney.imm.dtu.dk" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:ns0="http://types.niceview.ws">
+    <types>
+        <xsd:schema targetNamespace="http://niceview.ws">
+            <xsd:import namespace="http://types.niceview.ws" schemaLocation="types/NiceViewXSD.xsd"/>
+            <xsd:import namespace="urn://types.fastmoney.imm.dtu.dk" schemaLocation="http://fastmoney.imm.dtu.dk:8080/BankService?xsd=1"/>
+        </xsd:schema>
+    </types>
+    <message name="getHotelsRequest">
+        <part name="city" type="xsd:string"/>
+        <part name="departureDate" type="xsd:date"/>
+        <part name="arrivalDate" type="xsd:date"/>
+    </message>
+    <message name="getHotelsResponse">
+        <part name="hotels" type="ns0:hotelListType"/>
+    </message>
+    <portType name="NiceViewWSDLPortType">
+        <operation name="getHotels">
+            <input name="input1" message="tns:getHotelsRequest"/>
+            <output name="output1" message="tns:getHotelsResponse"/>
+        </operation>
+    </portType>
+    <binding name="NiceViewWSDLBinding" type="tns:NiceViewWSDLPortType">
+        <soap:binding style="rpc" transport="http://schemas.xmlsoap.org/soap/http"/>
+        <operation name="getHotels">
+            <soap:operation/>
+            <input name="input1">
+                <soap:body use="literal"/>
+            </input>
+            <output name="output1">
+                <soap:body use="literal"/>
+            </output>
+        </operation>
+    </binding>
+    <service name="NiceViewWSDLService">
+        <port name="NiceViewWSDLPort" binding="tns:NiceViewWSDLBinding">
+            <soap:address location="http://localhost:${HttpDefaultPort}/service"/>
+        </port>
+    </service>
+</definitions>
+
+
+
+
+
+
+
+
+
+
