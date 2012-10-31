@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+    targetNamespace="urn:ws.imm.dtu:whitepages"
+    xmlns:tns="urn:ws.imm.dtu:whitepages"
+    elementFormDefault="qualified">
+
+    <xsd:element name="person" type="tns:personType" />
+    <xsd:element name="address" type="tns:addressType" />
+    <xsd:element name="status" type="xsd:string" />
+    <xsd:element name="wpfault" type="tns:faultType" />
+
+    <xsd:complexType name="personType">
+        <xsd:sequence>
+            <xsd:element name="address" type="tns:addressType" />
+        </xsd:sequence>
+
+        <xsd:attribute name="firstName" type="xsd:string" />
+        <xsd:attribute name="lastName" type="xsd:string" />
+        <xsd:attribute name="phone" type="xsd:string" />
+        
+    </xsd:complexType>
+
+    <xsd:complexType name="addressType">
+        <xsd:sequence>
+            <xsd:element name="streetName" type="xsd:string" />
+            <xsd:element name="postCode" type="xsd:string" />
+            <xsd:element name="cityName" type="xsd:string" />
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="faultType">
+        <xsd:sequence>
+            <xsd:element name="errorMessage" type="xsd:string"/>
+            <xsd:element name="person" type="tns:personType"/>
+        </xsd:sequence>
+    </xsd:complexType>
+    
+</xsd:schema>
