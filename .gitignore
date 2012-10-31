@@ -6,6 +6,12 @@
 *.war
 *.ear
 
+# WS specific
+**/web/WEB-INF/wsdl/
+**/src/conf/xml-resources/
+**/xml-resources/
+**/src/META-INF/wsdl/
+
 # NetBeans specific #
 build/
 nbbuild/
