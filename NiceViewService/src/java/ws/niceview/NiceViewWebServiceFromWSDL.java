@@ -5,9 +5,10 @@
 
 package ws.niceview;
 
-import java.util.Calendar;
+import dk.dtu.imm.fastmoney.types.CreditCardFaultType;
 import javax.jws.WebService;
 import ws.niceview.types.AddressType;
+import ws.niceview.types.BookHotelFaultType;
 import ws.niceview.types.HotelListType;
 import ws.niceview.types.HotelType;
 
@@ -18,7 +19,7 @@ import ws.niceview.types.HotelType;
 @WebService(serviceName = "NiceViewWSDLService", portName = "NiceViewWSDLPort", endpointInterface = "ws.niceview.NiceViewWSDLPortType", targetNamespace = "http://niceview.ws", wsdlLocation = "WEB-INF/wsdl/NiceViewWebServiceFromWSDL/NiceViewWSDL.wsdl")
 public class NiceViewWebServiceFromWSDL {
 
-    public HotelListType getHotels(String city, Calendar departureDate, Calendar arrivalDate) {
+    public ws.niceview.types.HotelListType getHotels(java.lang.String city, java.util.Calendar departureDate, java.util.Calendar arrivalDate) {
         HotelListType hotelList = new HotelListType();
 
         HotelType hotel = new HotelType();
@@ -37,6 +38,16 @@ public class NiceViewWebServiceFromWSDL {
         hotelList.getHotel().add(hotel);
 
         return hotelList;
+
+    }
+
+    public boolean bookHotel(java.lang.String bookingNumber, dk.dtu.imm.fastmoney.types.CreditCardInfoType creditCardInfo) throws BookHotelFault, BookHotelCreditCardFault {
+        if ("".equals(bookingNumber))
+            throw new BookHotelFault("Booking number cannot be empty", new BookHotelFaultType());
+
+        if ("".equals(creditCardInfo.getNumber()))
+            throw new BookHotelCreditCardFault("Number cannot be empty", new CreditCardFaultType());
+        return true;
     }
 
 }

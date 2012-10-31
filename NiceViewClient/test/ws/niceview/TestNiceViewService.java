@@ -4,9 +4,11 @@
  */
 package ws.niceview;
 
+import dk.dtu.imm.fastmoney.types.CreditCardInfoType;
 import java.util.Calendar;
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
@@ -16,24 +18,21 @@ import static org.junit.Assert.*;
  */
 public class TestNiceViewService {
 
-    public TestNiceViewService() {
-    }
+    private NiceViewWSDLPortType port;
 
-    @BeforeClass
-    public static void setUpClass() throws Exception {
-    }
+    @Before
+    public void setUp() throws Exception {
+        NiceViewWSDLService service = new ws.niceview.NiceViewWSDLService();
+        this.port = service.getNiceViewWSDLPort();
 
-    @AfterClass
-    public static void tearDownClass() throws Exception {
     }
 
     @Test
-    public void hello() {
+    public void testGetHotels() {
 
 
         try { // Call Web Service Operation
-            ws.niceview.NiceViewWSDLService service = new ws.niceview.NiceViewWSDLService();
-            ws.niceview.NiceViewWSDLPortType port = service.getNiceViewWSDLPort();
+
             // TODO initialize WS operation arguments here
             java.lang.String city = "";
             Calendar departureDate = Calendar.getInstance();
@@ -47,6 +46,43 @@ public class TestNiceViewService {
             // TODO handle custom exceptions here
             fail();
         }
+    }
+
+    @Test
+    public void testBookHotel() {
+
+            CreditCardInfoType creditCardInfo = new CreditCardInfoType();
+            creditCardInfo.setNumber("123");
+            
+            testBookHotel("test1", creditCardInfo, true);
+            testBookHotel("test2", creditCardInfo, true);
+
+            testBookHotel("", creditCardInfo, false);
+
+            creditCardInfo.setNumber("");
+
+            testBookHotel("test1", creditCardInfo, false);
+            testBookHotel("test2", creditCardInfo, false);
+
+        
+    }
+
+    private void testBookHotel(String bookingNumber, CreditCardInfoType creditCardInfo, boolean expectedToPass) {
+
+        try {
+
+            boolean result = port.bookHotel(bookingNumber, creditCardInfo);
+
+            assertTrue(expectedToPass);
+
+        } catch (BookHotelCreditCardFault ex) {
+            assertFalse(expectedToPass);
+            
+        } catch (BookHotelFault ex) {
+            assertFalse(expectedToPass);
+
+        }
 
     }
+   
 }

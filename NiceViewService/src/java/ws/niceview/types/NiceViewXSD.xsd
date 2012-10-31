@@ -36,6 +36,13 @@
             <xsd:element name="hotelReservationServiceName" type="xsd:string"></xsd:element>
         </xsd:sequence>
     </xsd:complexType>
-
+    <xsd:complexType name="BookHotelFaultType">
+        <xsd:sequence>
+            <xsd:element name="message" type="xsd:string"></xsd:element>
+        </xsd:sequence>
+    </xsd:complexType>
+    
+    <xsd:element name="BookHotelFault" type="tns:BookHotelFaultType"></xsd:element>
 </xsd:schema>
+
 
