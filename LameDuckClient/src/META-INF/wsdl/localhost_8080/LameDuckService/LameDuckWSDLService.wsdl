@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?><!-- Published by JAX-WS RI at http://jax-ws.dev.java.net. RI's version is JAX-WS RI 2.1.3.3-hudson-757-SNAPSHOT. --><definitions xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://j2ee.netbeans.org/wsdl/LameDuckService/LameDuckWSDL" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" name="LameDuckWSDL" targetNamespace="http://j2ee.netbeans.org/wsdl/LameDuckService/LameDuckWSDL">
+    <types>
+        <xsd:schema xmlns:tns="http://j2ee.netbeans.org/wsdl/LameDuckService/LameDuckWSDL" targetNamespace="http://j2ee.netbeans.org/wsdl/LameDuckService/LameDuckWSDL">
+            <xsd:complexType name="requestGetFlightType">
+                <xsd:sequence>
+                    <xsd:element name="flightStart" type="xsd:string"></xsd:element>
+                    <xsd:element name="flightDestination" type="xsd:string"></xsd:element>
+                    <xsd:element name="flightDate" type="xsd:date"></xsd:element>
+                </xsd:sequence>
+            </xsd:complexType>
+            <xsd:complexType name="flightInformationType">
+                <xsd:sequence>
+                    <xsd:element name="bookingNumber" type="xsd:string"></xsd:element>
+                    <xsd:element name="price" type="xsd:double"></xsd:element>
+                    <xsd:element name="airlineReservationServiceName" type="xsd:string"></xsd:element>
+                    <xsd:element name="flight" type="tns:flightType"></xsd:element>
+                </xsd:sequence>
+            </xsd:complexType>
+            <xsd:complexType name="flightType">
+                <xsd:sequence>
+                    <xsd:element name="startAirport" type="xsd:string"></xsd:element>
+                    <xsd:element name="destinationAirport" type="xsd:string"></xsd:element>
+                    <xsd:element name="liftOffDate" type="xsd:date"></xsd:element>
+                    <xsd:element name="landingDate" type="xsd:date"></xsd:element>
+                    <xsd:element name="carrierName" type="xsd:string"></xsd:element>
+                </xsd:sequence>
+            </xsd:complexType>
+            <xsd:complexType name="flightInformationListType">
+                <xsd:sequence>
+                    <xsd:element name="flightInformation" type="tns:flightInformationType" minOccurs="0" maxOccurs="unbounded"></xsd:element>
+                </xsd:sequence>
+            </xsd:complexType>
+        </xsd:schema>
+    </types>
+    <message name="getFlightsRequest">
+        <part name="input" type="tns:requestGetFlightType"></part>
+    </message>
+    <message name="getFlightsResponse">
+        <part name="output" type="tns:flightInformationListType"></part>
+    </message>
+    <portType name="LameDuckWSDLPortType">
+        <operation name="getFlights">
+            <input name="input1" message="tns:getFlightsRequest"></input>
+            <output name="output1" message="tns:getFlightsResponse"></output>
+        </operation>
+    </portType>
+    <binding name="LameDuckWSDLPortTypeBinding" type="tns:LameDuckWSDLPortType">
+        <soap:binding style="rpc" transport="http://schemas.xmlsoap.org/soap/http"></soap:binding>
+        <operation name="getFlights">
+            <soap:operation></soap:operation>
+            <input name="input1">
+                <soap:body use="literal"></soap:body>
+            </input>
+            <output name="output1">
+                <soap:body use="literal"></soap:body>
+            </output>
+        </operation>
+    </binding>
+    <service name="LameDuckWSDLService">
+        <port name="LameDuckWSDLPortTypeBindingPort" binding="tns:LameDuckWSDLPortTypeBinding">
+            <soap:address location="http://localhost:8080/LameDuckService/LameDuckWSDLService"></soap:address>
+        </port>
+    </service>
+</definitions>
