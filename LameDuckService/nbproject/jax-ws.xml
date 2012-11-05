@@ -3,7 +3,7 @@
   <services>
     <service name="LameDuckService">
       <implementation-class>ws.lameduck.LameDuckService</implementation-class>
-      <wsdl-url>file:/I:/Software%20Development%20of%20Web%20Services/NetBeansProjects/Project/LameDuckService/src/java/ws/lameduck/LameDuckWSDL.wsdl</wsdl-url>
+      <wsdl-url>file:/I:/scoala/sfow/github/WS_Project_TravelGood/LameDuckService/src/java/ws/lameduck/LameDuckWSDL.wsdl</wsdl-url>
       <local-wsdl-file>LameDuckWSDL.wsdl</local-wsdl-file>
       <service-name>LameDuckWSDLService</service-name>
       <port-name>LameDuckWSDLPortTypeBindingPort</port-name>

@@ -7,19 +7,16 @@ package ws.lameduck;
 
 import javax.jws.WebService;
 import javax.xml.datatype.XMLGregorianCalendar;
-import org.netbeans.j2ee.wsdl.lameduckservice.lameduckwsdl.FlightInformationListType;
-import org.netbeans.j2ee.wsdl.lameduckservice.lameduckwsdl.FlightInformationType;
-import org.netbeans.j2ee.wsdl.lameduckservice.lameduckwsdl.FlightType;
+import org.netbeans.j2ee.wsdl.lameduckservice.lameduckwsdl.*;
 
 /**
  *
- * @author s120997
+ * @author s120930
  */
 @WebService(serviceName = "LameDuckWSDLService", portName = "LameDuckWSDLPortTypeBindingPort", endpointInterface = "org.netbeans.j2ee.wsdl.lameduckservice.lameduckwsdl.LameDuckWSDLPortType", targetNamespace = "http://j2ee.netbeans.org/wsdl/LameDuckService/LameDuckWSDL", wsdlLocation = "WEB-INF/wsdl/LameDuckService/LameDuckWSDL.wsdl")
 public class LameDuckService {
 
     public org.netbeans.j2ee.wsdl.lameduckservice.lameduckwsdl.FlightInformationListType getFlights(org.netbeans.j2ee.wsdl.lameduckservice.lameduckwsdl.RequestGetFlightType input) {
-
         String start = input.getFlightStart();
         String destination = input.getFlightDestination();
         XMLGregorianCalendar dateFlight = input.getFlightDate();
@@ -40,10 +37,33 @@ public class LameDuckService {
         myFlight.setLandingDate(dateFlight);
         myFlightInformation.setFlight(myFlight);
 
+        FlightInformationType myFlightInformation2 = new FlightInformationType();
+        myFlightInformation2.setBookingNumber("54321B");
+        myFlightInformation2.setAirlineReservationServiceName("AirAustria");
+        myFlightInformation2.setPrice(21.43);
+        FlightType myFlight2 = new FlightType();
+        myFlight2.setCarrierName("Nikki");
+        myFlight2.setStartAirport("Copenhagen");
+        myFlight2.setDestinationAirport("Bucharest");
+        myFlight2.setLiftOffDate(dateFlight);
+        myFlight2.setLandingDate(dateFlight);
+        myFlightInformation2.setFlight(myFlight2);
+
 
         myListOfFlights.getFlightInformation().add(myFlightInformation);
+        myListOfFlights.getFlightInformation().add(myFlightInformation2);
 
         return myListOfFlights;
+    }
+
+    public boolean bookFlight(java.lang.String part1) {
+        //TODO implement this method
+        throw new UnsupportedOperationException("Not implemented yet.");
+    }
+
+    public void cancelFlight(org.netbeans.j2ee.wsdl.lameduckservice.lameduckwsdl.RequestCancelFlightType part1) {
+        //TODO implement this method
+        throw new UnsupportedOperationException("Not implemented yet.");
     }
 
 }

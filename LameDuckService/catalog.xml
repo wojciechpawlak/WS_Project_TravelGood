@@ -2,7 +2,12 @@
 <catalog xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog" prefer="system">
     <system systemId="file:/I:/Software%20Development%20of%20Web%20Services/NetBeansProjects/Project/LameDuckService/src/java/ws/lameduck/LameDuckWSDL.wsdl" uri="src/conf/xml-resources/web-services/LameDuckService/wsdl/LameDuckWSDL.wsdl"/>
     <nextCatalog catalog="nbproject/private/cache/retriever/catalog.xml"/>
+    <system systemId="file:/I:/scoala/sfow/github/WS_Project_TravelGood/LameDuckService/src/java/ws/lameduck/LameDuckWSDL.wsdl" uri="src/conf/xml-resources/web-services/LameDuckService/wsdl/LameDuckWSDL.wsdl"/>
+    <system systemId="http://fastmoney.imm.dtu.dk:8080/BankService?xsd=1" uri="src/conf/xml-resources/web-services/LameDuckService/wsdl/fastmoney.imm.dtu.dk_8080/BankService.xsd_1.xsd"/>
 </catalog>
+
+
+
 
 
 
