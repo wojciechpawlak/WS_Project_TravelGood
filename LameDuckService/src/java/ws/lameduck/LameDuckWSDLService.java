@@ -11,10 +11,10 @@ import org.netbeans.j2ee.wsdl.lameduckservice.lameduckwsdl.*;
 
 /**
  *
- * @author s120930
+ * @author s120997
  */
-@WebService(serviceName = "LameDuckWSDLService", portName = "LameDuckWSDLPortTypeBindingPort", endpointInterface = "org.netbeans.j2ee.wsdl.lameduckservice.lameduckwsdl.LameDuckWSDLPortType", targetNamespace = "http://j2ee.netbeans.org/wsdl/LameDuckService/LameDuckWSDL", wsdlLocation = "WEB-INF/wsdl/LameDuckService/LameDuckWSDL.wsdl")
-public class LameDuckService {
+@WebService(serviceName = "LameDuckWSDLService", portName = "LameDuckWSDLPortTypeBindingPort", endpointInterface = "org.netbeans.j2ee.wsdl.lameduckservice.lameduckwsdl.LameDuckWSDLPortType", targetNamespace = "http://j2ee.netbeans.org/wsdl/LameDuckService/LameDuckWSDL", wsdlLocation = "WEB-INF/wsdl/LameDuckWSDLService/LameDuckWSDL.wsdl")
+public class LameDuckWSDLService {
 
     public org.netbeans.j2ee.wsdl.lameduckservice.lameduckwsdl.FlightInformationListType getFlights(org.netbeans.j2ee.wsdl.lameduckservice.lameduckwsdl.RequestGetFlightType input) {
         String start = input.getFlightStart();
@@ -65,5 +65,6 @@ public class LameDuckService {
         //TODO implement this method
         throw new UnsupportedOperationException("Not implemented yet.");
     }
+
 
 }
