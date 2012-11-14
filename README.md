@@ -20,4 +20,13 @@ How-to:
 	 - Check "Also replace local wsdl file with the original one .... " !!! 
 	 - Right click on the project, select "Clean and build"
 	 - Run your tests, they should work fine now
+	 
+	 Worst-case scenario (applies only to Service projects):
+	 - Backup (copy to notepad or sth) the contents of your *Service.java file (the one containing web service implementation)
+	 	(WARNING - your *Service.java file will disappear after the you complete the next step!)
+	 - Expand your project, expand "Web Service References", right-click on the reference and click "Delete"
+	 - Right-click on the project, and select "New -> Web Service from WSDL.."
+	 - Pick our WSDL file and create the webservice
+	 - Once the new java file is created, open it and replace the dummy methods with the ones you have in your backup (and only methods)
+	 - Clean & Build, you should be good to go
  
