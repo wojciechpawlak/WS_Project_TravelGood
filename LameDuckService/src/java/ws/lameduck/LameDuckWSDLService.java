@@ -7,16 +7,20 @@ package ws.lameduck;
 
 import javax.jws.WebService;
 import javax.xml.datatype.XMLGregorianCalendar;
-import org.netbeans.j2ee.wsdl.lameduckservice.lameduckwsdl.*;
+import ws.lameduck.types.FlightInformationListType;
+import ws.lameduck.types.FlightInformationType;
+import ws.lameduck.types.FlightType;
 
 /**
  *
  * @author s120930
  */
-@WebService(serviceName = "LameDuckWSDLService", portName = "LameDuckWSDLPortTypeBindingPort", endpointInterface = "org.netbeans.j2ee.wsdl.lameduckservice.lameduckwsdl.LameDuckWSDLPortType", targetNamespace = "http://j2ee.netbeans.org/wsdl/LameDuckService/LameDuckWSDL", wsdlLocation = "WEB-INF/wsdl/LameDuckService/LameDuckWSDL.wsdl")
-public class LameDuckService {
+@WebService(serviceName = "LameDuckWSDLService", portName = "LameDuckWSDLPortTypeBindingPort", endpointInterface = "org.netbeans.j2ee.wsdl.lameduckservice.lameduckwsdl.LameDuckWSDLPortType", targetNamespace = "http://j2ee.netbeans.org/wsdl/LameDuckService/LameDuckWSDL", wsdlLocation = "WEB-INF/wsdl/LameDuckWSDLService/LameDuckWSDL.wsdl")
+public class LameDuckWSDLService {
 
-    public org.netbeans.j2ee.wsdl.lameduckservice.lameduckwsdl.FlightInformationListType getFlights(org.netbeans.j2ee.wsdl.lameduckservice.lameduckwsdl.RequestGetFlightType input) {
+    public ws.lameduck.types.FlightInformationListType getFlights(ws.lameduck.types.RequestGetFlightType input) {
+
+        //
         String start = input.getFlightStart();
         String destination = input.getFlightDestination();
         XMLGregorianCalendar dateFlight = input.getFlightDate();
@@ -24,6 +28,7 @@ public class LameDuckService {
         //System.out.println("Start = " + start + "\nDestination = " + destination + "\nDate = " + dateFlight.toString());
 
         FlightInformationListType myListOfFlights = new FlightInformationListType();
+        FlightInformationListType returnListOfFlights = new FlightInformationListType();
 
         FlightInformationType myFlightInformation = new FlightInformationType();
         myFlightInformation.setBookingNumber("12345A");
@@ -53,15 +58,29 @@ public class LameDuckService {
         myListOfFlights.getFlightInformation().add(myFlightInformation);
         myListOfFlights.getFlightInformation().add(myFlightInformation2);
 
-        return myListOfFlights;
+
+
+        //
+        for(FlightInformationType fit:myListOfFlights.getFlightInformation()){
+
+            if(start.equals(fit.getFlight().getStartAirport()) &&
+               destination.equals(fit.getFlight().getDestinationAirport()) &&
+               dateFlight.equals(fit.getFlight().getLiftOffDate())
+                    ){
+                returnListOfFlights.getFlightInformation().add(fit);
+            }
+
+        }
+
+        return returnListOfFlights;
     }
 
-    public boolean bookFlight(java.lang.String part1) {
+    public void cancelFlight(ws.lameduck.types.RequestCancelFlightType part1) {
         //TODO implement this method
         throw new UnsupportedOperationException("Not implemented yet.");
     }
 
-    public void cancelFlight(org.netbeans.j2ee.wsdl.lameduckservice.lameduckwsdl.RequestCancelFlightType part1) {
+    public boolean bookFlights(ws.lameduck.types.RequestBookFlightType part1) {
         //TODO implement this method
         throw new UnsupportedOperationException("Not implemented yet.");
     }
