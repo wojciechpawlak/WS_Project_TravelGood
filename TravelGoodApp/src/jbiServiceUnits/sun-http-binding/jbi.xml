@@ -3,6 +3,6 @@
     <services binding-component="true">
         <provides endpoint-name="NiceViewWSDLPort" interface-name="ns3:NiceViewWSDLPortType" service-name="ns3:NiceViewWSDLService"/>
         <provides endpoint-name="LameDuckWSDLPortTypeBindingPort" interface-name="ns4:LameDuckWSDLPortType" service-name="ns4:LameDuckWSDLService"/>
-        <consumes endpoint-name="TravelGoodWSDLPort" interface-name="ns1:TravelGoodWSDLPortType" service-name="ns1:TravelGoodWSDLService"/>
+        <consumes endpoint-name="TravelGoodWSDLPortTypeBindingPort" interface-name="ns1:TravelGoodWSDLPortType" service-name="ns1:TravelGoodWSDLService"/>
     </services>
 </jbi>
