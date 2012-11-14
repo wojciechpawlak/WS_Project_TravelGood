@@ -8,7 +8,7 @@
     xmlns="http://docs.oasis-open.org/wsbpel/2.0/process/executable"
     xmlns:sxt="http://www.sun.com/wsbpel/2.0/process/executable/SUNExtension/Trace" 
     xmlns:sxed="http://www.sun.com/wsbpel/2.0/process/executable/SUNExtension/Editor"
-    xmlns:sxeh="http://www.sun.com/wsbpel/2.0/process/executable/SUNExtension/ErrorHandling" xmlns:sxed2="http://www.sun.com/wsbpel/2.0/process/executable/SUNExtension/Editor2">
+    xmlns:sxeh="http://www.sun.com/wsbpel/2.0/process/executable/SUNExtension/ErrorHandling" xmlns:sxed2="http://www.sun.com/wsbpel/2.0/process/executable/SUNExtension/Editor2" xmlns:ns0="http://travelgood.ws">
     <import namespace="http://travelgood.ws" location="TravelGoodWSDL.wsdl" importType="http://schemas.xmlsoap.org/wsdl/"/>
     <import namespace="http://enterprise.netbeans.org/bpel/LameDuckWSDLServiceWrapper" location="LameDuckWSDLServiceWrapper.wsdl" importType="http://schemas.xmlsoap.org/wsdl/"/>
     <import namespace="http://j2ee.netbeans.org/wsdl/LameDuckService/LameDuckWSDL" location="http://localhost:8080/LameDuckService/LameDuckWSDLService?wsdl" importType="http://schemas.xmlsoap.org/wsdl/"/>
@@ -20,19 +20,59 @@
         <partnerLink name="PartnerLink1" xmlns:tns="http://travelgood.ws" partnerLinkType="tns:TravelGoodWSDL" myRole="TravelGoodWSDLPortTypeRole"/>
     </partnerLinks>
     <variables>
+        <variable name="GetHotelsOut" xmlns:tns="http://niceview.ws" messageType="tns:getHotelsResponse"/>
+        <variable name="GetHotelsIn" xmlns:tns="http://niceview.ws" messageType="tns:getHotelsRequest"/>
+        <variable name="GetHotelOut" xmlns:tns="http://travelgood.ws" messageType="tns:getHotelResponse"/>
+        <variable name="GetHotelIn" xmlns:tns="http://travelgood.ws" messageType="tns:getHotelRequest"/>
         <variable name="CreateItineraryOut" xmlns:tns="http://travelgood.ws" messageType="tns:createItineraryResponse"/>
         <variable name="CreateItineraryIn" xmlns:tns="http://travelgood.ws" messageType="tns:createItineraryRequest"/>
     </variables>
+    <correlationSets>
+        <correlationSet name="CustomerItineraryCorrelation" properties="ns0:itineraryId ns0:customerId"/>
+    </correlationSets>
     <sequence>
-        <receive name="Receive1" createInstance="yes" partnerLink="PartnerLink1" operation="createItinerary" xmlns:tns="http://travelgood.ws" portType="tns:TravelGoodWSDLPortType" variable="CreateItineraryIn"/>
+        <receive name="Receive1" createInstance="yes" partnerLink="PartnerLink1" operation="createItinerary" xmlns:tns="http://travelgood.ws" portType="tns:TravelGoodWSDLPortType" variable="CreateItineraryIn">
+            <correlations>
+                <correlation set="CustomerItineraryCorrelation" initiate="yes"/>
+            </correlations>
+        </receive>
         <assign name="Assign1">
             <copy>
-                <from>concat($CreateItineraryIn.customerId, 'Test')</from>
-                <to variable="CreateItineraryOut" part="itineraryId"/>
+                <from>'Itinerary Created'</from>
+                <to variable="CreateItineraryOut" part="output"/>
             </copy>
         </assign>
         <reply name="Reply1" partnerLink="PartnerLink1" operation="createItinerary" xmlns:tns="http://travelgood.ws" portType="tns:TravelGoodWSDLPortType" variable="CreateItineraryOut"/>
+        <receive name="Receive2" partnerLink="PartnerLink1" operation="getHotel" xmlns:tns="http://travelgood.ws" portType="tns:TravelGoodWSDLPortType" createInstance="no" variable="GetHotelIn">
+            <correlations>
+                <correlation set="CustomerItineraryCorrelation" initiate="no"/>
+            </correlations>
+        </receive>
+        <assign name="Assign2">
+            <copy>
+                <from variable="GetHotelIn" part="city"/>
+                <to variable="GetHotelsIn" part="city"/>
+            </copy>
+            <copy>
+                <from variable="GetHotelIn" part="arrivalDate"/>
+                <to variable="GetHotelsIn" part="arrivalDate"/>
+            </copy>
+            <copy>
+                <from variable="GetHotelIn" part="departureDate"/>
+                <to variable="GetHotelsIn" part="departureDate"/>
+            </copy>
+        </assign>
+        <invoke name="Invoke1" partnerLink="PartnerLink3" operation="getHotels" xmlns:tns="http://niceview.ws" portType="tns:NiceViewWSDLPortType" inputVariable="GetHotelsIn" outputVariable="GetHotelsOut"/>
+        <assign name="Assign3">
+            <copy>
+                <from variable="GetHotelsOut" part="hotels"/>
+                <to variable="GetHotelOut" part="output"/>
+            </copy>
+        </assign>
+        <reply name="Reply2" partnerLink="PartnerLink1" operation="getHotel" xmlns:tns="http://travelgood.ws" portType="tns:TravelGoodWSDLPortType" variable="GetHotelOut"/>
     </sequence>
 </process>
+
+
 
 

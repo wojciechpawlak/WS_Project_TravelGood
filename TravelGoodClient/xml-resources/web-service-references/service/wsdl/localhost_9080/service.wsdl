@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions name="TravelGoodWSDL" targetNamespace="http://travelgood.ws" xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:plnk="http://docs.oasis-open.org/wsbpel/2.0/plnktype" xmlns:ns="http://types.niceview.ws" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:tns="http://travelgood.ws" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:vprop="http://docs.oasis-open.org/wsbpel/2.0/varprop" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/">
+  <types>
+    <xsd:schema targetNamespace="http://travelgood.ws">
+            <xsd:import namespace="http://types.niceview.ws" schemaLocation="http://OP960-7N3KM4J.b45x.dtu.dk:9080/TravelGoodApp-sun-http-binding/TravelGoodBPEL/localhost_8080/NiceViewService/NiceViewWSDLService.xsd_1.xsd"/>
+        </xsd:schema>
+  </types>
+  <message name="getHotelRequest">
+    <part name="city" type="xsd:string">
+    </part>
+    <part name="arrivalDate" type="xsd:date">
+    </part>
+    <part name="departureDate" type="xsd:date">
+    </part>
+    <part name="customerId" type="xsd:int">
+    </part>
+    <part name="itineraryId" type="xsd:int">
+    </part>
+  </message>
+  <message name="createItineraryRequest">
+    <part name="customerId" type="xsd:int">
+    </part>
+    <part name="itineraryId" type="xsd:int">
+    </part>
+  </message>
+  <message name="createItineraryResponse">
+    <part name="output" type="xsd:string">
+    </part>
+  </message>
+  <message name="getHotelResponse">
+    <part name="output" type="ns:hotelListType">
+    </part>
+  </message>
+  <portType name="TravelGoodWSDLPortType">
+    <operation name="createItinerary">
+      <input name="input1" message="tns:createItineraryRequest">
+    </input>
+      <output name="output1" message="tns:createItineraryResponse">
+    </output>
+    </operation>
+    <operation name="getHotel">
+      <input name="input2" message="tns:getHotelRequest">
+    </input>
+      <output name="output2" message="tns:getHotelResponse">
+    </output>
+    </operation>
+  </portType>
+  <binding name="TravelGoodWSDLPortTypeBinding" type="tns:TravelGoodWSDLPortType">
+    <soap:binding style="rpc" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <operation name="createItinerary">
+      <soap:operation/>
+      <input name="input1">
+        <soap:body use="literal" namespace="http://travelgood.ws"/>
+      </input>
+      <output name="output1">
+        <soap:body use="literal" namespace="http://travelgood.ws"/>
+      </output>
+    </operation>
+    <operation name="getHotel">
+      <soap:operation/>
+      <input name="input2">
+        <soap:body use="literal" namespace="http://niceview.ws"/>
+      </input>
+      <output name="output2">
+        <soap:body use="literal"/>
+      </output>
+    </operation>
+  </binding>
+  <service name="TravelGoodWSDLService">
+    <port name="TravelGoodWSDLPortTypeBindingPort" binding="tns:TravelGoodWSDLPortTypeBinding">
+      <soap:address location="http://OP960-7N3KM4J.b45x.dtu.dk:9080/service"/>
+    </port>
+  </service>
+    <plnk:partnerLinkType name="TravelGoodWSDL">
+        <!-- A partner link type is automatically generated when a new port type is added. Partner link types are used by BPEL processes.
+In a BPEL process, a partner link represents the interaction between the BPEL process and a partner service. Each partner link is associated with a partner link type.
+A partner link type characterizes the conversational relationship between two services. The partner link type can have one or two roles.-->
+        <plnk:role name="TravelGoodWSDLPortTypeRole" portType="tns:TravelGoodWSDLPortType"/>
+    </plnk:partnerLinkType>
+    <vprop:property name="itineraryId" type="xsd:int"/>
+    <vprop:property name="customerId" type="xsd:int"/>
+    <vprop:propertyAlias messageType="tns:createItineraryRequest" part="itineraryId" propertyName="tns:itineraryId"/>
+    <vprop:propertyAlias messageType="tns:createItineraryRequest" part="customerId" propertyName="tns:customerId"/>
+    <vprop:propertyAlias messageType="tns:getHotelRequest" part="itineraryId" propertyName="tns:itineraryId"/>
+    <vprop:propertyAlias messageType="tns:getHotelRequest" part="customerId" propertyName="tns:customerId"/>
+</definitions>
