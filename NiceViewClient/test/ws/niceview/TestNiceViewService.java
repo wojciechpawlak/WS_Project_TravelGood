@@ -77,8 +77,33 @@ public class TestNiceViewService {
 
         } catch (BookHotelCreditCardFault ex) {
             assertFalse(expectedToPass);
-            
+
         } catch (BookHotelFault ex) {
+            assertFalse(expectedToPass);
+
+        }
+
+    }
+
+    @Test
+    public void testCancelHotel() {
+
+            testCancelHotel("test1", true);
+            testCancelHotel("test2", true);
+
+            testCancelHotel("", false);
+
+    }
+
+    private void testCancelHotel(String bookingNumber,boolean expectedToPass) {
+
+        try {
+
+            boolean result = port.cancelHotel(bookingNumber);
+
+            assertTrue(expectedToPass);
+
+        } catch (CancelHotelFault ex) {
             assertFalse(expectedToPass);
 
         }

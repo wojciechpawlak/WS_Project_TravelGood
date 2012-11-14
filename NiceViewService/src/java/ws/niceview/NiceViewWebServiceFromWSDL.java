@@ -9,12 +9,13 @@ import dk.dtu.imm.fastmoney.types.CreditCardFaultType;
 import javax.jws.WebService;
 import ws.niceview.types.AddressType;
 import ws.niceview.types.BookHotelFaultType;
+import ws.niceview.types.CancelHotelFaultType;
 import ws.niceview.types.HotelListType;
 import ws.niceview.types.HotelType;
 
 /**
  *
- * @author kucharekm
+ * @author mkucharek
  */
 @WebService(serviceName = "NiceViewWSDLService", portName = "NiceViewWSDLPort", endpointInterface = "ws.niceview.NiceViewWSDLPortType", targetNamespace = "http://niceview.ws", wsdlLocation = "WEB-INF/wsdl/NiceViewWebServiceFromWSDL/NiceViewWSDL.wsdl")
 public class NiceViewWebServiceFromWSDL {
@@ -47,6 +48,12 @@ public class NiceViewWebServiceFromWSDL {
 
         if ("".equals(creditCardInfo.getNumber()))
             throw new BookHotelCreditCardFault("Number cannot be empty", new CreditCardFaultType());
+        return true;
+    }
+
+    public boolean cancelHotel(java.lang.String bookingNumber) throws CancelHotelFault {
+        if ("".equals(bookingNumber))
+            throw new CancelHotelFault("Booking number cannot be empty", new CancelHotelFaultType());
         return true;
     }
 
