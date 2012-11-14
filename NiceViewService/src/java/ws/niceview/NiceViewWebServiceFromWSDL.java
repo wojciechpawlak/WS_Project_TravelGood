@@ -6,6 +6,7 @@
 package ws.niceview;
 
 import dk.dtu.imm.fastmoney.types.CreditCardFaultType;
+import java.util.Random;
 import javax.jws.WebService;
 import ws.niceview.types.AddressType;
 import ws.niceview.types.BookHotelFaultType;
@@ -20,23 +21,41 @@ import ws.niceview.types.HotelType;
 @WebService(serviceName = "NiceViewWSDLService", portName = "NiceViewWSDLPort", endpointInterface = "ws.niceview.NiceViewWSDLPortType", targetNamespace = "http://niceview.ws", wsdlLocation = "WEB-INF/wsdl/NiceViewWebServiceFromWSDL/NiceViewWSDL.wsdl")
 public class NiceViewWebServiceFromWSDL {
 
+    private int DAY_LIMIT = 14;
+
+    private HotelType[] hotelArray = new HotelType[] {
+        createHotel("Superb Hotel", "TestStreet", "12345", "Barcelona", "1", 50000.0, true),
+        createHotel("Nice Hotel", "TestStreet", "12345", "Vienna", "2", 2000.0, true),
+        createHotel("Passable Hotel", "TestStreet", "12345", "Vienna", "3", 500.0, true),
+        createHotel("Shitty Hotel", "TestStreet", "12345", "Zgierz", "4", 10.0, false)
+    };
+
     public ws.niceview.types.HotelListType getHotels(java.lang.String city, java.util.Calendar departureDate, java.util.Calendar arrivalDate) {
+
         HotelListType hotelList = new HotelListType();
+        boolean randomize = false;
+        Random rand = null;
 
-        HotelType hotel = new HotelType();
+        if (arrivalDate.get(java.util.Calendar.DAY_OF_YEAR) -
+               departureDate.get(java.util.Calendar.DAY_OF_YEAR) > DAY_LIMIT) {
+            randomize = true;
+            rand = new Random(System.currentTimeMillis());
+        }
 
-        hotel.setBookingNumber("12345");
-        hotel.setHotelName("Paradise");
-        hotel.setHotelStayPrice(150.0);
-        hotel.setIfCreditCardRequired(true);
+        for (HotelType hotel : hotelArray) {
 
-        AddressType hotelAddress = new AddressType();
+            if (hotel.getHotelAddress().getCity().equalsIgnoreCase(city)) {
+                if (randomize) {
+                    if (rand.nextBoolean()) {
+                        hotelList.getHotel().add(hotel);
+                    }
 
-        hotelAddress.setStreet("testStreet");
-
-        hotel.setHotelAddress(hotelAddress);
-
-        hotelList.getHotel().add(hotel);
+                } else {
+                    hotelList.getHotel().add(hotel);
+                    
+                }
+            }
+        }
 
         return hotelList;
 
@@ -55,6 +74,25 @@ public class NiceViewWebServiceFromWSDL {
         if ("".equals(bookingNumber))
             throw new CancelHotelFault("Booking number cannot be empty", new CancelHotelFaultType());
         return true;
+    }
+
+    private HotelType createHotel(String hotelName, String hotelStreet, String hotelPostcode, String hotelCity, String bookingNumber, double stayPrice, boolean ifCreditCardGuaranteeRequired) {
+
+        HotelType hotel = new HotelType();
+
+        hotel.setHotelName(hotelName);
+
+        AddressType hotelAddress = new AddressType();
+        hotelAddress.setStreet(hotelStreet);
+        hotelAddress.setPostcode(hotelPostcode);
+        hotelAddress.setCity(hotelCity);
+        hotel.setHotelAddress(hotelAddress);
+        
+        hotel.setBookingNumber(bookingNumber);
+        hotel.setHotelStayPrice(stayPrice);
+        hotel.setIfCreditCardRequired(ifCreditCardGuaranteeRequired);
+
+        return hotel;
     }
 
 }

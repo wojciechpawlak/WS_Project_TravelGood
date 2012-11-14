@@ -6,10 +6,10 @@ package ws.niceview;
 
 import dk.dtu.imm.fastmoney.types.CreditCardInfoType;
 import java.util.Calendar;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.junit.Before;
 import org.junit.Test;
+import ws.niceview.types.HotelListType;
+import ws.niceview.types.HotelType;
 import static org.junit.Assert.*;
 
 /**
@@ -30,41 +30,56 @@ public class TestNiceViewService {
     @Test
     public void testGetHotels() {
 
+        // the getHotels method returns the actual hotels only if the 
+        // difference between departure and arrival date is smaller than
+        // 14 days. If the difference is more, it randomizes the output.
+        // For testing, we need to make sure this difference is smaller.
+        Calendar departureDate = Calendar.getInstance();
+        Calendar arrivalDate = Calendar.getInstance();
 
-        try { // Call Web Service Operation
+        testGetHotels("Barcelona", departureDate, arrivalDate, new String[]{"Superb Hotel"});
+        testGetHotels("Vienna", departureDate, arrivalDate, new String[]{"Nice Hotel", "Passable Hotel"});
+        testGetHotels("Zgierz", departureDate, arrivalDate, new String[]{"Shitty Hotel"});
 
-            // TODO initialize WS operation arguments here
-            java.lang.String city = "";
-            Calendar departureDate = Calendar.getInstance();
-            Calendar arrivalDate = Calendar.getInstance();
-            // TODO process result here
-            ws.niceview.types.HotelListType result = port.getHotels(city, departureDate, arrivalDate);
+    }
 
-            assertEquals(1, result.getHotel().size());
-            System.out.println("Result = " + result);
-        } catch (Exception ex) {
-            // TODO handle custom exceptions here
-            fail();
+    private void testGetHotels(String city, Calendar departureDate, Calendar arrivalDate, String[] expectedHotelNames) {
+        HotelListType result = port.getHotels(city, departureDate, arrivalDate);
+
+        assertEquals(expectedHotelNames.length, result.getHotel().size());
+
+        for (String expectedHotelName : expectedHotelNames) {
+            int occurrences = 0;
+            for (HotelType hotel : result.getHotel()) {
+
+                if (expectedHotelName.equalsIgnoreCase(hotel.getHotelName())) {
+                    ++occurrences;
+                }
+
+            }
+
+            assertEquals("The expected hotel names does not match the webservice output", 1, occurrences);
+
         }
     }
 
     @Test
     public void testBookHotel() {
 
-            CreditCardInfoType creditCardInfo = new CreditCardInfoType();
-            creditCardInfo.setNumber("123");
-            
-            testBookHotel("test1", creditCardInfo, true);
-            testBookHotel("test2", creditCardInfo, true);
+        CreditCardInfoType creditCardInfo = new CreditCardInfoType();
+        creditCardInfo.setNumber("123");
 
-            testBookHotel("", creditCardInfo, false);
+        testBookHotel("test1", creditCardInfo, true);
+        testBookHotel("test2", creditCardInfo, true);
 
-            creditCardInfo.setNumber("");
+        testBookHotel("", creditCardInfo, false);
 
-            testBookHotel("test1", creditCardInfo, false);
-            testBookHotel("test2", creditCardInfo, false);
+        creditCardInfo.setNumber("");
 
-        
+        testBookHotel("test1", creditCardInfo, false);
+        testBookHotel("test2", creditCardInfo, false);
+
+
     }
 
     private void testBookHotel(String bookingNumber, CreditCardInfoType creditCardInfo, boolean expectedToPass) {
@@ -88,14 +103,14 @@ public class TestNiceViewService {
     @Test
     public void testCancelHotel() {
 
-            testCancelHotel("test1", true);
-            testCancelHotel("test2", true);
+        testCancelHotel("test1", true);
+        testCancelHotel("test2", true);
 
-            testCancelHotel("", false);
+        testCancelHotel("", false);
 
     }
 
-    private void testCancelHotel(String bookingNumber,boolean expectedToPass) {
+    private void testCancelHotel(String bookingNumber, boolean expectedToPass) {
 
         try {
 
@@ -109,5 +124,4 @@ public class TestNiceViewService {
         }
 
     }
-   
 }
