@@ -73,6 +73,7 @@ public class LameDuckWSDLService {
         }
 
         return returnListOfFlights;
+
     }
 
     public void cancelFlight(ws.lameduck.types.RequestCancelFlightType part1) {

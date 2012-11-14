@@ -4,8 +4,7 @@
     xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
     xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://j2ee.netbeans.org/wsdl/LameDuckService/LameDuckWSDL"
     xmlns:ns="urn://types.fastmoney.imm.dtu.dk"
-    xmlns:ns1="http://types.lameduck.ws"
-    xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/">
+    xmlns:ns1="http://types.lameduck.ws" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/">
     <types>
         <xsd:schema targetNamespace="http://j2ee.netbeans.org/wsdl/LameDuckService/LameDuckWSDL" xmlns:tns="http://j2ee.netbeans.org/wsdl/LameDuckService/LameDuckWSDL">
             <xsd:import namespace="http://types.lameduck.ws" schemaLocation="types/LameDuckXSD.xsd"/>
@@ -74,6 +73,7 @@
         </port>
     </service>
 </definitions>
+
 
 
 

@@ -8,13 +8,7 @@ package ws.lameduck;
 import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
 import javax.xml.datatype.DatatypeConfigurationException;
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
-import org.netbeans.j2ee.wsdl.lameduckservice.lameduckwsdl.FlightInformationListType;
-import static org.junit.Assert.*;
 import org.netbeans.j2ee.wsdl.lameduckservice.lameduckwsdl.FlightInformationType;
 
 /**
@@ -23,8 +17,10 @@ import org.netbeans.j2ee.wsdl.lameduckservice.lameduckwsdl.FlightInformationType
  */
 public class LameDuckJUnit {
 
+
     @Test
     public void getFlightTest1() throws DatatypeConfigurationException {
+
 
         org.netbeans.j2ee.wsdl.lameduckservice.lameduckwsdl.LameDuckWSDLService service = new org.netbeans.j2ee.wsdl.lameduckservice.lameduckwsdl.LameDuckWSDLService();
         org.netbeans.j2ee.wsdl.lameduckservice.lameduckwsdl.LameDuckWSDLPortType port = service.getLameDuckWSDLPortTypeBindingPort();
