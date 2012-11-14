@@ -17,6 +17,8 @@ import org.netbeans.j2ee.wsdl.lameduckservice.lameduckwsdl.*;
 public class LameDuckWSDLService {
 
     public org.netbeans.j2ee.wsdl.lameduckservice.lameduckwsdl.FlightInformationListType getFlights(org.netbeans.j2ee.wsdl.lameduckservice.lameduckwsdl.RequestGetFlightType input) {
+       
+        //
         String start = input.getFlightStart();
         String destination = input.getFlightDestination();
         XMLGregorianCalendar dateFlight = input.getFlightDate();
@@ -24,6 +26,7 @@ public class LameDuckWSDLService {
         //System.out.println("Start = " + start + "\nDestination = " + destination + "\nDate = " + dateFlight.toString());
 
         FlightInformationListType myListOfFlights = new FlightInformationListType();
+        FlightInformationListType returnListOfFlights = new FlightInformationListType();
 
         FlightInformationType myFlightInformation = new FlightInformationType();
         myFlightInformation.setBookingNumber("12345A");
@@ -53,7 +56,21 @@ public class LameDuckWSDLService {
         myListOfFlights.getFlightInformation().add(myFlightInformation);
         myListOfFlights.getFlightInformation().add(myFlightInformation2);
 
-        return myListOfFlights;
+       
+
+        //
+        for(FlightInformationType fit:myListOfFlights.getFlightInformation()){
+
+            if(start.equals(fit.getFlight().getStartAirport()) &&
+               destination.equals(fit.getFlight().getDestinationAirport()) &&
+               dateFlight.equals(fit.getFlight().getLiftOffDate())
+                    ){
+                returnListOfFlights.getFlightInformation().add(fit);
+            }
+
+        }
+
+        return returnListOfFlights;
     }
 
     public boolean bookFlight(java.lang.String part1) {
