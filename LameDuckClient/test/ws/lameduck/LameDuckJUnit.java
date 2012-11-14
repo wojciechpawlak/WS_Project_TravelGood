@@ -9,7 +9,6 @@ import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
 import javax.xml.datatype.DatatypeConfigurationException;
 import org.junit.Test;
-import org.netbeans.j2ee.wsdl.lameduckservice.lameduckwsdl.FlightInformationType;
 
 /**
  *
@@ -21,11 +20,10 @@ public class LameDuckJUnit {
     @Test
     public void getFlightTest1() throws DatatypeConfigurationException {
 
-
         org.netbeans.j2ee.wsdl.lameduckservice.lameduckwsdl.LameDuckWSDLService service = new org.netbeans.j2ee.wsdl.lameduckservice.lameduckwsdl.LameDuckWSDLService();
         org.netbeans.j2ee.wsdl.lameduckservice.lameduckwsdl.LameDuckWSDLPortType port = service.getLameDuckWSDLPortTypeBindingPort();
-        // TODO initialize WS operation arguments here
-        org.netbeans.j2ee.wsdl.lameduckservice.lameduckwsdl.RequestGetFlightType input = new org.netbeans.j2ee.wsdl.lameduckservice.lameduckwsdl.RequestGetFlightType();
+            // TODO initialize WS operation arguments here
+        ws.lameduck.types.RequestGetFlightType input = new ws.lameduck.types.RequestGetFlightType();
         input.setFlightDestination("Berlin");
         input.setFlightStart("Moscow");
 
@@ -34,8 +32,8 @@ public class LameDuckJUnit {
         input.setFlightDate(dateFlight);
 
         // TODO process result here
-        org.netbeans.j2ee.wsdl.lameduckservice.lameduckwsdl.FlightInformationListType result = port.getFlights(input);
-        FlightInformationType myResultToPrint = result.getFlightInformation().get(0);
+        ws.lameduck.types.FlightInformationListType result = port.getFlights(input);
+        ws.lameduck.types.FlightInformationType myResultToPrint = result.getFlightInformation().get(0);
         
         System.out.println(myResultToPrint.getAirlineReservationServiceName() + "\n" +
                            myResultToPrint.getBookingNumber() + "\n" +
