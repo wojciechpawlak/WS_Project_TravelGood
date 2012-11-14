@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+    targetNamespace="http://types.lameduck.ws"
+    xmlns:tns="http://types.lameduck.ws"
+    xmlns:jaxb="http://java.sun.com/xml/ns/jaxb"
+    elementFormDefault="qualified"
+    jaxb:version="2.0">
+	
+	<xsd:complexType name="requestGetFlightType">
+		<xsd:sequence>
+			<xsd:element name="flightStart" type="xsd:string"></xsd:element>
+			<xsd:element name="flightDestination" type="xsd:string"></xsd:element>
+			<xsd:element name="flightDate" type="xsd:date"></xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="flightInformationType">
+		<xsd:sequence>
+			<xsd:element name="bookingNumber" type="xsd:string"></xsd:element>
+			<xsd:element name="price" type="xsd:double"></xsd:element>
+			<xsd:element name="airlineReservationServiceName" type="xsd:string"></xsd:element>
+			<xsd:element name="flight" type="tns:flightType"></xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="flightType">
+		<xsd:sequence>
+			<xsd:element name="startAirport" type="xsd:string"></xsd:element>
+			<xsd:element name="destinationAirport" type="xsd:string"></xsd:element>
+			<xsd:element name="liftOffDate" type="xsd:date"></xsd:element>
+			<xsd:element name="landingDate" type="xsd:date"></xsd:element>
+			<xsd:element name="carrierName" type="xsd:string"></xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="flightInformationListType">
+		<xsd:sequence>
+			<xsd:element name="flightInformation" type="tns:flightInformationType" minOccurs="0" maxOccurs="unbounded"></xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="requestBookFlightType">
+		<xsd:sequence>
+			<xsd:element name="bookingNumber" type="xsd:string"></xsd:element>
+			<xsd:element name="creditCardInformation" type="ns:creditCardInfoType"></xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="requestCancelFlightType">
+		<xsd:sequence>
+			<xsd:element name="bookingNumber" type="xsd:string"></xsd:element>
+			<xsd:element name="price" type="xsd:double"></xsd:element>
+			<xsd:element name="creditCardInformation" type="ns:creditCardInfoType"></xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+</xsd:schema>
