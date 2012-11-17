@@ -5,6 +5,7 @@
 package ws.niceview;
 
 import dk.dtu.imm.fastmoney.types.CreditCardInfoType;
+import dk.dtu.imm.fastmoney.types.ExpirationDateType;
 import java.util.Calendar;
 import org.junit.Before;
 import org.junit.Test;
@@ -19,12 +20,24 @@ import static org.junit.Assert.*;
 public class TestNiceViewService {
 
     private NiceViewWSDLPortType port;
+    CreditCardInfoType correctCreditCardInfo;
+    CreditCardInfoType incorrectCreditCardInfo;
 
     @Before
     public void setUp() throws Exception {
         NiceViewWSDLService service = new ws.niceview.NiceViewWSDLService();
         this.port = service.getNiceViewWSDLPort();
 
+        correctCreditCardInfo = new CreditCardInfoType();
+        correctCreditCardInfo.setNumber("50408825");
+        correctCreditCardInfo.setName("Thor-Jensen Claus");
+
+        ExpirationDateType correctEDT = new ExpirationDateType();
+        correctEDT.setMonth(5);
+        correctEDT.setYear(9);
+        correctCreditCardInfo.setExpirationDate(correctEDT);
+
+        incorrectCreditCardInfo = new CreditCardInfoType();
     }
 
     @Test
@@ -66,20 +79,35 @@ public class TestNiceViewService {
     @Test
     public void testBookHotel() {
 
-        CreditCardInfoType creditCardInfo = new CreditCardInfoType();
-        creditCardInfo.setNumber("123");
+        // bookingNumber not specified
+        testBookHotel("", correctCreditCardInfo, false);
 
-        testBookHotel("test1", creditCardInfo, true);
-        testBookHotel("test2", creditCardInfo, true);
+        // bookingNumber does not exist
+        testBookHotel("test", correctCreditCardInfo, false);
 
-        testBookHotel("", creditCardInfo, false);
+        testBookHotel("2", correctCreditCardInfo, true);
 
-        creditCardInfo.setNumber("");
+        // not enough money on the valid account - hotel: 50000, money: 10000
+        testBookHotel("1", correctCreditCardInfo, false);
 
-        testBookHotel("test1", creditCardInfo, false);
-        testBookHotel("test2", creditCardInfo, false);
+        // creditCardInfo lacks number
+        testBookHotel("4", incorrectCreditCardInfo, false);
 
+        // creditCardInfto number specified is empty
+        incorrectCreditCardInfo.setNumber("");
+        testBookHotel("4", incorrectCreditCardInfo, false);
 
+        incorrectCreditCardInfo.setNumber("50408822");
+
+        // creditCardInfo lacks name
+        testBookHotel("4", incorrectCreditCardInfo, false);
+
+        incorrectCreditCardInfo.setName("Bech Camilla");
+
+        // creditCardInfo lacks expiration date
+        ExpirationDateType incorrectEDT = new ExpirationDateType();
+        incorrectCreditCardInfo.setExpirationDate(incorrectEDT);
+        testBookHotel("4", incorrectCreditCardInfo, false);
     }
 
     private void testBookHotel(String bookingNumber, CreditCardInfoType creditCardInfo, boolean expectedToPass) {
@@ -91,11 +119,16 @@ public class TestNiceViewService {
             assertTrue(expectedToPass);
 
         } catch (BookHotelCreditCardFault ex) {
+            System.out.println(ex.getMessage());
             assertFalse(expectedToPass);
 
         } catch (BookHotelFault ex) {
+            System.out.println(ex.getMessage());
             assertFalse(expectedToPass);
 
+        } catch (Exception ex) {
+            System.out.println(ex.getMessage());
+            assert(expectedToPass);
         }
 
     }
@@ -103,10 +136,15 @@ public class TestNiceViewService {
     @Test
     public void testCancelHotel() {
 
-        testCancelHotel("test1", true);
-        testCancelHotel("test2", true);
+        testBookHotel("2", correctCreditCardInfo, true);
+        testBookHotel("3", correctCreditCardInfo, true);
+
+        testCancelHotel("2", true);
+        testCancelHotel("3", true);
 
         testCancelHotel("", false);
+
+        testCancelHotel("4", false);
 
     }
 
@@ -115,10 +153,10 @@ public class TestNiceViewService {
         try {
 
             boolean result = port.cancelHotel(bookingNumber);
-
             assertTrue(expectedToPass);
 
         } catch (CancelHotelFault ex) {
+            System.out.println(ex.getMessage());
             assertFalse(expectedToPass);
 
         }
