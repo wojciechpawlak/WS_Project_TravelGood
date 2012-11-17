@@ -6,9 +6,10 @@
     <system systemId="file:/I:/scoala/sfow/github/WS_Project_TravelGood/LameDuckService/src/java/ws/lameduck/types/LameDuckXSD.xsd" uri="src/conf/xml-resources/web-services/LameDuckWSDLService/wsdl/types/LameDuckXSD.xsd"/>
     <system systemId="file:/H:/Private/Dokument/GitHub/WS_Project_TravelGood/LameDuckService/src/java/ws/lameduck/LameDuckWSDL.wsdl" uri="src/conf/xml-resources/web-services/LameDuckWSDLService/wsdl/LameDuckWSDL.wsdl"/>
     <system systemId="file:/H:/Private/Dokument/GitHub/WS_Project_TravelGood/LameDuckService/src/java/ws/lameduck/types/LameDuckXSD.xsd" uri="src/conf/xml-resources/web-services/LameDuckWSDLService/wsdl/types/LameDuckXSD.xsd"/>
-    <system systemId="http://fastmoney.imm.dtu.dk:8080/BankService?wsdl" uri="src/conf/xml-resources/web-service-references/BankService/wsdl/fastmoney.imm.dtu.dk_8080/BankService.wsdl"/>
-    <system systemId="http://fastmoney.imm.dtu.dk:8080/BankService?xsd=1" uri="src/conf/xml-resources/web-service-references/BankService/wsdl/fastmoney.imm.dtu.dk_8080/BankService.xsd_1.xsd"/>
+    <system systemId="http://fastmoney.imm.dtu.dk:8080/BankService?wsdl" uri="wsdl/fastmoney.imm.dtu.dk_8080/BankService.wsdl"/>
+    <system systemId="http://fastmoney.imm.dtu.dk:8080/BankService?xsd=1" uri="wsdl/fastmoney.imm.dtu.dk_8080/BankService.xsd_1.xsd"/>
 </catalog>
+
 
 
 

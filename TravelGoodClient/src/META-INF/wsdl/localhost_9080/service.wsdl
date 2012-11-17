@@ -1,16 +1,43 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<definitions name="TravelGoodWSDL" targetNamespace="http://travelgood.ws" xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:plnk="http://docs.oasis-open.org/wsbpel/2.0/plnktype" xmlns:ns="http://types.niceview.ws" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:tns="http://travelgood.ws" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:vprop="http://docs.oasis-open.org/wsbpel/2.0/varprop" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/">
+<definitions name="TravelGoodWSDL" targetNamespace="http://travelgood.ws" xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:plnk="http://docs.oasis-open.org/wsbpel/2.0/plnktype" xmlns:ns="http://types.niceview.ws" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:tns="http://travelgood.ws" xmlns:ns0="http://types.lameduck.ws" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:vprop="http://docs.oasis-open.org/wsbpel/2.0/varprop" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/">
   <types>
-    <xsd:schema targetNamespace="http://travelgood.ws">
-            <xsd:import namespace="http://types.niceview.ws" schemaLocation="http://Wojtek-PC:9080/TravelGoodApp-sun-http-binding/TravelGoodBPEL/localhost_8080/NiceViewService/NiceViewWSDLService.xsd_1.xsd"/>
+    <xsd:schema elementFormDefault="qualified" jaxb:version="2.0" targetNamespace="http://travelgood.ws" xmlns:jaxb="http://java.sun.com/xml/ns/jaxb">
+
+            <xsd:import namespace="http://types.niceview.ws" schemaLocation="http://OP960-7N3KM4J.b45x.dtu.dk:9080/TravelGoodApp-sun-http-binding/TravelGoodBPEL/localhost_8080/NiceViewService/NiceViewWSDLService.xsd_1.xsd"/>
+            <xsd:import namespace="http://types.lameduck.ws" schemaLocation="http://OP960-7N3KM4J.b45x.dtu.dk:9080/TravelGoodApp-sun-http-binding/TravelGoodBPEL/localhost_8080/LameDuckService/LameDuckWSDLService.xsd_1.xsd"/>
+            <xsd:complexType name="itineraryType">
+                <xsd:sequence>
+                    <xsd:element maxOccurs="unbounded" minOccurs="0" name="bookingsHotel" type="tns:bookingType"/>
+                    <xsd:element maxOccurs="unbounded" minOccurs="0" name="bookingsFlight" type="tns:bookingType"/>
+                    <xsd:element name="itineraryStartDate" type="xsd:date"/>
+                </xsd:sequence>
+            </xsd:complexType>
+            <xsd:complexType name="bookingType">
+                <xsd:sequence>
+                    <xsd:element name="bookingNumber" type="xsd:string"/>
+                    <xsd:element name="bookingStatus" type="xsd:string"/>
+                </xsd:sequence>
+            </xsd:complexType>
         </xsd:schema>
   </types>
-  <message name="getHotelRequest">
-    <part name="city" type="xsd:string">
+  <message name="getFlightResponse">
+    <part name="flightList" type="ns0:flightInformationListType">
     </part>
-    <part name="arrivalDate" type="xsd:date">
+  </message>
+  <message name="getItineraryRequest">
+    <part name="customerId" type="xsd:int">
     </part>
-    <part name="departureDate" type="xsd:date">
+    <part name="itineraryId" type="xsd:int">
+    </part>
+  </message>
+  <message name="cancelItineraryRequest">
+    <part name="customerId" type="xsd:int">
+    </part>
+    <part name="itineraryId" type="xsd:int">
+    </part>
+  </message>
+  <message name="addHotelRequest">
+    <part name="bookingNumber" type="xsd:string">
     </part>
     <part name="customerId" type="xsd:int">
     </part>
@@ -23,12 +50,94 @@
     <part name="itineraryId" type="xsd:int">
     </part>
   </message>
+  <message name="addHotelResponse">
+    <part name="confirmation" type="xsd:string">
+    </part>
+  </message>
+  <message name="removeHotelRequest">
+    <part name="bookingNumber" type="xsd:string">
+    </part>
+    <part name="customerId" type="xsd:int">
+    </part>
+    <part name="itineraryId" type="xsd:int">
+    </part>
+  </message>
+  <message name="getFlightRequest">
+    <part name="flightStart" type="xsd:string">
+    </part>
+    <part name="flightDestination" type="xsd:string">
+    </part>
+    <part name="flightDate" type="xsd:date">
+    </part>
+    <part name="customerId" type="xsd:int">
+    </part>
+    <part name="itineraryId" type="xsd:int">
+    </part>
+  </message>
+  <message name="bookingItineraryRequest">
+    <part name="customerId" type="xsd:int">
+    </part>
+    <part name="itineraryId" type="xsd:int">
+    </part>
+  </message>
+  <message name="addFlightResponse">
+    <part name="confirmation" type="xsd:string">
+    </part>
+  </message>
+  <message name="removeFlightRequest">
+    <part name="bookingNumber" type="xsd:string">
+    </part>
+    <part name="customerId" type="xsd:int">
+    </part>
+    <part name="itineraryId" type="xsd:int">
+    </part>
+  </message>
+  <message name="removeFlightResponse">
+    <part name="confirmation" type="xsd:string">
+    </part>
+  </message>
+  <message name="getHotelRequest">
+    <part name="city" type="xsd:string">
+    </part>
+    <part name="arrivalDate" type="xsd:date">
+    </part>
+    <part name="departureDate" type="xsd:date">
+    </part>
+    <part name="customerId" type="xsd:int">
+    </part>
+    <part name="itineraryId" type="xsd:int">
+    </part>
+  </message>
   <message name="createItineraryResponse">
-    <part name="output" type="xsd:string">
+    <part name="confirmation" type="xsd:string">
+    </part>
+  </message>
+  <message name="cancelItineraryResponse">
+    <part name="cancelValidation" type="xsd:string">
+    </part>
+  </message>
+  <message name="removeHotelResponse">
+    <part name="confirmation" type="xsd:string">
+    </part>
+  </message>
+  <message name="getItineraryResponse">
+    <part name="itinerary" type="tns:itineraryType">
+    </part>
+  </message>
+  <message name="bookingItineraryResponse">
+    <part name="bookingValidation" type="xsd:string">
     </part>
   </message>
   <message name="getHotelResponse">
-    <part name="output" type="ns:hotelListType">
+    <part name="hotelList" type="ns:hotelListType">
+    </part>
+  </message>
+  <message name="addFlightRequest">
+    <part name="bookingNumber" type="xsd:string">
+    </part>
+    <part name="customerId" type="xsd:int">
+    </part>
+    <part name="itineraryId" type="xsd:int">
     </part>
   </message>
   <portType name="TravelGoodWSDLPortType">
@@ -42,6 +151,54 @@
       <input name="input2" message="tns:getHotelRequest">
     </input>
       <output name="output2" message="tns:getHotelResponse">
+    </output>
+    </operation>
+    <operation name="getFlight">
+      <input name="input3" message="tns:getFlightRequest">
+    </input>
+      <output name="output3" message="tns:getFlightResponse">
+    </output>
+    </operation>
+    <operation name="addFlight">
+      <input name="input4" message="tns:addFlightRequest">
+    </input>
+      <output name="output4" message="tns:addFlightResponse">
+    </output>
+    </operation>
+    <operation name="addHotel">
+      <input name="input5" message="tns:addHotelRequest">
+    </input>
+      <output name="output5" message="tns:addHotelResponse">
+    </output>
+    </operation>
+    <operation name="removeFlight">
+      <input name="input6" message="tns:removeFlightRequest">
+    </input>
+      <output name="output6" message="tns:removeFlightResponse">
+    </output>
+    </operation>
+    <operation name="removeHotel">
+      <input name="input7" message="tns:removeHotelRequest">
+    </input>
+      <output name="output7" message="tns:removeHotelResponse">
+    </output>
+    </operation>
+    <operation name="bookingItinerary">
+      <input name="input8" message="tns:bookingItineraryRequest">
+    </input>
+      <output name="output8" message="tns:bookingItineraryResponse">
+    </output>
+    </operation>
+    <operation name="cancelItinerary">
+      <input name="input9" message="tns:cancelItineraryRequest">
+    </input>
+      <output name="output9" message="tns:cancelItineraryResponse">
+    </output>
+    </operation>
+    <operation name="getItinerary">
+      <input name="input10" message="tns:getItineraryRequest">
+    </input>
+      <output name="output10" message="tns:getItineraryResponse">
     </output>
     </operation>
   </portType>
@@ -65,10 +222,82 @@
         <soap:body use="literal" namespace="http://travelgood.ws"/>
       </output>
     </operation>
+    <operation name="getFlight">
+      <soap:operation/>
+      <input name="input3">
+        <soap:body use="literal" namespace="http://travelgood.ws"/>
+      </input>
+      <output name="output3">
+        <soap:body use="literal" namespace="http://travelgood.ws"/>
+      </output>
+    </operation>
+    <operation name="addFlight">
+      <soap:operation/>
+      <input name="input4">
+        <soap:body use="literal" namespace="http://travelgood.ws"/>
+      </input>
+      <output name="output4">
+        <soap:body use="literal" namespace="http://travelgood.ws"/>
+      </output>
+    </operation>
+    <operation name="addHotel">
+      <soap:operation/>
+      <input name="input5">
+        <soap:body use="literal" namespace="http://travelgood.ws"/>
+      </input>
+      <output name="output5">
+        <soap:body use="literal" namespace="http://travelgood.ws"/>
+      </output>
+    </operation>
+    <operation name="removeFlight">
+      <soap:operation/>
+      <input name="input6">
+        <soap:body use="literal" namespace="http://travelgood.ws"/>
+      </input>
+      <output name="output6">
+        <soap:body use="literal" namespace="http://travelgood.ws"/>
+      </output>
+    </operation>
+    <operation name="removeHotel">
+      <soap:operation/>
+      <input name="input7">
+        <soap:body use="literal" namespace="http://travelgood.ws"/>
+      </input>
+      <output name="output7">
+        <soap:body use="literal" namespace="http://travelgood.ws"/>
+      </output>
+    </operation>
+    <operation name="bookingItinerary">
+      <soap:operation/>
+      <input name="input8">
+        <soap:body use="literal" namespace="http://travelgood.ws"/>
+      </input>
+      <output name="output8">
+        <soap:body use="literal" namespace="http://travelgood.ws"/>
+      </output>
+    </operation>
+    <operation name="cancelItinerary">
+      <soap:operation/>
+      <input name="input9">
+        <soap:body use="literal" namespace="http://travelgood.ws"/>
+      </input>
+      <output name="output9">
+        <soap:body use="literal" namespace="http://travelgood.ws"/>
+      </output>
+    </operation>
+    <operation name="getItinerary">
+      <soap:operation/>
+      <input name="input10">
+        <soap:body use="literal" namespace="http://travelgood.ws"/>
+      </input>
+      <output name="output10">
+        <soap:body use="literal" namespace="http://travelgood.ws"/>
+      </output>
+    </operation>
   </binding>
   <service name="TravelGoodWSDLService">
     <port name="TravelGoodWSDLPortTypeBindingPort" binding="tns:TravelGoodWSDLPortTypeBinding">
-      <soap:address location="http://Wojtek-PC:9080/service"/>
+      <soap:address location="http://OP960-7N3KM4J.b45x.dtu.dk:9080/service"/>
     </port>
   </service>
     <plnk:partnerLinkType name="TravelGoodWSDL">
@@ -83,4 +312,8 @@ A partner link type characterizes the conversational relationship between two se
     <vprop:propertyAlias messageType="tns:createItineraryRequest" part="customerId" propertyName="tns:customerId"/>
     <vprop:propertyAlias messageType="tns:getHotelRequest" part="itineraryId" propertyName="tns:itineraryId"/>
     <vprop:propertyAlias messageType="tns:getHotelRequest" part="customerId" propertyName="tns:customerId"/>
+    <vprop:propertyAlias messageType="tns:addHotelRequest" part="customerId" propertyName="tns:customerId"/>
+    <vprop:propertyAlias messageType="tns:addHotelRequest" part="itineraryId" propertyName="tns:itineraryId"/>
+    <vprop:propertyAlias messageType="tns:getItineraryRequest" part="customerId" propertyName="tns:customerId"/>
+    <vprop:propertyAlias messageType="tns:getItineraryRequest" part="itineraryId" propertyName="tns:itineraryId"/>
 </definitions>

@@ -5,7 +5,7 @@
     <client name="LameDuckWSDLService">
       <wsdl-url>http://localhost:8080/LameDuckService/LameDuckWSDLService?wsdl</wsdl-url>
       <local-wsdl-file>localhost_8080/LameDuckService/LameDuckWSDLService.wsdl</local-wsdl-file>
-      <package-name>org.netbeans.j2ee.wsdl.lameduckservice.lameduckwsdl</package-name>
+      <package-name>ws.lameduck</package-name>
       <catalog-file>catalog.xml</catalog-file>
       <wsimport-options>
         <wsimport-option>

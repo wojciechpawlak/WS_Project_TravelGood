@@ -1,3 +1,8 @@
+/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
+
 package ws.niceview;
 
 import dk.dtu.imm.fastmoney.BankService;
@@ -18,9 +23,9 @@ import ws.niceview.types.HotelType;
 
 /**
  *
- * @author mkucharek
+ * @author s120997
  */
-@WebService(serviceName = "NiceViewWSDLService", portName = "NiceViewWSDLPort", endpointInterface = "ws.niceview.NiceViewWSDLPortType", targetNamespace = "http://niceview.ws", wsdlLocation = "WEB-INF/wsdl/NiceViewWebServiceFromWSDL/NiceViewWSDL.wsdl")
+@WebService(serviceName = "NiceViewWSDLService", portName = "NiceViewWSDLPort", endpointInterface = "ws.niceview.NiceViewWSDLPortType", targetNamespace = "http://niceview.ws", wsdlLocation = "WEB-INF/wsdl/NiceViewWSDLService/NiceViewWSDL.wsdl")
 public class NiceViewWebServiceFromWSDL {
 
     @WebServiceRef(wsdlLocation = "WEB-INF/wsdl/fastmoney.imm.dtu.dk_8080/BankService.wsdl")
@@ -82,7 +87,7 @@ public class NiceViewWebServiceFromWSDL {
             throw new BookHotelCreditCardFault("Credit Card Name is empty or was not provided", new CreditCardFaultType());
         } else if (creditCardInfo.getExpirationDate().getMonth() == 0 || creditCardInfo.getExpirationDate().getYear() == 0) {
             throw new BookHotelCreditCardFault("Credit Card Expiration Date was not provided", new CreditCardFaultType());
-        } 
+        }
 
         HotelType currentHotelToBook = new HotelType();
 
@@ -161,4 +166,5 @@ public class NiceViewWebServiceFromWSDL {
 
         return hotel;
     }
+
 }
