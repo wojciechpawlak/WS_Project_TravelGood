@@ -7,6 +7,8 @@ package ws.lameduck;
 
 import javax.jws.WebService;
 import javax.xml.datatype.XMLGregorianCalendar;
+import org.netbeans.j2ee.wsdl.lameduckservice.lameduckwsdl.BookFlightFault;
+import org.netbeans.j2ee.wsdl.lameduckservice.lameduckwsdl.CancelFlightFault;
 import ws.lameduck.types.FlightInformationListType;
 import ws.lameduck.types.FlightInformationType;
 import ws.lameduck.types.FlightType;
@@ -19,8 +21,7 @@ import ws.lameduck.types.FlightType;
 public class LameDuckWSDLService {
 
     public ws.lameduck.types.FlightInformationListType getFlights(ws.lameduck.types.RequestGetFlightType input) {
-
-        //
+ //
         String start = input.getFlightStart();
         String destination = input.getFlightDestination();
         XMLGregorianCalendar dateFlight = input.getFlightDate();
@@ -73,15 +74,14 @@ public class LameDuckWSDLService {
         }
 
         return returnListOfFlights;
-
     }
 
-    public void cancelFlight(ws.lameduck.types.RequestCancelFlightType part1) {
+    public boolean cancelFlight(ws.lameduck.types.RequestCancelFlightType input) throws CancelFlightFault {
         //TODO implement this method
         throw new UnsupportedOperationException("Not implemented yet.");
     }
 
-    public boolean bookFlights(ws.lameduck.types.RequestBookFlightType part1) {
+    public boolean bookFlights(ws.lameduck.types.RequestBookFlightType input) throws BookFlightFault {
         //TODO implement this method
         throw new UnsupportedOperationException("Not implemented yet.");
     }

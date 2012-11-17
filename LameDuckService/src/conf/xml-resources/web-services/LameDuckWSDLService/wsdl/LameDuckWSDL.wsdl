@@ -19,14 +19,24 @@
         <part name="output" type="ns1:flightInformationListType"/>
     </message>
     <message name="cancelFlightRequest">
-        <part name="part1" type="ns1:requestCancelFlightType"/>
+        <part name="input" type="ns1:requestCancelFlightType"/>
+    </message>
+    <message name="cancelFlightFault">
+        <part name="fault" element="ns1:CancelFlightFaultElement"/>
     </message>
     <message name="bookFlightRequest">
-        <part name="part1" type="ns1:requestBookFlightType"/>
+        <part name="input" type="ns1:requestBookFlightType"/>
     </message>
     <message name="bookFlightResponse">
-        <part name="part1" type="xsd:boolean"/>
+        <part name="output" type="xsd:boolean"/>
     </message>
+    <message name="cancelFlightResponse">
+        <part name="output" type="xsd:boolean"/>
+    </message>
+    <message name="bookFlightFault">
+        <part name="fault" element="ns1:BookFlightFaultElement"/>
+    </message>
+
     <portType name="LameDuckWSDLPortType">
         <operation name="getFlights">
             <input name="input1" message="tns:getFlightsRequest"/>
@@ -34,10 +44,13 @@
         </operation>
         <operation name="cancelFlight">
             <input name="input3" message="tns:cancelFlightRequest"/>
+            <output name="output3" message="tns:cancelFlightResponse"/>
+            <fault name="fault3" message="tns:cancelFlightFault"/>
         </operation>
         <operation name="bookFlights">
             <input name="input2" message="tns:bookFlightRequest"/>
             <output name="output2" message="tns:bookFlightResponse"/>
+            <fault name="fault2" message="tns:bookFlightFault" />
         </operation>
     </portType>
     <binding name="LameDuckWSDLPortTypeBinding" type="tns:LameDuckWSDLPortType">
@@ -56,6 +69,12 @@
             <input name="input3">
                 <soap:body use="literal"/>
             </input>
+            <output name="output3">
+                <soap:body use="literal"/>
+            </output>
+            <fault name="fault3">
+                <soap:fault name="fault3" use="literal"/>
+            </fault>
         </operation>
         <operation name="bookFlights">
             <soap:operation/>
@@ -65,6 +84,9 @@
             <output name="output2">
                 <soap:body use="literal"/>
             </output>
+            <fault name="fault2">
+                <soap:fault name="fault2" use="literal"/>
+            </fault>
         </operation>
     </binding>
     <service name="LameDuckWSDLService">
@@ -73,6 +95,8 @@
         </port>
     </service>
 </definitions>
+
+
 
 
 
