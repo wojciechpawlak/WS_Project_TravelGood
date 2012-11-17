@@ -26,6 +26,15 @@
     <message name="bookHotelCreditCardFault">
         <part name="fault2" element="ns1:CreditCardFault"></part>
     </message>
+    <message name="cancelHotelRequest">
+        <part name="bookingNumber" type="xsd:string"></part>
+    </message>
+    <message name="cancelHotelResponse">
+        <part name="ifCanceled" type="xsd:boolean"></part>
+    </message>
+    <message name="cancelHotelFault">
+        <part name="CHfault" element="ns0:CancelHotelFault"></part>
+    </message>
     <portType name="NiceViewWSDLPortType">
         <operation name="getHotels">
             <input name="getHotelsInput" message="tns:getHotelsRequest"></input>
@@ -37,25 +46,31 @@
             <fault name="bookHotelFault" message="tns:bookHotelFault"></fault>
             <fault name="creditCardFault" message="tns:bookHotelCreditCardFault"></fault>
         </operation>
+        <operation name="cancelHotel">
+            <input name="cancelHotelInput" message="tns:cancelHotelRequest"></input>
+            <output name="cancelHotelOutput" message="tns:cancelHotelResponse"></output>
+            <fault name="cancelHotelFault" message="tns:cancelHotelFault"></fault>
+        </operation>
     </portType>
-    <binding name="NiceViewWSDLBinding" type="tns:NiceViewWSDLPortType">
+    <binding name="NiceViewWSDLPortTypeBinding" type="tns:NiceViewWSDLPortType">
         <soap:binding style="rpc" transport="http://schemas.xmlsoap.org/soap/http"></soap:binding>
         <operation name="getHotels">
             <soap:operation></soap:operation>
             <input name="getHotelsInput">
-                <soap:body use="literal"></soap:body>
+                <soap:body use="literal" namespace="http://niceview.ws"></soap:body>
             </input>
+            <!-- Should work -->
             <output name="getHotelsOutput">
-                <soap:body use="literal"></soap:body>
+                <soap:body use="literal" namespace="http://niceview.ws"></soap:body>
             </output>
         </operation>
         <operation name="bookHotel">
             <soap:operation></soap:operation>
             <input name="bookHotelInput">
-                <soap:body use="literal"></soap:body>
+                <soap:body use="literal" namespace="http://niceview.ws"></soap:body>
             </input>
             <output name="bookHotelOutput">
-                <soap:body use="literal"></soap:body>
+                <soap:body use="literal" namespace="http://niceview.ws"></soap:body>
             </output>
             <fault name="bookHotelFault">
                 <soap:fault name="bookHotelFault" use="literal"></soap:fault>
@@ -64,9 +79,21 @@
                 <soap:fault name="creditCardFault" use="literal"></soap:fault>
             </fault>
         </operation>
+        <operation name="cancelHotel">
+            <soap:operation></soap:operation>
+            <input name="cancelHotelInput">
+                <soap:body use="literal" namespace="http://niceview.ws"></soap:body>
+            </input>
+            <output name="cancelHotelOutput">
+                <soap:body use="literal" namespace="http://niceview.ws"></soap:body>
+            </output>
+            <fault name="cancelHotelFault">
+                <soap:fault name="cancelHotelFault" use="literal"></soap:fault>
+            </fault>
+        </operation>
     </binding>
     <service name="NiceViewWSDLService">
-        <port name="NiceViewWSDLPort" binding="tns:NiceViewWSDLBinding">
+        <port name="NiceViewWSDLPort" binding="tns:NiceViewWSDLPortTypeBinding">
             <soap:address location="http://localhost:8080/NiceViewService/NiceViewWSDLService"></soap:address>
         </port>
     </service>

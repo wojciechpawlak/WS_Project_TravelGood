@@ -1,4 +1,4 @@
-CHP_Project_TravelGood
+WS_Project_TravelGood
 ======================
 
 A set of web services for a travel agency web application. Project work for 02267 Software Development of Web Services E12 that took place in Fall 2012 at DTU.
@@ -37,4 +37,22 @@ How-to:
 	 - Check "Also replace local wsdl file with the original one .... " !!! 
 	 - Right click on the project, select "Clean and build"
 	 - Run your tests, they should work fine now
+	 
+	 How to handle the update of BPEL Web Service
+	 if there was a change in WSDL file for LameDuck or NiceView:
+	 - make change in WSDL file for LameDuck or NiceView
+	 - refresh the Web Service
+	 - deploy the Web Service
+	 - copy the WSDL link from admin console
+	 - in BPEL Web Service project remove localhost_8080 folder, wrapper WSDL file and links in referenced resources
+	 - add  New > External WSDL Document(s)... and paste WSDL link from admin console in "From URL:"
+	 - wait a couple of seconds (try to collapse the menus; in worst case restart NetBeans)
+	 - open BPEL file and remove the Partner Link (on the right)
+	 - add new partner links through drag dropping WSDL file from localhost_8080 folder to the right side of BPEL diagram
+	 - in the menu that pops up keep the defaults
+	 - if there is an error when XML validated, you cannot Deploy, so turn off the server and restart NetBeans
+	 - error disappears after restart, so the BPEL Web Service can be deployed
+	 - run tests in BPEL Client
+	 
+	 
  

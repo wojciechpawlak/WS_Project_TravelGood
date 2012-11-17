@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<definitions name="LameDuckWSDL" targetNamespace="http://j2ee.netbeans.org/wsdl/LameDuckService/LameDuckWSDL"
+<definitions name="LameDuckWSDL" targetNamespace="http://lameduck.ws"
     xmlns="http://schemas.xmlsoap.org/wsdl/"
     xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
-    xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://j2ee.netbeans.org/wsdl/LameDuckService/LameDuckWSDL"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://lameduck.ws"
     xmlns:ns="urn://types.fastmoney.imm.dtu.dk"
     xmlns:ns1="http://types.lameduck.ws" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/">
     <types>
-        <xsd:schema targetNamespace="http://j2ee.netbeans.org/wsdl/LameDuckService/LameDuckWSDL" xmlns:tns="http://j2ee.netbeans.org/wsdl/LameDuckService/LameDuckWSDL">
+        <xsd:schema targetNamespace="http://lameduck.ws">
             <xsd:import namespace="http://types.lameduck.ws" schemaLocation="types/LameDuckXSD.xsd"/>
             <!-- Here is the import that is making a Broken Reference : <xsd:import namespace="urn://types.fastmoney.imm.dtu.dk" schemaLocation="http://fastmoney.imm.dtu.dk:8080/BankService?xsd=1"/>-->
             <xsd:import namespace="urn://types.fastmoney.imm.dtu.dk" schemaLocation="http://fastmoney.imm.dtu.dk:8080/BankService?xsd=1"/>
@@ -19,14 +19,24 @@
         <part name="output" type="ns1:flightInformationListType"/>
     </message>
     <message name="cancelFlightRequest">
-        <part name="part1" type="ns1:requestCancelFlightType"/>
+        <part name="input" type="ns1:requestCancelFlightType"/>
+    </message>
+    <message name="cancelFlightFault">
+        <part name="fault" element="ns1:CancelFlightFaultElement"/>
     </message>
     <message name="bookFlightRequest">
-        <part name="part1" type="ns1:requestBookFlightType"/>
+        <part name="input" type="ns1:requestBookFlightType"/>
     </message>
     <message name="bookFlightResponse">
-        <part name="part1" type="xsd:boolean"/>
+        <part name="output" type="xsd:boolean"/>
     </message>
+    <message name="cancelFlightResponse">
+        <part name="output" type="xsd:boolean"/>
+    </message>
+    <message name="bookFlightFault">
+        <part name="fault" element="ns1:BookFlightFaultElement"/>
+    </message>
+
     <portType name="LameDuckWSDLPortType">
         <operation name="getFlights">
             <input name="input1" message="tns:getFlightsRequest"/>
@@ -34,10 +44,13 @@
         </operation>
         <operation name="cancelFlight">
             <input name="input3" message="tns:cancelFlightRequest"/>
+            <output name="output3" message="tns:cancelFlightResponse"/>
+            <fault name="fault3" message="tns:cancelFlightFault"/>
         </operation>
         <operation name="bookFlights">
             <input name="input2" message="tns:bookFlightRequest"/>
             <output name="output2" message="tns:bookFlightResponse"/>
+            <fault name="fault2" message="tns:bookFlightFault" />
         </operation>
     </portType>
     <binding name="LameDuckWSDLPortTypeBinding" type="tns:LameDuckWSDLPortType">
@@ -45,26 +58,43 @@
         <operation name="getFlights">
             <soap:operation/>
             <input name="input1">
-                <soap:body use="literal"/>
+                <soap:body use="literal"
+                namespace="http://lameduck.ws" />
             </input>
             <output name="output1">
-                <soap:body use="literal"/>
+                <soap:body use="literal"
+                namespace="http://lameduck.ws" />
             </output>
         </operation>
         <operation name="cancelFlight">
             <soap:operation/>
             <input name="input3">
-                <soap:body use="literal"/>
+                <soap:body use="literal"
+                namespace="http://lameduck.ws" />
             </input>
+            <output name="output3">
+                <soap:body use="literal"
+                namespace="http://lameduck.ws" />
+            </output>
+            <fault name="fault3">
+                <soap:fault name="fault3" use="literal"
+                namespace="http://lameduck.ws" />
+            </fault>
         </operation>
         <operation name="bookFlights">
             <soap:operation/>
             <input name="input2">
-                <soap:body use="literal"/>
+                <soap:body use="literal"
+                namespace="http://lameduck.ws" />
             </input>
             <output name="output2">
-                <soap:body use="literal"/>
+                <soap:body use="literal"
+                namespace="http://lameduck.ws" />
             </output>
+            <fault name="fault2">
+                <soap:fault name="fault2" use="literal"
+                namespace="http://lameduck.ws" />
+            </fault>
         </operation>
     </binding>
     <service name="LameDuckWSDLService">
@@ -73,6 +103,8 @@
         </port>
     </service>
 </definitions>
+
+
 
 
 

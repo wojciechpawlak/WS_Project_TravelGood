@@ -62,22 +62,23 @@
         <operation name="getHotels">
             <soap:operation/>
             <input name="getHotelsInput">
-                <soap:body use="literal"/>
+                <soap:body use="literal" namespace="http://niceview.ws"/>
             </input>
+            <!-- Should work -->
             <output name="getHotelsOutput">
-                <soap:body use="literal"/>
+                <soap:body use="literal" namespace="http://niceview.ws"/>
             </output>
         </operation>
         <operation name="bookHotel">
             <soap:operation/>
             <input name="bookHotelInput">
-                <soap:body use="literal"/>
+                <soap:body use="literal" namespace="http://niceview.ws"/>
             </input>
             <output name="bookHotelOutput">
-                <soap:body use="literal"/>
+                <soap:body use="literal" namespace="http://niceview.ws"/>
             </output>
             <fault name="bookHotelFault">
-                <soap:fault name="bookHotelFault" use="literal"/>
+                <soap:fault name="bookHotelFault" use="literal" />
             </fault>
             <fault name="creditCardFault">
                 <soap:fault name="creditCardFault" use="literal"/>
@@ -86,10 +87,10 @@
         <operation name="cancelHotel">
             <soap:operation/>
             <input name="cancelHotelInput">
-                <soap:body use="literal"/>
+                <soap:body use="literal" namespace="http://niceview.ws"/>
             </input>
             <output name="cancelHotelOutput">
-                <soap:body use="literal"/>
+                <soap:body use="literal" namespace="http://niceview.ws"/>
             </output>
             <fault name="cancelHotelFault">
                 <soap:fault name="cancelHotelFault" use="literal"/>

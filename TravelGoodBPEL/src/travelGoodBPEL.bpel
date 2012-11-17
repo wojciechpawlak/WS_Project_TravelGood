@@ -8,10 +8,10 @@
     xmlns="http://docs.oasis-open.org/wsbpel/2.0/process/executable"
     xmlns:sxt="http://www.sun.com/wsbpel/2.0/process/executable/SUNExtension/Trace" 
     xmlns:sxed="http://www.sun.com/wsbpel/2.0/process/executable/SUNExtension/Editor"
-    xmlns:sxeh="http://www.sun.com/wsbpel/2.0/process/executable/SUNExtension/ErrorHandling" xmlns:sxed2="http://www.sun.com/wsbpel/2.0/process/executable/SUNExtension/Editor2" xmlns:ns0="http://travelgood.ws">
+    xmlns:sxeh="http://www.sun.com/wsbpel/2.0/process/executable/SUNExtension/ErrorHandling" xmlns:sxed2="http://www.sun.com/wsbpel/2.0/process/executable/SUNExtension/Editor2" xmlns:ns0="http://travelgood.ws" xmlns:sxxf="http://www.sun.com/wsbpel/2.0/process/executable/SUNExtension/XPathFunctions" xmlns:ns1="http://www.sun.com/wsbpel/2.0/process/executable/SUNExtension" ns1:ignoreMissingFromData="yes" xmlns:ns2="http://types.niceview.ws">
     <import namespace="http://travelgood.ws" location="TravelGoodWSDL.wsdl" importType="http://schemas.xmlsoap.org/wsdl/"/>
     <import namespace="http://enterprise.netbeans.org/bpel/LameDuckWSDLServiceWrapper" location="LameDuckWSDLServiceWrapper.wsdl" importType="http://schemas.xmlsoap.org/wsdl/"/>
-    <import namespace="http://j2ee.netbeans.org/wsdl/LameDuckService/LameDuckWSDL" location="http://localhost:8080/LameDuckService/LameDuckWSDLService?wsdl" importType="http://schemas.xmlsoap.org/wsdl/"/>
+    <import namespace="http://lameduck.ws" location="http://localhost:8080/LameDuckService/LameDuckWSDLService?wsdl" importType="http://schemas.xmlsoap.org/wsdl/"/>
     <import namespace="http://enterprise.netbeans.org/bpel/NiceViewWSDLServiceWrapper" location="NiceViewWSDLServiceWrapper.wsdl" importType="http://schemas.xmlsoap.org/wsdl/"/>
     <import namespace="http://niceview.ws" location="http://localhost:8080/NiceViewService/NiceViewWSDLService?wsdl" importType="http://schemas.xmlsoap.org/wsdl/"/>
     <partnerLinks>
@@ -20,6 +20,13 @@
         <partnerLink name="PartnerLink1" xmlns:tns="http://travelgood.ws" partnerLinkType="tns:TravelGoodWSDL" myRole="TravelGoodWSDLPortTypeRole"/>
     </partnerLinks>
     <variables>
+        <variable name="lastDateGetHotel" type="xs:date"/>
+        <variable name="GetItineraryOut" messageType="ns0:getItineraryResponse"/>
+        <variable name="GetItineraryIn" messageType="ns0:getItineraryRequest"/>
+        <variable name="changeItineraryStartDate" type="xs:boolean"/>
+        <variable name="Itinerary" type="ns0:itineraryType"/>
+        <variable name="AddHotelOut" messageType="ns0:addHotelResponse"/>
+        <variable name="AddHotelIn" messageType="ns0:addHotelRequest"/>
         <variable name="GetHotelsOut" xmlns:tns="http://niceview.ws" messageType="tns:getHotelsResponse"/>
         <variable name="GetHotelsIn" xmlns:tns="http://niceview.ws" messageType="tns:getHotelsRequest"/>
         <variable name="GetHotelOut" xmlns:tns="http://travelgood.ws" messageType="tns:getHotelResponse"/>
@@ -39,7 +46,7 @@
         <assign name="Assign1">
             <copy>
                 <from>'Itinerary Created'</from>
-                <to variable="CreateItineraryOut" part="output"/>
+                <to variable="CreateItineraryOut" part="confirmation"/>
             </copy>
         </assign>
         <reply name="Reply1" partnerLink="PartnerLink1" operation="createItinerary" xmlns:tns="http://travelgood.ws" portType="tns:TravelGoodWSDLPortType" variable="CreateItineraryOut"/>
@@ -65,13 +72,109 @@
         <invoke name="Invoke1" partnerLink="PartnerLink3" operation="getHotels" xmlns:tns="http://niceview.ws" portType="tns:NiceViewWSDLPortType" inputVariable="GetHotelsIn" outputVariable="GetHotelsOut"/>
         <assign name="Assign3">
             <copy>
-                <from variable="GetHotelsOut" part="hotels"/>
-                <to variable="GetHotelOut" part="output"/>
+                <from>$GetHotelsOut.hotels/ns2:hotel/ns2:hotelName</from>
+                <to>$GetHotelOut.hotelList/ns2:hotel/ns2:hotelName</to>
+            </copy>
+            <copy>
+                <from>$GetHotelsOut.hotels/ns2:hotel/ns2:hotelAddress/ns2:street</from>
+                <to>$GetHotelOut.hotelList/ns2:hotel/ns2:hotelAddress/ns2:street</to>
+            </copy>
+            <copy>
+                <from>$GetHotelsOut.hotels/ns2:hotel/ns2:hotelAddress/ns2:postcode</from>
+                <to>$GetHotelOut.hotelList/ns2:hotel/ns2:hotelAddress/ns2:postcode</to>
+            </copy>
+            <copy>
+                <from>$GetHotelsOut.hotels/ns2:hotel/ns2:hotelAddress/ns2:city</from>
+                <to>$GetHotelOut.hotelList/ns2:hotel/ns2:hotelAddress/ns2:city</to>
+            </copy>
+            <copy>
+                <from>$GetHotelsOut.hotels/ns2:hotel/ns2:bookingNumber</from>
+                <to>$GetHotelOut.hotelList/ns2:hotel/ns2:bookingNumber</to>
+            </copy>
+            <copy>
+                <from>$GetHotelsOut.hotels/ns2:hotel/ns2:hotelStayPrice</from>
+                <to>$GetHotelOut.hotelList/ns2:hotel/ns2:hotelStayPrice</to>
+            </copy>
+            <copy>
+                <from>$GetHotelsOut.hotels/ns2:hotel/ns2:ifCreditCardRequired</from>
+                <to>$GetHotelOut.hotelList/ns2:hotel/ns2:ifCreditCardRequired</to>
+            </copy>
+            <copy>
+                <from>sxxf:current-dateTime()</from>
+                <to variable="lastDateGetHotel"/>
             </copy>
         </assign>
         <reply name="Reply2" partnerLink="PartnerLink1" operation="getHotel" xmlns:tns="http://travelgood.ws" portType="tns:TravelGoodWSDLPortType" variable="GetHotelOut"/>
+        <receive name="Receive3" partnerLink="PartnerLink1" operation="addHotel" portType="ns0:TravelGoodWSDLPortType" createInstance="no" variable="AddHotelIn">
+            <correlations>
+                <correlation set="CustomerItineraryCorrelation" initiate="no"/>
+            </correlations>
+        </receive>
+        <assign name="Assign4">
+            <copy>
+                <from>'Hotel added'</from>
+                <to variable="AddHotelOut" part="confirmation"/>
+            </copy>
+            <copy>
+                <from variable="AddHotelIn" part="bookingNumber"/>
+                <to>$Itinerary/bookingsHotel/bookingNumber</to>
+            </copy>
+            <copy>
+                <from>'unconfirmed'</from>
+                <to>$Itinerary/bookingsHotel/bookingStatus</to>
+            </copy>
+            <copy>
+                <from>true()</from>
+                <to variable="changeItineraryStartDate"/>
+            </copy>
+        </assign>
+        <if name="If1">
+            <condition>$changeItineraryStartDate</condition>
+            <assign name="Assign5">
+                <copy>
+                    <from>sxxf:current-dateTime()</from>
+                    <to>$Itinerary/ns0:itineraryStartDate</to>
+                </copy>
+            </assign>
+            <else>
+                <assign name="Assign7">
+                    <copy>
+                        <from variable="GetHotelIn" part="arrivalDate"/>
+                        <to>$Itinerary/itineraryStartDate</to>
+                    </copy>
+                </assign>
+            </else>
+        </if>
+        <reply name="Reply3" partnerLink="PartnerLink1" operation="addHotel" portType="ns0:TravelGoodWSDLPortType" variable="AddHotelOut"/>
+        <receive name="Receive4" partnerLink="PartnerLink1" operation="getItinerary" portType="ns0:TravelGoodWSDLPortType" createInstance="no" variable="GetItineraryIn">
+            <correlations>
+                <correlation set="CustomerItineraryCorrelation" initiate="no"/>
+            </correlations>
+        </receive>
+        <assign name="Assign6">
+            <copy>
+                <from variable="Itinerary"/>
+                <to variable="GetItineraryOut" part="itinerary"/>
+            </copy>
+        </assign>
+        <reply name="Reply4" partnerLink="PartnerLink1" operation="getItinerary" portType="ns0:TravelGoodWSDLPortType" variable="GetItineraryOut"/>
     </sequence>
 </process>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

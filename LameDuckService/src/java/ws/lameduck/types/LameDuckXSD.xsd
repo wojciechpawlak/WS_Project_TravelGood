@@ -50,4 +50,18 @@
 		 <xsd:element name="creditCardInformation" type="ns0:creditCardInfoType"></xsd:element>
 		</xsd:sequence>
 	</xsd:complexType>
+    <xsd:complexType name="CancelFlightFaultType">
+        <xsd:sequence>
+            <xsd:element name="Message" type="xsd:string"></xsd:element>
+        </xsd:sequence>
+    </xsd:complexType>
+    <xsd:complexType name="BookFlightFaultType">
+        <xsd:sequence>
+            <xsd:element name="Message" type="xsd:string"></xsd:element>
+        </xsd:sequence>
+    </xsd:complexType>
+    <xsd:element name="CancelFlightFaultElement" type="tns:CancelFlightFaultType"></xsd:element>
+    <xsd:element name="BookFlightFaultElement" type="tns:BookFlightFaultType"></xsd:element>
 </xsd:schema>
+
+

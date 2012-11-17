@@ -4,8 +4,8 @@
     xmlns="http://schemas.xmlsoap.org/wsdl/"
     xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
     xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
-    xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="LameDuckWSDLServiceWrapper" targetNamespace="http://enterprise.netbeans.org/bpel/LameDuckWSDLServiceWrapper" xmlns:tns="http://enterprise.netbeans.org/bpel/LameDuckWSDLServiceWrapper" xmlns:plnk="http://docs.oasis-open.org/wsbpel/2.0/plnktype" xmlns:ns="http://j2ee.netbeans.org/wsdl/LameDuckService/LameDuckWSDL">
-    <import location="http://localhost:8080/LameDuckService/LameDuckWSDLService?wsdl" namespace="http://j2ee.netbeans.org/wsdl/LameDuckService/LameDuckWSDL"/>
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="LameDuckWSDLServiceWrapper" targetNamespace="http://enterprise.netbeans.org/bpel/LameDuckWSDLServiceWrapper" xmlns:tns="http://enterprise.netbeans.org/bpel/LameDuckWSDLServiceWrapper" xmlns:plnk="http://docs.oasis-open.org/wsbpel/2.0/plnktype" xmlns:ns="http://lameduck.ws">
+    <import location="http://localhost:8080/LameDuckService/LameDuckWSDLService?wsdl" namespace="http://lameduck.ws"/>
     <plnk:partnerLinkType name="LameDuckWSDLLinkType">
         <plnk:role name="LameDuckWSDLRole" portType="ns:LameDuckWSDLPortType"/>
     </plnk:partnerLinkType>

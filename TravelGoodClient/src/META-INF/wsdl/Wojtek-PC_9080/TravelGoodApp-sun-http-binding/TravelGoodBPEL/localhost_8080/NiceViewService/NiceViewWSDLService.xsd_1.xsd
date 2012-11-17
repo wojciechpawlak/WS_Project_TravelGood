@@ -1,17 +1,10 @@
-<?xml version="1.0" encoding="UTF-8"?>
-
-<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
-    targetNamespace="http://types.niceview.ws"
-    xmlns:tns="http://types.niceview.ws"
-    xmlns:jaxb="http://java.sun.com/xml/ns/jaxb"
-    elementFormDefault="qualified"
-    jaxb:version="2.0">
+<?xml version="1.0" encoding="UTF-8"?><!-- Published by JAX-WS RI at http://jax-ws.dev.java.net. RI's version is JAX-WS RI 2.1.3.3-hudson-757-SNAPSHOT. --><xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://types.niceview.ws" xmlns:jaxb="http://java.sun.com/xml/ns/jaxb" targetNamespace="http://types.niceview.ws" elementFormDefault="qualified" jaxb:version="2.0">
 
     <xsd:annotation>
         <xsd:appinfo>
             <jaxb:globalBindings>
-                <jaxb:javaType name="java.util.Calendar" xmlType="xsd:date" parseMethod="javax.xml.bind.DatatypeConverter.parseDateTime" printMethod="javax.xml.bind.DatatypeConverter.printDateTime" />
-                <jaxb:javaType name="java.util.Calendar" xmlType="xsd:dateTime" parseMethod="javax.xml.bind.DatatypeConverter.parseDateTime" printMethod="javax.xml.bind.DatatypeConverter.printDateTime" />
+                <jaxb:javaType name="java.util.Calendar" xmlType="xsd:date" parseMethod="javax.xml.bind.DatatypeConverter.parseDateTime" printMethod="javax.xml.bind.DatatypeConverter.printDateTime"></jaxb:javaType>
+                <jaxb:javaType name="java.util.Calendar" xmlType="xsd:dateTime" parseMethod="javax.xml.bind.DatatypeConverter.parseDateTime" printMethod="javax.xml.bind.DatatypeConverter.printDateTime"></jaxb:javaType>
             </jaxb:globalBindings>
         </xsd:appinfo>
     </xsd:annotation>

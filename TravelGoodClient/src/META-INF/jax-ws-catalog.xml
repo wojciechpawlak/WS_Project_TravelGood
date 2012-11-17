@@ -3,7 +3,46 @@
     <system systemId="http://localhost:9080/TravelGoodWSDLService/TravelGoodWSDLPort?wsdl" uri="wsdl/localhost_9080/TravelGoodWSDLService/TravelGoodWSDLPort.wsdl"/>
     <system systemId="http://OP960-7N3KM4J.b45x.dtu.dk:9080/TravelGoodApp-sun-http-binding/TravelGoodBPEL/localhost_8080/NiceViewService/NiceViewWSDLService.xsd_1.xsd" uri="wsdl/OP960-7N3KM4J.b45x.dtu.dk_9080/TravelGoodApp-sun-http-binding/TravelGoodBPEL/localhost_8080/NiceViewService/NiceViewWSDLService.xsd_1.xsd"/>
     <system systemId="http://localhost:9080/service?wsdl" uri="wsdl/localhost_9080/service.wsdl"/>
+    <system systemId="http://Wojtek-PC:9080/TravelGoodApp-sun-http-binding/TravelGoodBPEL/localhost_8080/NiceViewService/NiceViewWSDLService.xsd_1.xsd" uri="wsdl/Wojtek-PC_9080/TravelGoodApp-sun-http-binding/TravelGoodBPEL/localhost_8080/NiceViewService/NiceViewWSDLService.xsd_1.xsd"/>
+    <system systemId="http://OP960-7N3KM4J.b45x.dtu.dk:9080/TravelGoodApp-sun-http-binding/TravelGoodBPEL/localhost_8080/LameDuckService/LameDuckWSDLService.xsd_1.xsd" uri="wsdl/OP960-7N3KM4J.b45x.dtu.dk_9080/TravelGoodApp-sun-http-binding/TravelGoodBPEL/localhost_8080/LameDuckService/LameDuckWSDLService.xsd_1.xsd"/>
+    <system systemId="http://fastmoney.imm.dtu.dk:8080/BankService?xsd=1" uri="wsdl/fastmoney.imm.dtu.dk_8080/BankService.xsd_1.xsd"/>
 </catalog>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
