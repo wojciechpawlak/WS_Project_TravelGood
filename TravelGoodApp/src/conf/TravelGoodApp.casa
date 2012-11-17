@@ -46,7 +46,7 @@
     </porttypes>
     <bindings>
         <link xlink:href="../jbiServiceUnits/TravelGoodBPEL/localhost_8080/LameDuckService/LameDuckWSDLService.wsdl#xpointer(/definitions/binding[@name='LameDuckWSDLPortTypeBinding'])" xlink:type="simple"/>
-        <link xlink:href="../jbiServiceUnits/TravelGoodBPEL/localhost_8080/NiceViewService/NiceViewWSDLService.wsdl#xpointer(/definitions/binding[@name='NiceViewWSDLBinding'])" xlink:type="simple"/>
+        <link xlink:href="../jbiServiceUnits/TravelGoodBPEL/localhost_8080/NiceViewService/NiceViewWSDLService.wsdl#xpointer(/definitions/binding[@name='NiceViewWSDLPortTypeBinding'])" xlink:type="simple"/>
         <link xlink:href="../jbiServiceUnits/TravelGoodBPEL/TravelGoodWSDL.wsdl#xpointer(/definitions/binding[@name='TravelGoodWSDLPortTypeBinding'])" xlink:type="simple"/>
     </bindings>
     <services>

@@ -3,7 +3,7 @@
   <services>
     <service name="NiceViewWebServiceFromWSDL">
       <implementation-class>ws.niceview.NiceViewWebServiceFromWSDL</implementation-class>
-      <wsdl-url>file:///Users/mkucharek/Developer/Workspaces/NetBeansProjects/WS-Project/NiceViewService/src/java/ws/niceview/NiceViewWSDL.wsdl</wsdl-url>
+      <wsdl-url>file:/C:/Users/Wojtek/Documents/Git%20Repositories/WS_Project_TravelGood/NiceViewService/src/java/ws/niceview/NiceViewWSDL.wsdl</wsdl-url>
       <local-wsdl-file>NiceViewWSDL.wsdl</local-wsdl-file>
       <service-name>NiceViewWSDLService</service-name>
       <port-name>NiceViewWSDLPort</port-name>

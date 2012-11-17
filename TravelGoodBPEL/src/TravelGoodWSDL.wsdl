@@ -51,10 +51,12 @@
         <operation name="getHotel">
             <soap:operation/>
             <input name="input2">
-                <soap:body use="literal" />
+                <soap:body use="literal"
+                namespace="http://travelgood.ws" />
             </input>
             <output name="output2">
-                <soap:body use="literal"/>
+                <soap:body use="literal"
+                namespace="http://travelgood.ws" />
             </output>
         </operation>
     </binding>
