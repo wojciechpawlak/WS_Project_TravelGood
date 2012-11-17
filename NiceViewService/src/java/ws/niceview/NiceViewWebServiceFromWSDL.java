@@ -23,7 +23,7 @@ public class NiceViewWebServiceFromWSDL {
 
     private int DAY_LIMIT = 14;
 
-    private HotelType[] hotelArray = new HotelType[] {
+    private static HotelType[] hotelArray = new HotelType[] {
         createHotel("Superb Hotel", "TestStreet", "12345", "Barcelona", "1", 50000.0, true),
         createHotel("Nice Hotel", "TestStreet", "12345", "Vienna", "2", 2000.0, true),
         createHotel("Passable Hotel", "TestStreet", "12345", "Vienna", "3", 500.0, true),
@@ -76,7 +76,7 @@ public class NiceViewWebServiceFromWSDL {
         return true;
     }
 
-    private HotelType createHotel(String hotelName, String hotelStreet, String hotelPostcode, String hotelCity, String bookingNumber, double stayPrice, boolean ifCreditCardGuaranteeRequired) {
+    private static HotelType createHotel(String hotelName, String hotelStreet, String hotelPostcode, String hotelCity, String bookingNumber, double stayPrice, boolean ifCreditCardGuaranteeRequired) {
 
         HotelType hotel = new HotelType();
 
