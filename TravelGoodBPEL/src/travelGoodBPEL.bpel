@@ -8,7 +8,7 @@
     xmlns="http://docs.oasis-open.org/wsbpel/2.0/process/executable"
     xmlns:sxt="http://www.sun.com/wsbpel/2.0/process/executable/SUNExtension/Trace" 
     xmlns:sxed="http://www.sun.com/wsbpel/2.0/process/executable/SUNExtension/Editor"
-    xmlns:sxeh="http://www.sun.com/wsbpel/2.0/process/executable/SUNExtension/ErrorHandling" xmlns:sxed2="http://www.sun.com/wsbpel/2.0/process/executable/SUNExtension/Editor2" xmlns:ns0="http://travelgood.ws" xmlns:sxxf="http://www.sun.com/wsbpel/2.0/process/executable/SUNExtension/XPathFunctions" xmlns:ns1="http://www.sun.com/wsbpel/2.0/process/executable/SUNExtension" ns1:ignoreMissingFromData="yes" xmlns:ns2="http://types.niceview.ws">
+    xmlns:sxeh="http://www.sun.com/wsbpel/2.0/process/executable/SUNExtension/ErrorHandling" xmlns:sxed2="http://www.sun.com/wsbpel/2.0/process/executable/SUNExtension/Editor2" xmlns:ns0="http://travelgood.ws" xmlns:sxxf="http://www.sun.com/wsbpel/2.0/process/executable/SUNExtension/XPathFunctions" xmlns:ns1="http://www.sun.com/wsbpel/2.0/process/executable/SUNExtension" ns1:ignoreMissingFromData="yes" xmlns:ns2="http://types.niceview.ws" xmlns:ns3="http://types.lameduck.ws">
     <import namespace="http://travelgood.ws" location="TravelGoodWSDL.wsdl" importType="http://schemas.xmlsoap.org/wsdl/"/>
     <import namespace="http://enterprise.netbeans.org/bpel/LameDuckWSDLServiceWrapper" location="LameDuckWSDLServiceWrapper.wsdl" importType="http://schemas.xmlsoap.org/wsdl/"/>
     <import namespace="http://lameduck.ws" location="http://localhost:8080/LameDuckService/LameDuckWSDLService?wsdl" importType="http://schemas.xmlsoap.org/wsdl/"/>
@@ -20,6 +20,13 @@
         <partnerLink name="PartnerLink1" xmlns:tns="http://travelgood.ws" partnerLinkType="tns:TravelGoodWSDL" myRole="TravelGoodWSDLPortTypeRole"/>
     </partnerLinks>
     <variables>
+        <variable name="GetFlightsOut" xmlns:tns="http://lameduck.ws" messageType="tns:getFlightsResponse"/>
+        <variable name="GetFlightsIn" xmlns:tns="http://lameduck.ws" messageType="tns:getFlightsRequest"/>
+        <variable name="GetFlightOut" messageType="ns0:getFlightResponse"/>
+        <variable name="GetFlightIn" messageType="ns0:getFlightRequest"/>
+        <variable name="BookingItineraryOut" messageType="ns0:bookingItineraryResponse"/>
+        <variable name="BookingItineraryIn" messageType="ns0:bookingItineraryRequest"/>
+        <variable name="donePlanning" type="xs:boolean"/>
         <variable name="lastDateGetHotel" type="xs:date"/>
         <variable name="GetItineraryOut" messageType="ns0:getItineraryResponse"/>
         <variable name="GetItineraryIn" messageType="ns0:getItineraryRequest"/>
@@ -48,118 +55,212 @@
                 <from>'Itinerary Created'</from>
                 <to variable="CreateItineraryOut" part="confirmation"/>
             </copy>
+            <copy>
+                <from>false()</from>
+                <to variable="donePlanning"/>
+            </copy>
         </assign>
         <reply name="Reply1" partnerLink="PartnerLink1" operation="createItinerary" xmlns:tns="http://travelgood.ws" portType="tns:TravelGoodWSDLPortType" variable="CreateItineraryOut"/>
-        <receive name="Receive2" partnerLink="PartnerLink1" operation="getHotel" xmlns:tns="http://travelgood.ws" portType="tns:TravelGoodWSDLPortType" createInstance="no" variable="GetHotelIn">
-            <correlations>
-                <correlation set="CustomerItineraryCorrelation" initiate="no"/>
-            </correlations>
-        </receive>
-        <assign name="Assign2">
-            <copy>
-                <from variable="GetHotelIn" part="city"/>
-                <to variable="GetHotelsIn" part="city"/>
-            </copy>
-            <copy>
-                <from variable="GetHotelIn" part="arrivalDate"/>
-                <to variable="GetHotelsIn" part="arrivalDate"/>
-            </copy>
-            <copy>
-                <from variable="GetHotelIn" part="departureDate"/>
-                <to variable="GetHotelsIn" part="departureDate"/>
-            </copy>
-        </assign>
-        <invoke name="Invoke1" partnerLink="PartnerLink3" operation="getHotels" xmlns:tns="http://niceview.ws" portType="tns:NiceViewWSDLPortType" inputVariable="GetHotelsIn" outputVariable="GetHotelsOut"/>
-        <assign name="Assign3">
-            <copy>
-                <from>$GetHotelsOut.hotels/ns2:hotel/ns2:hotelName</from>
-                <to>$GetHotelOut.hotelList/ns2:hotel/ns2:hotelName</to>
-            </copy>
-            <copy>
-                <from>$GetHotelsOut.hotels/ns2:hotel/ns2:hotelAddress/ns2:street</from>
-                <to>$GetHotelOut.hotelList/ns2:hotel/ns2:hotelAddress/ns2:street</to>
-            </copy>
-            <copy>
-                <from>$GetHotelsOut.hotels/ns2:hotel/ns2:hotelAddress/ns2:postcode</from>
-                <to>$GetHotelOut.hotelList/ns2:hotel/ns2:hotelAddress/ns2:postcode</to>
-            </copy>
-            <copy>
-                <from>$GetHotelsOut.hotels/ns2:hotel/ns2:hotelAddress/ns2:city</from>
-                <to>$GetHotelOut.hotelList/ns2:hotel/ns2:hotelAddress/ns2:city</to>
-            </copy>
-            <copy>
-                <from>$GetHotelsOut.hotels/ns2:hotel/ns2:bookingNumber</from>
-                <to>$GetHotelOut.hotelList/ns2:hotel/ns2:bookingNumber</to>
-            </copy>
-            <copy>
-                <from>$GetHotelsOut.hotels/ns2:hotel/ns2:hotelStayPrice</from>
-                <to>$GetHotelOut.hotelList/ns2:hotel/ns2:hotelStayPrice</to>
-            </copy>
-            <copy>
-                <from>$GetHotelsOut.hotels/ns2:hotel/ns2:ifCreditCardRequired</from>
-                <to>$GetHotelOut.hotelList/ns2:hotel/ns2:ifCreditCardRequired</to>
-            </copy>
-            <copy>
-                <from>sxxf:current-dateTime()</from>
-                <to variable="lastDateGetHotel"/>
-            </copy>
-        </assign>
-        <reply name="Reply2" partnerLink="PartnerLink1" operation="getHotel" xmlns:tns="http://travelgood.ws" portType="tns:TravelGoodWSDLPortType" variable="GetHotelOut"/>
-        <receive name="Receive3" partnerLink="PartnerLink1" operation="addHotel" portType="ns0:TravelGoodWSDLPortType" createInstance="no" variable="AddHotelIn">
-            <correlations>
-                <correlation set="CustomerItineraryCorrelation" initiate="no"/>
-            </correlations>
-        </receive>
-        <assign name="Assign4">
-            <copy>
-                <from>'Hotel added'</from>
-                <to variable="AddHotelOut" part="confirmation"/>
-            </copy>
-            <copy>
-                <from variable="AddHotelIn" part="bookingNumber"/>
-                <to>$Itinerary/bookingsHotel/bookingNumber</to>
-            </copy>
-            <copy>
-                <from>'unconfirmed'</from>
-                <to>$Itinerary/bookingsHotel/bookingStatus</to>
-            </copy>
-            <copy>
-                <from>true()</from>
-                <to variable="changeItineraryStartDate"/>
-            </copy>
-        </assign>
-        <if name="If1">
-            <condition>$changeItineraryStartDate</condition>
-            <assign name="Assign5">
-                <copy>
-                    <from>sxxf:current-dateTime()</from>
-                    <to>$Itinerary/ns0:itineraryStartDate</to>
-                </copy>
-            </assign>
-            <else>
-                <assign name="Assign7">
-                    <copy>
-                        <from variable="GetHotelIn" part="arrivalDate"/>
-                        <to>$Itinerary/itineraryStartDate</to>
-                    </copy>
-                </assign>
-            </else>
-        </if>
-        <reply name="Reply3" partnerLink="PartnerLink1" operation="addHotel" portType="ns0:TravelGoodWSDLPortType" variable="AddHotelOut"/>
-        <receive name="Receive4" partnerLink="PartnerLink1" operation="getItinerary" portType="ns0:TravelGoodWSDLPortType" createInstance="no" variable="GetItineraryIn">
-            <correlations>
-                <correlation set="CustomerItineraryCorrelation" initiate="no"/>
-            </correlations>
-        </receive>
-        <assign name="Assign6">
-            <copy>
-                <from variable="Itinerary"/>
-                <to variable="GetItineraryOut" part="itinerary"/>
-            </copy>
-        </assign>
-        <reply name="Reply4" partnerLink="PartnerLink1" operation="getItinerary" portType="ns0:TravelGoodWSDLPortType" variable="GetItineraryOut"/>
+        <repeatUntil name="RepeatUntil1">
+            <pick name="Pick1" xmlns:tns="http://niceview.ws">
+                <onMessage partnerLink="PartnerLink1" operation="getHotel" portType="ns0:TravelGoodWSDLPortType" variable="GetHotelIn">
+                        <correlations>
+                                <correlation set="CustomerItineraryCorrelation" initiate="no"/>
+                            </correlations>
+                            <sequence name="Sequence1">
+                                <assign name="Assign2">
+                                        <copy>
+                                                <from variable="GetHotelIn" part="city"/>
+                                                    <to variable="GetHotelsIn" part="city"/>
+                                            </copy>
+                                            <copy>
+                                                <from variable="GetHotelIn" part="arrivalDate"/>
+                                                    <to variable="GetHotelsIn" part="arrivalDate"/>
+                                            </copy>
+                                            <copy>
+                                                <from variable="GetHotelIn" part="departureDate"/>
+                                                    <to variable="GetHotelsIn" part="departureDate"/>
+                                            </copy>
+                                    </assign>
+                                    <invoke name="Invoke1" partnerLink="PartnerLink3" operation="getHotels" xmlns:tns="http://niceview.ws" portType="tns:NiceViewWSDLPortType" inputVariable="GetHotelsIn" outputVariable="GetHotelsOut"/>
+                                    <assign name="Assign3">
+                                        <copy>
+                                                <from>$GetHotelsOut.hotels/ns2:hotel/ns2:hotelName</from>
+                                                    <to>$GetHotelOut.hotelList/ns2:hotel/ns2:hotelName</to>
+                                            </copy>
+                                            <copy>
+                                                <from>$GetHotelsOut.hotels/ns2:hotel/ns2:hotelAddress/ns2:street</from>
+                                                    <to>$GetHotelOut.hotelList/ns2:hotel/ns2:hotelAddress/ns2:street</to>
+                                            </copy>
+                                            <copy>
+                                                <from>$GetHotelsOut.hotels/ns2:hotel/ns2:hotelAddress/ns2:postcode</from>
+                                                    <to>$GetHotelOut.hotelList/ns2:hotel/ns2:hotelAddress/ns2:postcode</to>
+                                            </copy>
+                                            <copy>
+                                                <from>$GetHotelsOut.hotels/ns2:hotel/ns2:hotelAddress/ns2:city</from>
+                                                    <to>$GetHotelOut.hotelList/ns2:hotel/ns2:hotelAddress/ns2:city</to>
+                                            </copy>
+                                            <copy>
+                                                <from>$GetHotelsOut.hotels/ns2:hotel/ns2:bookingNumber</from>
+                                                    <to>$GetHotelOut.hotelList/ns2:hotel/ns2:bookingNumber</to>
+                                            </copy>
+                                            <copy>
+                                                <from>$GetHotelsOut.hotels/ns2:hotel/ns2:hotelStayPrice</from>
+                                                    <to>$GetHotelOut.hotelList/ns2:hotel/ns2:hotelStayPrice</to>
+                                            </copy>
+                                            <copy>
+                                                <from>$GetHotelsOut.hotels/ns2:hotel/ns2:ifCreditCardRequired</from>
+                                                    <to>$GetHotelOut.hotelList/ns2:hotel/ns2:ifCreditCardRequired</to>
+                                            </copy>
+                                        <copy>
+                                            <from>$GetHotelsOut.hotels/ns2:hotelReservationServiceName</from>
+                                            <to>$GetHotelOut.hotelList/ns2:hotelReservationServiceName</to>
+                                        </copy>
+                                    </assign>
+                                    <reply name="Reply2" partnerLink="PartnerLink1" operation="getHotel" portType="ns0:TravelGoodWSDLPortType" variable="GetHotelOut"/>
+                            </sequence>
+                    </onMessage>
+                    <onMessage partnerLink="PartnerLink1" operation="addHotel" portType="ns0:TravelGoodWSDLPortType" variable="AddHotelIn">
+                        <correlations>
+                                <correlation set="CustomerItineraryCorrelation" initiate="no"/>
+                            </correlations>
+                            <sequence name="Sequence2">
+                                <assign name="Assign4">
+                                        <copy>
+                                                <from>'Hotel added'</from>
+                                                    <to variable="AddHotelOut" part="confirmation"/>
+                                            </copy>
+                                            <copy>
+                                                <from variable="AddHotelIn" part="bookingNumber"/>
+                                                    <to>$Itinerary/<!--ns0:-->bookingsHotel/<!--ns0:-->bookingNumber</to>
+                                            </copy>
+                                            <copy>
+                                                <from>'unconfirmed'</from>
+                                                    <to>$Itinerary/<!--ns0:-->bookingsHotel/<!--ns0:-->bookingStatus</to>
+                                            </copy>
+                                            <copy>
+                                                <from>true()</from>
+                                                    <to variable="changeItineraryStartDate"/>
+                                            </copy>
+                                    </assign>
+                                    <if name="If1">
+                                        <condition>$changeItineraryStartDate</condition>
+                                            <assign name="Assign5">
+                                                <copy>
+                                                    <from>sxxf:current-date()</from>
+                                                    <to>$Itinerary/<!--ns0:-->itineraryStartDate</to>
+                                                </copy>
+                                            </assign>
+                                            <else>
+                                                <assign name="Assign7">
+                                                        <copy>
+                                                                <from variable="GetHotelIn" part="arrivalDate"/>
+                                                                    <to>$Itinerary/<!--ns0:-->itineraryStartDate</to>
+                                                            </copy>
+                                                    </assign>
+                                            </else>
+                                    </if>
+                                    <reply name="Reply3" partnerLink="PartnerLink1" operation="addHotel" portType="ns0:TravelGoodWSDLPortType" variable="AddHotelOut"/>
+                            </sequence>
+                    </onMessage>
+                    <onMessage partnerLink="PartnerLink1" operation="getItinerary" portType="ns0:TravelGoodWSDLPortType" variable="GetItineraryIn">
+                        <correlations>
+                                <correlation set="CustomerItineraryCorrelation" initiate="no"/>
+                            </correlations>
+                            <sequence name="Sequence3">
+                                <assign name="Assign6">
+                                        <copy>
+                                                <from variable="Itinerary"/>
+                                                    <to variable="GetItineraryOut" part="itinerary"/>
+                                            </copy>
+                                    </assign>
+                                    <reply name="Reply4" partnerLink="PartnerLink1" operation="getItinerary" portType="ns0:TravelGoodWSDLPortType" variable="GetItineraryOut"/>
+                            </sequence>
+                    </onMessage>
+                <onMessage partnerLink="PartnerLink1" operation="bookingItinerary" portType="ns0:TravelGoodWSDLPortType" variable="BookingItineraryIn">
+                    <correlations>
+                        <correlation set="CustomerItineraryCorrelation" initiate="no"/>
+                    </correlations>
+                    <sequence name="Sequence4">
+                        <assign name="Assign8">
+                            <copy>
+                                    <from>true()</from>
+                                        <to variable="donePlanning"/>
+                                </copy>
+                            <copy>
+                                <from>'Booking done'</from>
+                                <to variable="BookingItineraryOut" part="bookingValidation"/>
+                            </copy>
+                        </assign>
+                        <reply name="Reply5" partnerLink="PartnerLink1" operation="bookingItinerary" portType="ns0:TravelGoodWSDLPortType" variable="BookingItineraryOut"/>
+                    </sequence>
+                </onMessage>
+                <onMessage partnerLink="PartnerLink1" operation="getFlight" portType="ns0:TravelGoodWSDLPortType" variable="GetFlightIn">
+                    <correlations>
+                        <correlation set="CustomerItineraryCorrelation" initiate="no"/>
+                    </correlations>
+                    <sequence name="Sequence5">
+                        <assign name="Assign9">
+                            <copy>
+                                <from variable="GetFlightIn" part="flightStart"/>
+                                <to>$GetFlightsIn.input/ns3:flightStart</to>
+                            </copy>
+                            <copy>
+                                <from variable="GetFlightIn" part="flightDestination"/>
+                                <to>$GetFlightsIn.input/ns3:flightDestination</to>
+                            </copy>
+                            <copy>
+                                <from variable="GetFlightIn" part="flightDate"/>
+                                <to>$GetFlightsIn.input/ns3:flightDate</to>
+                            </copy>
+                        </assign>
+                        <invoke name="Invoke2" partnerLink="PartnerLink2" operation="getFlights" xmlns:tns="http://lameduck.ws" portType="tns:LameDuckWSDLPortType" inputVariable="GetFlightsIn" outputVariable="GetFlightsOut"/>
+                        <assign name="Assign10">
+                            <copy>
+                                <from>$GetFlightsOut.output/ns3:flightInformation/ns3:bookingNumber</from>
+                                <to>$GetFlightOut.flightList/ns3:flightInformation/ns3:bookingNumber</to>
+                            </copy>
+                            <copy>
+                                <from>$GetFlightsOut.output/ns3:flightInformation/ns3:price</from>
+                                <to>$GetFlightOut.flightList/ns3:flightInformation/ns3:price</to>
+                            </copy>
+                            <copy>
+                                <from>$GetFlightsOut.output/ns3:flightInformation/ns3:airlineReservationServiceName</from>
+                                <to>$GetFlightOut.flightList/ns3:flightInformation/ns3:airlineReservationServiceName</to>
+                            </copy>
+                            <copy>
+                                <from>$GetFlightsOut.output/ns3:flightInformation/ns3:flight/ns3:startAirport</from>
+                                <to>$GetFlightOut.flightList/ns3:flightInformation/ns3:flight/ns3:startAirport</to>
+                            </copy>
+                            <copy>
+                                <from>$GetFlightsOut.output/ns3:flightInformation/ns3:flight/ns3:destinationAirport</from>
+                                <to>$GetFlightOut.flightList/ns3:flightInformation/ns3:flight/ns3:destinationAirport</to>
+                            </copy>
+                            <copy>
+                                <from>$GetFlightsOut.output/ns3:flightInformation/ns3:flight/ns3:liftOffDate</from>
+                                <to>$GetFlightOut.flightList/ns3:flightInformation/ns3:flight/ns3:liftOffDate</to>
+                            </copy>
+                            <copy>
+                                <from>$GetFlightsOut.output/ns3:flightInformation/ns3:flight/ns3:landingDate</from>
+                                <to>$GetFlightOut.flightList/ns3:flightInformation/ns3:flight/ns3:landingDate</to>
+                            </copy>
+                            <copy>
+                                <from>$GetFlightsOut.output/ns3:flightInformation/ns3:flight/ns3:carrierName</from>
+                                <to>$GetFlightOut.flightList/ns3:flightInformation/ns3:flight/ns3:carrierName</to>
+                            </copy>
+                        </assign>
+                        <reply name="Reply6" partnerLink="PartnerLink1" operation="getFlight" portType="ns0:TravelGoodWSDLPortType" variable="GetFlightOut"/>
+                    </sequence>
+                </onMessage>
+            </pick>
+            <condition>$donePlanning</condition>
+        </repeatUntil>
     </sequence>
 </process>
+
+
+
+
 
 
 

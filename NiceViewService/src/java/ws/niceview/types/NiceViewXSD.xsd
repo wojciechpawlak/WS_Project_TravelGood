@@ -7,14 +7,14 @@
     elementFormDefault="qualified"
     jaxb:version="2.0">
 
-    <xsd:annotation>
+    <!--<xsd:annotation>
         <xsd:appinfo>
             <jaxb:globalBindings>
                 <jaxb:javaType name="java.util.Calendar" xmlType="xsd:date" parseMethod="javax.xml.bind.DatatypeConverter.parseDateTime" printMethod="javax.xml.bind.DatatypeConverter.printDateTime" />
                 <jaxb:javaType name="java.util.Calendar" xmlType="xsd:dateTime" parseMethod="javax.xml.bind.DatatypeConverter.parseDateTime" printMethod="javax.xml.bind.DatatypeConverter.printDateTime" />
             </jaxb:globalBindings>
         </xsd:appinfo>
-    </xsd:annotation>
+    </xsd:annotation>-->
 
     <xsd:complexType name="hotelType">
         <xsd:sequence>

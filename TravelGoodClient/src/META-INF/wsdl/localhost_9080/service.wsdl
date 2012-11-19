@@ -1,7 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <definitions name="TravelGoodWSDL" targetNamespace="http://travelgood.ws" xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:plnk="http://docs.oasis-open.org/wsbpel/2.0/plnktype" xmlns:ns="http://types.niceview.ws" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:tns="http://travelgood.ws" xmlns:ns0="http://types.lameduck.ws" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:vprop="http://docs.oasis-open.org/wsbpel/2.0/varprop" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/">
   <types>
-    <xsd:schema elementFormDefault="qualified" jaxb:version="2.0" targetNamespace="http://travelgood.ws" xmlns:jaxb="http://java.sun.com/xml/ns/jaxb">
+    <xsd:schema targetNamespace="http://travelgood.ws">
+                    <!-- xmlns:jaxb="http://java.sun.com/xml/ns/jaxb"
+                    elementFormDefault="qualified"
+                    jaxb:version="2.0"
+                    >
+                    -->
 
             <xsd:import namespace="http://types.niceview.ws" schemaLocation="http://OP960-7N3KM4J.b45x.dtu.dk:9080/TravelGoodApp-sun-http-binding/TravelGoodBPEL/localhost_8080/NiceViewService/NiceViewWSDLService.xsd_1.xsd"/>
             <xsd:import namespace="http://types.lameduck.ws" schemaLocation="http://OP960-7N3KM4J.b45x.dtu.dk:9080/TravelGoodApp-sun-http-binding/TravelGoodBPEL/localhost_8080/LameDuckService/LameDuckWSDLService.xsd_1.xsd"/>
@@ -316,4 +321,8 @@ A partner link type characterizes the conversational relationship between two se
     <vprop:propertyAlias messageType="tns:addHotelRequest" part="itineraryId" propertyName="tns:itineraryId"/>
     <vprop:propertyAlias messageType="tns:getItineraryRequest" part="customerId" propertyName="tns:customerId"/>
     <vprop:propertyAlias messageType="tns:getItineraryRequest" part="itineraryId" propertyName="tns:itineraryId"/>
+    <vprop:propertyAlias messageType="tns:bookingItineraryRequest" part="customerId" propertyName="tns:customerId"/>
+    <vprop:propertyAlias messageType="tns:bookingItineraryRequest" part="itineraryId" propertyName="tns:itineraryId"/>
+    <vprop:propertyAlias messageType="tns:getFlightRequest" part="customerId" propertyName="tns:customerId"/>
+    <vprop:propertyAlias messageType="tns:getFlightRequest" part="itineraryId" propertyName="tns:itineraryId"/>
 </definitions>

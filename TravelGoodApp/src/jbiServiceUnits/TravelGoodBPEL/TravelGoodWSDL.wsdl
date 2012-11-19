@@ -5,10 +5,12 @@
     xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://travelgood.ws" xmlns:plnk="http://docs.oasis-open.org/wsbpel/2.0/plnktype" xmlns:ns="http://types.niceview.ws" xmlns:vprop="http://docs.oasis-open.org/wsbpel/2.0/varprop" xmlns:ns0="http://types.lameduck.ws" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
     >
     <types>
-        <xsd:schema targetNamespace="http://travelgood.ws"
-                    xmlns:jaxb="http://java.sun.com/xml/ns/jaxb"
+        <xsd:schema targetNamespace="http://travelgood.ws" >
+                    <!-- xmlns:jaxb="http://java.sun.com/xml/ns/jaxb"
                     elementFormDefault="qualified"
-                    jaxb:version="2.0">
+                    jaxb:version="2.0"
+                    >
+                    -->
 
             <xsd:import namespace="http://types.niceview.ws" schemaLocation="localhost_8080/NiceViewService/NiceViewWSDLService.xsd_1.xsd"/>
             <xsd:import namespace="http://types.lameduck.ws" schemaLocation="localhost_8080/LameDuckService/LameDuckWSDLService.xsd_1.xsd"/>
@@ -283,7 +285,12 @@ A partner link type characterizes the conversational relationship between two se
     <vprop:propertyAlias propertyName="tns:itineraryId" messageType="tns:addHotelRequest" part="itineraryId"/>
     <vprop:propertyAlias propertyName="tns:customerId" messageType="tns:getItineraryRequest" part="customerId"/>
     <vprop:propertyAlias propertyName="tns:itineraryId" messageType="tns:getItineraryRequest" part="itineraryId"/>
+    <vprop:propertyAlias propertyName="tns:customerId" messageType="tns:bookingItineraryRequest" part="customerId"/>
+    <vprop:propertyAlias propertyName="tns:itineraryId" messageType="tns:bookingItineraryRequest" part="itineraryId"/>
+    <vprop:propertyAlias propertyName="tns:customerId" messageType="tns:getFlightRequest" part="customerId"/>
+    <vprop:propertyAlias propertyName="tns:itineraryId" messageType="tns:getFlightRequest" part="itineraryId"/>
 </definitions>
+
 
 
 

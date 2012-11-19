@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import javax.jws.WebService;
+import javax.xml.datatype.XMLGregorianCalendar;
 import javax.xml.ws.WebServiceRef;
 import ws.niceview.types.AddressType;
 import ws.niceview.types.BookHotelFaultType;
@@ -41,17 +42,23 @@ public class NiceViewWebServiceFromWSDL {
     };
     List<String> bookedHotels = new ArrayList<String>();
 
-    public ws.niceview.types.HotelListType getHotels(java.lang.String city, java.util.Calendar departureDate, java.util.Calendar arrivalDate) {
+    public ws.niceview.types.HotelListType getHotels(java.lang.String city, XMLGregorianCalendar departureDate, XMLGregorianCalendar arrivalDate) {
 
         HotelListType hotelList = new HotelListType();
         boolean randomize = false;
         Random rand = null;
 
-        if (arrivalDate.get(java.util.Calendar.DAY_OF_YEAR) -
-                departureDate.get(java.util.Calendar.DAY_OF_YEAR) > DAY_LIMIT) {
+        if(arrivalDate.getDay() - departureDate.getDay() > DAY_LIMIT)
+        {
             randomize = true;
             rand = new Random(System.currentTimeMillis());
         }
+
+        /*if (arrivalDate.get(java.util.Calendar.DAY_OF_YEAR) -
+                departureDate.get(java.util.Calendar.DAY_OF_YEAR) > DAY_LIMIT) {
+            randomize = true;
+            rand = new Random(System.currentTimeMillis());
+        }*/
 
         for (HotelType hotel : hotelArray) {
 

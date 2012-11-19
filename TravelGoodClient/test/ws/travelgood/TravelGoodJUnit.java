@@ -5,7 +5,11 @@
 package ws.travelgood;
 
 import java.util.Calendar;
+import javax.xml.datatype.DatatypeConfigurationException;
+import javax.xml.datatype.DatatypeFactory;
+import javax.xml.datatype.XMLGregorianCalendar;
 import org.junit.Test;
+import ws.lameduck.types.FlightInformationListType;
 import ws.niceview.types.*;
 import static org.junit.Assert.*;
 
@@ -30,8 +34,9 @@ public class TravelGoodJUnit {
 
     }
 
+    
     @Test
-    public void testGetHotel() {
+    public void testGetHotel() throws DatatypeConfigurationException {
 
         ws.travelgood.TravelGoodWSDLService service = new ws.travelgood.TravelGoodWSDLService();
         ws.travelgood.TravelGoodWSDLPortType port = service.getTravelGoodWSDLPortTypeBindingPort();
@@ -42,10 +47,15 @@ public class TravelGoodJUnit {
         port.createItinerary(customerId, itineraryId);
 
         java.lang.String city = "Barcelona";
-        java.util.Calendar arrivalDate = Calendar.getInstance();
+
+        DatatypeFactory df = DatatypeFactory.newInstance();
+        XMLGregorianCalendar arrivalDate = df.newXMLGregorianCalendar("2012-11-23");
+        XMLGregorianCalendar departureDate = df.newXMLGregorianCalendar("2012-11-25");
+
+        /*java.util.Calendar arrivalDate = Calendar.getInstance();
         arrivalDate.set(2012, 11, 23);
         java.util.Calendar departureDate = Calendar.getInstance();
-        departureDate.set(2012, 11, 25);
+        departureDate.set(2012, 11, 25);*/
 
         ws.niceview.types.HotelListType result = port.getHotel(city, arrivalDate, departureDate, customerId, itineraryId);
 
@@ -53,8 +63,9 @@ public class TravelGoodJUnit {
         
     }
 
+    
     @Test
-    public void testAddHotel() {
+    public void testAddHotel() throws DatatypeConfigurationException {
 
         ws.travelgood.TravelGoodWSDLService service = new ws.travelgood.TravelGoodWSDLService();
         ws.travelgood.TravelGoodWSDLPortType port = service.getTravelGoodWSDLPortTypeBindingPort();
@@ -65,10 +76,15 @@ public class TravelGoodJUnit {
         port.createItinerary(customerId, itineraryId);
 
         java.lang.String city = "Barcelona";
-        java.util.Calendar arrivalDate = Calendar.getInstance();
+
+        DatatypeFactory df = DatatypeFactory.newInstance();
+        XMLGregorianCalendar arrivalDate = df.newXMLGregorianCalendar("2012-11-23");
+        XMLGregorianCalendar departureDate = df.newXMLGregorianCalendar("2012-11-25");
+
+        /*java.util.Calendar arrivalDate = Calendar.getInstance();
         arrivalDate.set(2012, 11, 23);
         java.util.Calendar departureDate = Calendar.getInstance();
-        departureDate.set(2012, 11, 25);
+        departureDate.set(2012, 11, 25);*/
 
         ws.niceview.types.HotelListType resultGetHotel = port.getHotel(city, arrivalDate, departureDate, customerId, itineraryId);
 
@@ -79,7 +95,7 @@ public class TravelGoodJUnit {
     }
 
     @Test
-    public void testGetItinerary() {
+    public void testGetItinerary() throws DatatypeConfigurationException {
 
         ws.travelgood.TravelGoodWSDLService service = new ws.travelgood.TravelGoodWSDLService();
         ws.travelgood.TravelGoodWSDLPortType port = service.getTravelGoodWSDLPortTypeBindingPort();
@@ -90,10 +106,15 @@ public class TravelGoodJUnit {
         port.createItinerary(customerId, itineraryId);
 
         java.lang.String city = "Barcelona";
-        java.util.Calendar arrivalDate = Calendar.getInstance();
+
+        DatatypeFactory df = DatatypeFactory.newInstance();
+        XMLGregorianCalendar arrivalDate = df.newXMLGregorianCalendar("2012-11-23");
+        XMLGregorianCalendar departureDate = df.newXMLGregorianCalendar("2012-11-25");
+
+        /*java.util.Calendar arrivalDate = Calendar.getInstance();
         arrivalDate.set(2012, 11, 23);
         java.util.Calendar departureDate = Calendar.getInstance();
-        departureDate.set(2012, 11, 25);
+        departureDate.set(2012, 11, 25);*/
 
         ws.niceview.types.HotelListType resultGetHotel = port.getHotel(city, arrivalDate, departureDate, customerId, itineraryId);
 
@@ -127,4 +148,27 @@ public class TravelGoodJUnit {
         assertEquals(arrivalDate.toString(),result.getItineraryStartDate().toString());
 
     }
+
+        @Test
+        public void testGetFlight() throws DatatypeConfigurationException {
+
+            ws.travelgood.TravelGoodWSDLService service = new ws.travelgood.TravelGoodWSDLService();
+            ws.travelgood.TravelGoodWSDLPortType port = service.getTravelGoodWSDLPortTypeBindingPort();
+            // TODO initialize WS operation arguments here
+            int customerId = 5;
+            int itineraryId = 5;
+            // TODO process result here
+            port.createItinerary(customerId, itineraryId);
+
+            DatatypeFactory df = DatatypeFactory.newInstance();
+            XMLGregorianCalendar flightDate = df.newXMLGregorianCalendar("2012-12-22");
+
+            FlightInformationListType result = port.getFlight("Copenhagen", "Bucharest",flightDate, customerId, itineraryId);
+
+            assertFalse(result.getFlightInformation().isEmpty());
+
+        }
+
+
+
 }
