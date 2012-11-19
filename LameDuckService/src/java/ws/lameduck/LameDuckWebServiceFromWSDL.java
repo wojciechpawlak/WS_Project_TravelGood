@@ -159,7 +159,7 @@ public class LameDuckWebServiceFromWSDL {
         } catch (DatatypeConfigurationException ex) {
             return;
         }
-        XMLGregorianCalendar date = df.newXMLGregorianCalendar("2012-12-22");
+        XMLGregorianCalendar date = df.newXMLGregorianCalendar("2012-12-25");
 
         FlightInformationType myFlightInformation = new FlightInformationType();
         myFlightInformation.setBookingNumber("12345A");
@@ -185,8 +185,21 @@ public class LameDuckWebServiceFromWSDL {
         myFlight2.setLandingDate(date);
         myFlightInformation2.setFlight(myFlight2);
 
+        FlightInformationType myFlightInformation3 = new FlightInformationType();
+        myFlightInformation3.setBookingNumber("123321C");
+        myFlightInformation3.setAirlineReservationServiceName("AirFrance");
+        myFlightInformation3.setPrice(22);
+        FlightType myFlight3 = new FlightType();
+        myFlight3.setCarrierName("Blast");
+        myFlight3.setStartAirport("Paris");
+        myFlight3.setDestinationAirport("Tokyo");
+        myFlight3.setLiftOffDate(date);
+        myFlight3.setLandingDate(date);
+        myFlightInformation3.setFlight(myFlight3);
+
         flights.add(myFlightInformation);
         flights.add(myFlightInformation2);
+        flights.add(myFlightInformation3);
 
         onlyOnce = true;
     }

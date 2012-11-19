@@ -75,6 +75,8 @@ public class NiceViewWebServiceFromWSDL {
             }
         }
 
+        hotelList.setHotelReservationServiceName("FormuleUn"); //Add by KB
+
         return hotelList;
 
     }
