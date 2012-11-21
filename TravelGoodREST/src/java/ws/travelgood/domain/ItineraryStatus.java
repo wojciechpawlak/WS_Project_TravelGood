@@ -20,7 +20,7 @@ public enum ItineraryStatus {
     PLANNING,
     @XmlEnumValue("BOOKED")
     BOOKED,
-    @XmlEnumValue("PARTIALLY_CANCELLED")
-    PARTIALLY_CANCELLED;
+    @XmlEnumValue("CANCEL_REQUESTED")
+    CANCEL_REQUESTED;
     
 }

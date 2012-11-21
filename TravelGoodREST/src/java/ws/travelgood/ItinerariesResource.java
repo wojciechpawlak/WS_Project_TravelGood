@@ -28,7 +28,7 @@ public class ItinerariesResource {
 
     @Context
     private UriInfo context;
-    static List<Itinerary> itineraryList = new ArrayList<Itinerary>(
+    public static List<Itinerary> itineraryList = new ArrayList<Itinerary>(
             Arrays.asList(
             new Itinerary[]{
                 new Itinerary("u1", "1"),

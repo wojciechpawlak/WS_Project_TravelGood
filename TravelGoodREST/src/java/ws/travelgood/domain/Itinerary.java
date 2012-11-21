@@ -7,15 +7,16 @@ package ws.travelgood.domain;
 
 import java.util.ArrayList;
 import java.util.List;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
-import ws.niceview.types.HotelType;
+import ws.travelgood.domain.hotel.HotelBooking;
 
 /**
  *
  * @author mkucharek
  */
-@XmlType
 @XmlRootElement
 public class Itinerary {
 
@@ -25,7 +26,7 @@ public class Itinerary {
 
     private ItineraryStatus currentStatus;
 
-    private List<HotelType> hotelList;
+    private List<HotelBooking> hotelBookingList;
 
     private Itinerary() {
 
@@ -40,7 +41,7 @@ public class Itinerary {
         this.id = itineraryId;
         this.userId = userId;
         this.currentStatus = status;
-        this.hotelList = new ArrayList<HotelType>();
+        this.hotelBookingList = new ArrayList<HotelBooking>();
 
     }
 
@@ -87,18 +88,22 @@ public class Itinerary {
     }
 
     /**
-     * @return the hotelList
+     * @return the hotelBookingList
      */
-    public List<HotelType> getHotelList() {
-        return hotelList;
+    @XmlElementWrapper(name="hotels")
+    @XmlElement(name="hotel")
+    public List<HotelBooking> getHotelBookingList() {
+        return hotelBookingList;
     }
 
     /**
-     * @param hotelList the hotelList to set
+     * @param hotelBookingList the hotelBookingList to set
      */
-    public void setHotelList(List<HotelType> hotelList) {
-        this.setHotelList(hotelList);
+    public void setHotelBookingList(List<HotelBooking> hotelBookingList) {
+        this.hotelBookingList = hotelBookingList;
     }
+
+    
 
     @Override
     public String toString() {
@@ -106,7 +111,7 @@ public class Itinerary {
                 "id = " + this.id + "; " +
                 "userId = " + this.userId + "; " +
                 "status = " + this.currentStatus + "; " +
-                "hotelList = " + this.hotelList + "]";
+                "hotelList = " + this.getHotelBookingList() + "]";
     }
 
 }

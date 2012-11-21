@@ -10,5 +10,5 @@ package ws.travelgood.domain;
  * @author mkucharek
  */
 public enum ItineraryElementStatus {
-    REQUESTED, BOOKED, CANCELLED
+    UNCONFIRMED, CONFIRMED, CANCELLED
 }

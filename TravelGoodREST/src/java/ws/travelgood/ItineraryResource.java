@@ -104,7 +104,9 @@ public class ItineraryResource {
                     return Response.ok().build();
 
                 } else {
-                    throw new InvalidStatusException(it + " cannot be deleted as it is no longer in planning state");
+                    throw new InvalidStatusException(
+                            it +
+                            " cannot be deleted as it is no longer in planning state");
 
                 }
             }
@@ -114,12 +116,32 @@ public class ItineraryResource {
     }
 
     @POST
+    @Path("book")
+    public Response bookItinerary(@PathParam("id") String id) {
+
+        // check if itinerary is in PLANNING phase
+
+        // optionally - check if all the items are UNCONFIRMED
+
+        // book every single hotel
+
+        // book every single flight
+
+        // in case of failure - cancel all the previous bookings, return to PLANNING phase
+
+        return Response.ok().build();
+
+    }
+
+    @POST
     @Path("cancel")
     public Response cancelItinerary(@PathParam("id") String id) {
 
         // cancel all hotels
 
         // cancel all flights
+
+        // on error - continue, but notify the user
 
 
         return Response.ok().build();
