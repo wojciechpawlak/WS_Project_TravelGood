@@ -202,6 +202,77 @@ public class TravelGoodJUnit {
         //Create the itinerary
         port.createItinerary(customerId, itineraryId);
 
+        //TODO : REMOVE
+
+        ItineraryType myItinerary2 = port.getItinerary(customerId, itineraryId);
+        System.out.println(myItinerary2.getBookingsHotel().size());
+
+        DatatypeFactory df1 = DatatypeFactory.newInstance();
+
+        XMLGregorianCalendar arrivalDate1 = df1.newXMLGregorianCalendar("2012-12-22");
+        XMLGregorianCalendar departureDate1 = df1.newXMLGregorianCalendar("2012-12-25");
+        HotelListType resultGetHotel1 = port.getHotel("Vienna", arrivalDate1, departureDate1, customerId, itineraryId);
+        if (resultGetHotel1.getHotel().size() > 0)
+            port.addHotel(resultGetHotel1.getHotel().get(0).getBookingNumber(), customerId, itineraryId);
+
+        myItinerary2 = port.getItinerary(customerId, itineraryId);
+        System.out.println(myItinerary2.getBookingsHotel().size());
+
+        arrivalDate1 = df1.newXMLGregorianCalendar("2012-12-26");
+        departureDate1 = df1.newXMLGregorianCalendar("2012-12-28");
+        resultGetHotel1 = port.getHotel("Barcelona", arrivalDate1, departureDate1, customerId, itineraryId);
+        if (resultGetHotel1.getHotel().size() > 0)
+            port.addHotel(resultGetHotel1.getHotel().get(0).getBookingNumber(), customerId, itineraryId);
+
+        myItinerary2 = port.getItinerary(customerId, itineraryId);
+        System.out.println(myItinerary2.getBookingsHotel().size());
+
+        arrivalDate1 = df1.newXMLGregorianCalendar("2012-12-26");
+        departureDate1 = df1.newXMLGregorianCalendar("2012-12-28");
+        resultGetHotel1 = port.getHotel("Vienna", arrivalDate1, departureDate1, customerId, itineraryId);
+        if (resultGetHotel1.getHotel().size() > 0)
+            port.addHotel(resultGetHotel1.getHotel().get(0).getBookingNumber(), customerId, itineraryId);
+
+        myItinerary2 = port.getItinerary(customerId, itineraryId);
+        System.out.println(myItinerary2.getBookingsHotel().size());
+
+        arrivalDate1 = df1.newXMLGregorianCalendar("2012-12-26");
+        departureDate1 = df1.newXMLGregorianCalendar("2012-12-28");
+        resultGetHotel1 = port.getHotel("Vienna", arrivalDate1, departureDate1, customerId, itineraryId);
+        if (resultGetHotel1.getHotel().size() > 0)
+            port.addHotel(resultGetHotel1.getHotel().get(0).getBookingNumber(), customerId, itineraryId);
+
+        myItinerary2 = port.getItinerary(customerId, itineraryId);
+        System.out.println(myItinerary2.getBookingsHotel().size());
+
+        arrivalDate1 = df1.newXMLGregorianCalendar("2012-12-26");
+        departureDate1 = df1.newXMLGregorianCalendar("2012-12-28");
+        resultGetHotel1 = port.getHotel("Vienna", arrivalDate1, departureDate1, customerId, itineraryId);
+        if (resultGetHotel1.getHotel().size() > 0)
+            port.addHotel(resultGetHotel1.getHotel().get(0).getBookingNumber(), customerId, itineraryId);
+
+        myItinerary2 = port.getItinerary(customerId, itineraryId);
+        System.out.println(myItinerary2.getBookingsHotel().size());
+
+        arrivalDate1 = df1.newXMLGregorianCalendar("2012-12-26");
+        departureDate1 = df1.newXMLGregorianCalendar("2012-12-28");
+        resultGetHotel1 = port.getHotel("Vienna", arrivalDate1, departureDate1, customerId, itineraryId);
+        if (resultGetHotel1.getHotel().size() > 0)
+            port.addHotel(resultGetHotel1.getHotel().get(0).getBookingNumber(), customerId, itineraryId);
+
+        myItinerary2 = port.getItinerary(customerId, itineraryId);
+        System.out.println(myItinerary2.getBookingsHotel().size());
+        
+        System.out.println();
+
+        for(BookingType myBooking : myItinerary2.getBookingsHotel())
+            System.out.println(myBooking.getBookingNumber());
+
+        port.bookingItinerary(customerId, itineraryId);
+        
+        //TODO : END REMOVE
+
+        /*
         //Plan a trip by first planning a flight
         //i.e. getting a list of flights and then adding a flight to the itinerary
         DatatypeFactory df = DatatypeFactory.newInstance();
@@ -240,8 +311,12 @@ public class TravelGoodJUnit {
         ItineraryType myItinerary = port.getItinerary(customerId, itineraryId);
 
         assertEquals(0,myItinerary.getBookingsFlight().size()); //TODO : Replace by 3
-        assertEquals(1,myItinerary.getBookingsHotel().size()); //TODO : Replace by 2
+        assertEquals(3,myItinerary.getBookingsHotel().size()); //TODO : Replace by 2
         //TODO : Make this work //assertEquals(df.newXMLGregorianCalendar("2012-12-22"),myItinerary.getItineraryStartDate());
+
+        System.out.println(myItinerary.getBookingsHotel().get(0).getBookingNumber());
+        System.out.println(myItinerary.getBookingsHotel().get(1).getBookingNumber());
+        System.out.println(myItinerary.getBookingsHotel().get(2).getBookingNumber());
 
         //in particular, that the booking status for each item is unconfirmed.
         for(BookingType myBookingFlight : myItinerary.getBookingsFlight())
@@ -254,7 +329,7 @@ public class TravelGoodJUnit {
         port.bookingItinerary(customerId, itineraryId);
         //myItinerary = port.getItinerary(customerId, itineraryId);
 
-        /*//Check that each booking status is now confirmed
+        //Check that each booking status is now confirmed
         for(BookingType myBookingFlight : myItinerary.getBookingsFlight())
             assertEquals("confirmed",myBookingFlight.getBookingStatus());
 
