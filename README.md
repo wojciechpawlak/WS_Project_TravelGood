@@ -5,7 +5,6 @@ A set of web services for a travel agency web application. Project work for 0226
 
 How-to:
 
-
 	Service project:
 	 - check out the code from the repository
 	 - open Netbeans and open the desired projects
@@ -38,7 +37,15 @@ How-to:
 	 - Right click on the project, select "Clean and build"
 	 - Run your tests, they should work fine now
 	 
-	 How to handle the update of BPEL Web Service
+	 
+	 
+	 For BPEL Web Service project:
+	 Error: BPJBI-7004:Service unit TravelGoodApp-TravelGoodBPEL failed to load deployment
+	 BPJBI-6024:Error while loading BPEL file
+	 Exception details are Cannot parse BPEL ==> Compiling XSDs failed,
+	 while deployment of TravelGoodApp
+	 or
+	 how to handle the update of BPEL Web Service
 	 if there was a change in WSDL file for LameDuck or NiceView:
 	 - make change in WSDL file for LameDuck or NiceView
 	 - refresh the Web Service
@@ -46,13 +53,13 @@ How-to:
 	 - copy the WSDL link from admin console
 	 - in BPEL Web Service project remove localhost_8080 folder, wrapper WSDL file and links in referenced resources
 	 - add  New > External WSDL Document(s)... and paste WSDL link from admin console in "From URL:"
-	 - wait a couple of seconds (try to collapse the menus; in worst case restart NetBeans)
+	 - process takes some time, one can check progress in bottom right corner (if is seems blocked, try to collapse the menus; in worst case restart NetBeans)
 	 - open BPEL file and remove the Partner Link (on the right)
 	 - add new partner links through drag dropping WSDL file from localhost_8080 folder to the right side of BPEL diagram
 	 - in the menu that pops up keep the defaults
 	 - if there is an error when XML validated, you cannot Deploy, so turn off the server and restart NetBeans
 	 - error disappears after restart, so the BPEL Web Service can be deployed
-	 - run tests in BPEL Client
+	 - run tests in BPEL Client (refresh the Client if needed)
 	 
 	 
  
