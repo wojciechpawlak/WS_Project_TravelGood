@@ -20,7 +20,8 @@
         <partnerLink name="PartnerLink1" xmlns:tns="http://travelgood.ws" partnerLinkType="tns:TravelGoodWSDL" myRole="TravelGoodWSDLPortTypeRole"/>
     </partnerLinks>
     <variables>
-          <variable name="AddFlightOut" messageType="ns0:addFlightResponse"/>
+        <variable name="arraySize" type="xsd:int"/>
+        <variable name="AddFlightOut" messageType="ns0:addFlightResponse"/>
           <variable name="AddFlightIn" messageType="ns0:addFlightRequest"/>
           <variable name="GetFlightsOut" xmlns:tns="http://lameduck.ws" messageType="tns:getFlightsResponse"/>
         <variable name="GetFlightsIn" xmlns:tns="http://lameduck.ws" messageType="tns:getFlightsRequest"/>
@@ -32,7 +33,11 @@
         <variable name="GetItineraryOut" messageType="ns0:getItineraryResponse"/>
         <variable name="GetItineraryIn" messageType="ns0:getItineraryRequest"/>
         <variable name="changeItineraryStartDate" type="xs:boolean"/>
-        <variable name="Itinerary" type="ns0:itineraryType"/>
+        <variable name="Itinerary" type="ns0:itineraryType">
+            <sxed2:editor>
+                <sxed2:predicate path="$Itinerary/bookingsHotel[$arraySize]" source="to"/>
+            </sxed2:editor>
+        </variable>
         <variable name="AddHotelOut" messageType="ns0:addHotelResponse"/>
         <variable name="AddHotelIn" messageType="ns0:addHotelRequest"/>
         <variable name="GetHotelsOut" xmlns:tns="http://niceview.ws" messageType="tns:getHotelsResponse"/>
@@ -59,6 +64,14 @@
             <copy>
                 <from>false()</from>
                 <to variable="donePlanning"/>
+            </copy>
+            <copy>
+                <from>'3000-01-01T00:00:0.0+01:00'</from>
+                <to>$Itinerary/itineraryStartDate</to>
+            </copy>
+            <copy>
+                <from>0</from>
+                <to variable="arraySize"/>
             </copy>
         </assign>
         <reply name="Reply1" partnerLink="PartnerLink1" operation="createItinerary" xmlns:tns="http://travelgood.ws" portType="tns:TravelGoodWSDLPortType" variable="CreateItineraryOut"/>
@@ -98,25 +111,39 @@
                                 <correlation set="CustomerItineraryCorrelation" initiate="no"/>
                             </correlations>
                             <sequence name="Sequence2">
+                                <assign name="Assign13">
+                                    <copy>
+                                        <from>$arraySize + 1</from>
+                                        <to variable="arraySize"/>
+                                    </copy>
+                                </assign>
                                 <assign name="Assign4">
                                         <copy>
                                                 <from>'Hotel added'</from>
                                                     <to variable="AddHotelOut" part="confirmation"/>
                                             </copy>
-                                            <copy>
-                                                <from>'unconfirmed'</from>
-                                                    <to>$Itinerary/<!--ns0:-->bookingsHotel/<!--ns0:-->bookingStatus</to>
-                                            </copy>
-                                      <copy>
-                                            <from variable="AddHotelIn" part="bookingNumber"/>
-                                            <to>$Itinerary/bookingsHotel/bookingNumber</to>
-                                      </copy>
-                                      <copy>
-                                            <from>true()</from>
-                                            <to variable="changeItineraryStartDate"/>
-                                      </copy>
+                                    <copy>
+                                        <from>true()</from>
+                                        <to variable="changeItineraryStartDate"/>
+                                    </copy>
+                                    <copy>
+                                        <from variable="arraySize"/>
+                                        <to>$Itinerary/bookingsHotel[$arraySize]/bookingNumber
+                                            <sxed2:editor>
+                                                <sxed2:predicate path="$Itinerary/bookingsHotel[$arraySize]" source="to"/>
+                                            </sxed2:editor>
+                                        </to>
+                                    </copy>
+                                    <copy>
+                                        <from>'unconfirmed'</from>
+                                        <to>$Itinerary/bookingsHotel[$arraySize]/bookingStatus
+                                            <sxed2:editor>
+                                                <sxed2:predicate path="$Itinerary/bookingsHotel[$arraySize]" source="to"/>
+                                            </sxed2:editor>
+                                        </to>
+                                    </copy>
                                 </assign>
-                                    <if name="If1">
+                                <if name="If1">
                                         <condition>$changeItineraryStartDate</condition>
                                             <assign name="Assign5">
                                                   <copy>
@@ -229,6 +256,10 @@
         </repeatUntil>
     </sequence>
 </process>
+
+
+
+
 
 
 
