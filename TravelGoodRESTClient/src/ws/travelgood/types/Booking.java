@@ -3,7 +3,7 @@
  * and open the template in the editor.
  */
 
-package ws.travelgood.domain;
+package ws.travelgood.types;
 
 /**
  *

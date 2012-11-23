@@ -4,7 +4,7 @@
  */
 package ws.travelgood;
 
-import ws.travelgood.domain.Itinerary;
+import ws.travelgood.types.Itinerary;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -16,7 +16,7 @@ import javax.ws.rs.Consumes;
 import javax.ws.rs.Path;
 import javax.ws.rs.GET;
 import javax.ws.rs.Produces;
-import ws.travelgood.domain.ItineraryStatus;
+import ws.travelgood.types.ItineraryStatus;
 
 /**
  * REST Web Service

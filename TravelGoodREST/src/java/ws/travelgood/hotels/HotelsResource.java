@@ -4,7 +4,7 @@
  */
 package ws.travelgood.hotels;
 
-import ws.travelgood.domain.hotel.HotelList;
+import ws.travelgood.types.hotel.HotelList;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;

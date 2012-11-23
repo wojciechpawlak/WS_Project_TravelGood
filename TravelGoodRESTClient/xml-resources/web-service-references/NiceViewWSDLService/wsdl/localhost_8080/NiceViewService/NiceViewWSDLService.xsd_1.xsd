@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?><!-- Published by JAX-WS RI at http://jax-ws.dev.java.net. RI's version is JAX-WS RI 2.1.3.3-hudson-757-SNAPSHOT. --><xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://types.niceview.ws" xmlns:jaxb="http://java.sun.com/xml/ns/jaxb" targetNamespace="http://types.niceview.ws" elementFormDefault="qualified" jaxb:version="2.0">
+
+    <!--<xsd:annotation>
+        <xsd:appinfo>
+            <jaxb:globalBindings>
+                <jaxb:javaType name="java.util.Calendar" xmlType="xsd:date" parseMethod="javax.xml.bind.DatatypeConverter.parseDateTime" printMethod="javax.xml.bind.DatatypeConverter.printDateTime" />
+                <jaxb:javaType name="java.util.Calendar" xmlType="xsd:dateTime" parseMethod="javax.xml.bind.DatatypeConverter.parseDateTime" printMethod="javax.xml.bind.DatatypeConverter.printDateTime" />
+            </jaxb:globalBindings>
+        </xsd:appinfo>
+    </xsd:annotation>-->
+
+    <xsd:complexType name="hotelType">
+        <xsd:sequence>
+            <xsd:element name="hotelName" type="xsd:string"></xsd:element>
+            <xsd:element name="hotelAddress" type="tns:addressType"></xsd:element>
+            <xsd:element name="bookingNumber" type="xsd:string"></xsd:element>
+            <xsd:element name="hotelStayPrice" type="xsd:double"></xsd:element>
+            <xsd:element name="ifCreditCardRequired" type="xsd:boolean"></xsd:element>
+        </xsd:sequence>
+    </xsd:complexType>
+    <xsd:complexType name="addressType">
+        <xsd:sequence>
+            <xsd:element name="street" type="xsd:string"></xsd:element>
+            <xsd:element name="postcode" type="xsd:string"></xsd:element>
+            <xsd:element name="city" type="xsd:string"></xsd:element>
+        </xsd:sequence>
+    </xsd:complexType>
+    <xsd:complexType name="hotelListType">
+        <xsd:sequence>
+            <xsd:element name="hotel" type="tns:hotelType" maxOccurs="unbounded" minOccurs="0"></xsd:element>
+            <xsd:element name="hotelReservationServiceName" type="xsd:string"></xsd:element>
+        </xsd:sequence>
+    </xsd:complexType>
+    <xsd:complexType name="BookHotelFaultType">
+        <xsd:sequence>
+            <xsd:element name="message" type="xsd:string"></xsd:element>
+        </xsd:sequence>
+    </xsd:complexType>
+    
+    <xsd:element name="BookHotelFault" type="tns:BookHotelFaultType"></xsd:element>
+    <xsd:complexType name="CancelHotelFaultType">
+        <xsd:sequence>
+            <xsd:element name="message" type="xsd:string"></xsd:element>
+        </xsd:sequence>
+    </xsd:complexType>
+    <xsd:element name="CancelHotelFault" type="tns:CancelHotelFaultType"></xsd:element>
+</xsd:schema>

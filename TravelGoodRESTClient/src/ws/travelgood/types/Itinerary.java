@@ -3,7 +3,7 @@
  * and open the template in the editor.
  */
 
-package ws.travelgood.domain;
+package ws.travelgood.types;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,7 +11,7 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
-import ws.travelgood.domain.hotel.HotelBooking;
+import ws.travelgood.types.hotel.HotelBooking;
 
 /**
  *

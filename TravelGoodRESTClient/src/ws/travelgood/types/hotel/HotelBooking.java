@@ -3,10 +3,10 @@
  * and open the template in the editor.
  */
 
-package ws.travelgood.domain.hotel;
+package ws.travelgood.types.hotel;
 
 import javax.xml.bind.annotation.XmlRootElement;
-import ws.travelgood.domain.Booking;
+import ws.travelgood.types.Booking;
 
 /**
  *

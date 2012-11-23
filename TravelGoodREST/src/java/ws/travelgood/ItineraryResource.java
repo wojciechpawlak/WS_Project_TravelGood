@@ -6,7 +6,7 @@ package ws.travelgood;
 
 import javax.ws.rs.Consumes;
 import ws.travelgood.exceptions.InvalidStatusException;
-import ws.travelgood.domain.Itinerary;
+import ws.travelgood.types.Itinerary;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.PathParam;
@@ -18,7 +18,7 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
-import ws.travelgood.domain.ItineraryStatus;
+import ws.travelgood.types.ItineraryStatus;
 import ws.travelgood.flights.FlightsResource;
 import ws.travelgood.hotels.HotelsResource;
 

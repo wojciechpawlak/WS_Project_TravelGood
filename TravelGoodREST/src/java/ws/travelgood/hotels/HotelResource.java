@@ -12,9 +12,9 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.UriInfo;
 import ws.travelgood.ItinerariesResource;
-import ws.travelgood.domain.Itinerary;
-import ws.travelgood.domain.ItineraryStatus;
-import ws.travelgood.domain.hotel.HotelBooking;
+import ws.travelgood.types.Itinerary;
+import ws.travelgood.types.ItineraryStatus;
+import ws.travelgood.types.hotel.HotelBooking;
 import ws.travelgood.exceptions.InvalidStatusException;
 
 /**
