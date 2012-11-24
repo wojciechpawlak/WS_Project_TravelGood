@@ -40,14 +40,14 @@
 	<xsd:complexType name="requestBookFlightType">
 		<xsd:sequence>
 			<xsd:element name="bookingNumber" type="xsd:string"></xsd:element>
-		 <xsd:element name="creditCardInformation" type="ns0:creditCardInfoType"></xsd:element>
+		 <xsd:element name="creditCardInformation" type="tns:creditCardInfoWrapperType"></xsd:element>
 		</xsd:sequence>
 	</xsd:complexType>
 	<xsd:complexType name="requestCancelFlightType">
 		<xsd:sequence>
 			<xsd:element name="bookingNumber" type="xsd:string"></xsd:element>
 			<xsd:element name="price" type="xsd:double"></xsd:element>
-		 <xsd:element name="creditCardInformation" type="ns0:creditCardInfoType"></xsd:element>
+		 <xsd:element name="creditCardInformation" type="tns:creditCardInfoWrapperType"></xsd:element>
 		</xsd:sequence>
 	</xsd:complexType>
     <xsd:complexType name="CancelFlightFaultType">
@@ -62,7 +62,15 @@
     </xsd:complexType>
     <xsd:element name="CancelFlightFaultElement" type="tns:CancelFlightFaultType"></xsd:element>
     <xsd:element name="BookFlightFaultElement" type="tns:BookFlightFaultType"></xsd:element>
+    <xsd:complexType name="creditCardInfoWrapperType">
+        <xsd:complexContent>
+            <xsd:extension xmlns:tns="urn://types.fastmoney.imm.dtu.dk" base="ns0:creditCardInfoType">
+                <xsd:sequence/>
+            </xsd:extension>
+        </xsd:complexContent>
+    </xsd:complexType>
 </xsd:schema>
+
 
 
 

@@ -4,13 +4,14 @@
  */
 package ws.lameduck;
 
-import dk.dtu.imm.fastmoney.types.CreditCardInfoType;
 import dk.dtu.imm.fastmoney.types.ExpirationDateType;
 import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
 import javax.xml.datatype.DatatypeConfigurationException;
 import org.junit.Test;
+import ws.lameduck.types.CreditCardInfoWrapperType;
 import ws.lameduck.types.FlightInformationType;
+import static org.junit.Assert.*;
 
 /**
  *
@@ -53,19 +54,19 @@ public class LameDuckJUnit {
      }
 
      @Test
-     public void testBookFlights() throws DatatypeConfigurationException {
+     public void testBookFlights() throws DatatypeConfigurationException, BookFlightFault {
 
 
 
 
-         try { // Call Web Service Operation
+        //try { // Call Web Service Operation
              ws.lameduck.LameDuckWSDLService service = new ws.lameduck.LameDuckWSDLService();
              ws.lameduck.LameDuckWSDLPortType port = service.getLameDuckWSDLPortTypeBindingPort();
              //initialize WS operation arguments here
              ws.lameduck.types.RequestBookFlightType input = new ws.lameduck.types.RequestBookFlightType();
              input.setBookingNumber("12345A");
 
-             CreditCardInfoType ccit = new CreditCardInfoType();
+             CreditCardInfoWrapperType ccit = new CreditCardInfoWrapperType();
              ccit.setName("Anne Strandberg");
              ccit.setNumber("50408816");
              ExpirationDateType edt = new ExpirationDateType();
@@ -78,9 +79,10 @@ public class LameDuckJUnit {
              // TODO process result here
              boolean result = port.bookFlights(input);
              System.out.println("Result = "+result);
-         } catch (Exception ex) {
+             assertTrue(result);
+         /*} catch (Exception ex) {
              System.out.println(ex.getMessage());
-         }
+         }*/
 
 
 
@@ -98,7 +100,7 @@ public class LameDuckJUnit {
              input.setBookingNumber("12345A");
              input.setPrice(12);
 
-             CreditCardInfoType ccit = new CreditCardInfoType();
+             CreditCardInfoWrapperType ccit = new CreditCardInfoWrapperType();
              ccit.setName("Anne Strandberg");
              ccit.setNumber("50408816");
              ExpirationDateType edt = new ExpirationDateType();
@@ -111,6 +113,7 @@ public class LameDuckJUnit {
              // TODO process result here
              boolean result = port.cancelFlight(input);
              System.out.println("Result = "+result);
+             assertTrue(result);
          } catch (Exception ex) {
              System.out.println(ex.getMessage());
          }

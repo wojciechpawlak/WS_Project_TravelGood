@@ -13,6 +13,7 @@ import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
 import org.junit.Test;
 import ws.lameduck.types.FlightInformationListType;
+import ws.lameduck.types.CreditCardInfoWrapperType;
 import ws.niceview.types.*;
 import static org.junit.Assert.*;
 
@@ -343,7 +344,7 @@ public class TravelGoodJUnit {
 
         
         //Book the itinerary and ask again for the itinerary.
-        CreditCardInfoType ccit = new CreditCardInfoType();
+        CreditCardInfoWrapperType ccit = new CreditCardInfoWrapperType();
         ccit.setName("Anne Strandberg");
         ccit.setNumber("50408816");
         ExpirationDateType edt = new ExpirationDateType();

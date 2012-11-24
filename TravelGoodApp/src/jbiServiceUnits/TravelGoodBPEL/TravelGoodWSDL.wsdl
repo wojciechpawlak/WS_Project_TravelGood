@@ -14,7 +14,7 @@
 
             <xsd:import namespace="http://types.niceview.ws" schemaLocation="localhost_8080/NiceViewService/NiceViewWSDLService.xsd_1.xsd"/>
             <xsd:import namespace="http://types.lameduck.ws" schemaLocation="localhost_8080/LameDuckService/LameDuckWSDLService.xsd_1.xsd"/>
-            <xsd:import namespace="urn://types.fastmoney.imm.dtu.dk" schemaLocation="fastmoney.imm.dtu.dk_8080/BankService.xsd_1.xsd"/>
+            <!--<xsd:import namespace="urn://types.fastmoney.imm.dtu.dk" schemaLocation="fastmoney.imm.dtu.dk_8080/BankService.xsd_1.xsd"/>-->
             <xsd:complexType name="itineraryType">
                 <xsd:sequence>
                     <xsd:element name="bookingsHotel" type="tns:bookingType" maxOccurs="unbounded" minOccurs="0"></xsd:element>
@@ -92,7 +92,7 @@
     <message name="bookingItineraryRequest">
         <part name="customerId" type="xsd:int"/>
         <part name="itineraryId" type="xsd:int"/>
-        <part name="creditCardInfo" type="ns1:creditCardInfoType"/>
+        <part name="creditCardInfo" type="ns0:creditCardInfoWrapperType"/>
     </message>
     <message name="bookingItineraryResponse">
         <part name="bookingValidation" type="xsd:string"/>
@@ -294,6 +294,7 @@ A partner link type characterizes the conversational relationship between two se
     <vprop:propertyAlias propertyName="tns:customerId" messageType="tns:addFlightRequest" part="customerId"/>
     <vprop:propertyAlias propertyName="tns:itineraryId" messageType="tns:addFlightRequest" part="itineraryId"/>
 </definitions>
+
 
 
 

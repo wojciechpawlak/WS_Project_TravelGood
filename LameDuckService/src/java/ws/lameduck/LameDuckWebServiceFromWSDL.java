@@ -72,7 +72,7 @@ public class LameDuckWebServiceFromWSDL {
             dk.dtu.imm.fastmoney.BankPortType port = service.getBankPort();
             //initialize WS operation arguments here
             int group = 1;
-            dk.dtu.imm.fastmoney.types.CreditCardInfoType creditCardInfo = input.getCreditCardInformation();
+            dk.dtu.imm.fastmoney.types.CreditCardInfoType creditCardInfo = (dk.dtu.imm.fastmoney.types.CreditCardInfoType)input.getCreditCardInformation();
             int amount = priceOfFlight;
             dk.dtu.imm.fastmoney.types.AccountType account = new dk.dtu.imm.fastmoney.types.AccountType();
             account.setName("LameDuck");
@@ -105,7 +105,7 @@ public class LameDuckWebServiceFromWSDL {
             dk.dtu.imm.fastmoney.BankPortType port = service.getBankPort();
             //initialize WS operation arguments here
             int group = 1;
-            dk.dtu.imm.fastmoney.types.CreditCardInfoType creditCardInfo = input.getCreditCardInformation();
+            dk.dtu.imm.fastmoney.types.CreditCardInfoType creditCardInfo = (dk.dtu.imm.fastmoney.types.CreditCardInfoType) input.getCreditCardInformation();
             int amount = priceOfFlight;
 
             boolean result = port.validateCreditCard(group, creditCardInfo, amount);
@@ -121,7 +121,7 @@ public class LameDuckWebServiceFromWSDL {
             dk.dtu.imm.fastmoney.BankPortType port = service.getBankPort();
             //initialize WS operation arguments here
             int group = 1;
-            dk.dtu.imm.fastmoney.types.CreditCardInfoType creditCardInfo = input.getCreditCardInformation();
+            dk.dtu.imm.fastmoney.types.CreditCardInfoType creditCardInfo = (dk.dtu.imm.fastmoney.types.CreditCardInfoType) input.getCreditCardInformation();
             int amount = priceOfFlight;
             dk.dtu.imm.fastmoney.types.AccountType account = new dk.dtu.imm.fastmoney.types.AccountType();
 //            account.setName(input.getCreditCardInformation().getName());

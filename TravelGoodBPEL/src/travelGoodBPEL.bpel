@@ -194,8 +194,8 @@
                                    <to>$BookFlightsIn.input/ns3:creditCardInformation</to>
                               </copy>
                          </assign>
-                         <invoke name="Invoke3" partnerLink="PartnerLink2" operation="bookFlights" xmlns:tns="http://lameduck.ws" portType="tns:LameDuckWSDLPortType" inputVariable="BookFlightsIn" outputVariable="BookFlightsOut"/>
-                         <assign name="Assign8">
+                        <invoke name="Invoke3" partnerLink="PartnerLink2" operation="bookFlights" xmlns:tns="http://lameduck.ws" portType="tns:LameDuckWSDLPortType" inputVariable="BookFlightsIn" outputVariable="BookFlightsOut"/>
+                        <assign name="Assign8">
                             <copy>
                                 <from>'Booking done'</from>
                                 <to variable="BookingItineraryOut" part="bookingValidation"/>
@@ -299,6 +299,8 @@
         </repeatUntil>
     </sequence>
 </process>
+
+
 
 
 
