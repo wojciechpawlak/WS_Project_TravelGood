@@ -46,6 +46,7 @@ public class TravelGoodJUnit {
 
     }
 
+    /*
     @Test
     public void testGetHotel() throws DatatypeConfigurationException {
 
@@ -211,85 +212,8 @@ public class TravelGoodJUnit {
         int customerId = 1;
         int itineraryId = 1;
 
-        System.out.println("I'm here !");
-
         //Create the itinerary
         port.createItinerary(customerId, itineraryId);
-
-        /*
-        //TODO : REMOVE
-
-        ItineraryType myItinerary2 = port.getItinerary(customerId, itineraryId);
-        System.out.println(myItinerary2.getBookingsHotel().size());
-
-        DatatypeFactory df1 = DatatypeFactory.newInstance();
-
-        XMLGregorianCalendar arrivalDate1 = df1.newXMLGregorianCalendar("2012-12-22");
-        XMLGregorianCalendar departureDate1 = df1.newXMLGregorianCalendar("2012-12-25");
-        HotelListType resultGetHotel1 = port.getHotel("Vienna", arrivalDate1, departureDate1, customerId, itineraryId);
-        if (resultGetHotel1.getHotel().size() > 0)
-            port.addHotel(resultGetHotel1.getHotel().get(0).getBookingNumber(), customerId, itineraryId);
-
-        myItinerary2 = port.getItinerary(customerId, itineraryId);
-        System.out.println(myItinerary2.getBookingsHotel().size());
-
-        arrivalDate1 = df1.newXMLGregorianCalendar("2012-12-26");
-        departureDate1 = df1.newXMLGregorianCalendar("2012-12-28");
-        resultGetHotel1 = port.getHotel("Barcelona", arrivalDate1, departureDate1, customerId, itineraryId);
-        if (resultGetHotel1.getHotel().size() > 0)
-            port.addHotel(resultGetHotel1.getHotel().get(0).getBookingNumber(), customerId, itineraryId);
-
-        myItinerary2 = port.getItinerary(customerId, itineraryId);
-        System.out.println(myItinerary2.getBookingsHotel().size());
-
-        arrivalDate1 = df1.newXMLGregorianCalendar("2012-12-26");
-        departureDate1 = df1.newXMLGregorianCalendar("2012-12-28");
-        resultGetHotel1 = port.getHotel("Vienna", arrivalDate1, departureDate1, customerId, itineraryId);
-        if (resultGetHotel1.getHotel().size() > 0)
-            port.addHotel(resultGetHotel1.getHotel().get(0).getBookingNumber(), customerId, itineraryId);
-
-        myItinerary2 = port.getItinerary(customerId, itineraryId);
-        System.out.println(myItinerary2.getBookingsHotel().size());
-
-        arrivalDate1 = df1.newXMLGregorianCalendar("2012-12-26");
-        departureDate1 = df1.newXMLGregorianCalendar("2012-12-28");
-        resultGetHotel1 = port.getHotel("Vienna", arrivalDate1, departureDate1, customerId, itineraryId);
-        if (resultGetHotel1.getHotel().size() > 0)
-            port.addHotel(resultGetHotel1.getHotel().get(0).getBookingNumber(), customerId, itineraryId);
-
-        myItinerary2 = port.getItinerary(customerId, itineraryId);
-        System.out.println(myItinerary2.getBookingsHotel().size());
-
-        arrivalDate1 = df1.newXMLGregorianCalendar("2012-12-26");
-        departureDate1 = df1.newXMLGregorianCalendar("2012-12-28");
-        resultGetHotel1 = port.getHotel("Vienna", arrivalDate1, departureDate1, customerId, itineraryId);
-        if (resultGetHotel1.getHotel().size() > 0)
-            port.addHotel(resultGetHotel1.getHotel().get(0).getBookingNumber(), customerId, itineraryId);
-
-        myItinerary2 = port.getItinerary(customerId, itineraryId);
-        System.out.println(myItinerary2.getBookingsHotel().size());
-
-        arrivalDate1 = df1.newXMLGregorianCalendar("2012-12-26");
-        departureDate1 = df1.newXMLGregorianCalendar("2012-12-28");
-        resultGetHotel1 = port.getHotel("Vienna", arrivalDate1, departureDate1, customerId, itineraryId);
-        if (resultGetHotel1.getHotel().size() > 0)
-            port.addHotel(resultGetHotel1.getHotel().get(0).getBookingNumber(), customerId, itineraryId);
-
-        myItinerary2 = port.getItinerary(customerId, itineraryId);
-        System.out.println("Size : " + myItinerary2.getBookingsHotel().size());
-        System.out.println("Size without null : " + sizeWithoutNull(myItinerary2.getBookingsHotel()));
-        
-        System.out.println();
-
-        for(BookingType myBooking : myItinerary2.getBookingsHotel())
-            System.out.println(myBooking.getBookingNumber());
-
-        port.bookingItinerary(customerId, itineraryId);
-        
-        //TODO : END REMOVE
-        */
-
-        System.out.println("I'm here !");
         
         //Plan a trip by first planning a flight
         //i.e. getting a list of flights and then adding a flight to the itinerary
@@ -340,8 +264,6 @@ public class TravelGoodJUnit {
         for(BookingType myBookingHotel : myItinerary.getBookingsHotel())
             assertEquals("unconfirmed",myBookingHotel.getBookingStatus());
 
-        System.out.println("I'm here !");
-
         
         //Book the itinerary and ask again for the itinerary.
         CreditCardInfoWrapperType ccit = new CreditCardInfoWrapperType();
@@ -354,20 +276,19 @@ public class TravelGoodJUnit {
         String result = port.bookingItinerary(customerId, itineraryId,ccit);
         assertEquals("Booking done",result);
         myItinerary = port.getItinerary(customerId, itineraryId);
+        myItinerary = cleanNull(myItinerary);
 
-        /*for(BookingType myBookingFlight : myItinerary.getBookingsFlight())
-            System.out.println(myBookingFlight.getBookingStatus());
-
-        /*
         //Check that each booking status is now confirmed
         for(BookingType myBookingFlight : myItinerary.getBookingsFlight())
             assertEquals("confirmed",myBookingFlight.getBookingStatus());
 
         for(BookingType myBookingHotel : myItinerary.getBookingsHotel())
             assertEquals("confirmed",myBookingHotel.getBookingStatus());
-         */
+         
        
     }
+
+    //*/
 
     private ItineraryType cleanNull(ItineraryType myItinerary) {
 
