@@ -21,6 +21,7 @@ import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.UriBuilder;
 import ws.travelgood.domain.ItineraryDAO;
 import ws.travelgood.domain.ItineraryDAOImpl;
+import ws.travelgood.types.ItineraryStatus;
 
 /**
  * REST Web Service
@@ -39,7 +40,7 @@ public class ItinerariesResource {
             new Itinerary[]{
                 new Itinerary("u1"),
                 new Itinerary("u1"),
-                new Itinerary("u2")})));
+                new Itinerary("u2", 3, ItineraryStatus.BOOKED)})));
 
 
     /** Creates a new instance of ItinerariesResource */

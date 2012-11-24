@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import ws.travelgood.types.Itinerary;
+import ws.travelgood.types.ItineraryStatus;
 
 /**
  *
@@ -115,16 +116,19 @@ public class ItineraryDAOImpl implements ItineraryDAO {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
-    protected boolean updateItinerary(Itinerary itinerary) {
+    protected boolean updateItinerary(Itinerary it) {
 
-        int index = this.getItineraryIndex(itinerary);
+        if (!it.getCurrentStatus().equals(ItineraryStatus.PLANNING)) {
+            // cannot update itinerary
+            return false;
+        }
+
+        int index = this.getItineraryIndex(it);
 
         if (index != ITINERARY_NOT_FOUND) {
 
-            this.itineraryList.set(index, itinerary);
+            this.itineraryList.set(index, it);
             return true;
-
-
 
         } else {
             // item must have been deleted - cannot update

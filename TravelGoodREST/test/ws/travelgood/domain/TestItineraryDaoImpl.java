@@ -135,6 +135,9 @@ public class TestItineraryDaoImpl {
 
         // add hotel to inexisting itineraryId - should return null
         Assert.assertFalse(itineraryDAO.addHotel(102912, "whateva"));
+
+        // add hotel to already booked itinerary
+        Assert.assertFalse(itineraryDAO.addHotel(3, "whateva"));
         
 
     }
