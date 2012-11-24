@@ -173,6 +173,8 @@ public class LameDuckWebServiceFromWSDL {
         myFlight.setLandingDate(date);
         myFlightInformation.setFlight(myFlight);
 
+        date = df.newXMLGregorianCalendar("2012-12-22");
+
         FlightInformationType myFlightInformation2 = new FlightInformationType();
         myFlightInformation2.setBookingNumber("54321B");
         myFlightInformation2.setAirlineReservationServiceName("AirAustria");
@@ -184,6 +186,8 @@ public class LameDuckWebServiceFromWSDL {
         myFlight2.setLiftOffDate(date);
         myFlight2.setLandingDate(date);
         myFlightInformation2.setFlight(myFlight2);
+
+        date = df.newXMLGregorianCalendar("2012-12-29");
 
         FlightInformationType myFlightInformation3 = new FlightInformationType();
         myFlightInformation3.setBookingNumber("123321C");

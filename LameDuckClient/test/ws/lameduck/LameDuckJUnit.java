@@ -34,7 +34,7 @@ public class LameDuckJUnit {
         input.setFlightStart("Moscow");
 
         DatatypeFactory df = DatatypeFactory.newInstance();
-        XMLGregorianCalendar dateFlight = df.newXMLGregorianCalendar("2012-12-22");
+        XMLGregorianCalendar dateFlight = df.newXMLGregorianCalendar("2012-12-25");
         input.setFlightDate(dateFlight);
              // TODO process result here
              ws.lameduck.types.FlightInformationListType result = port.getFlights(input);
