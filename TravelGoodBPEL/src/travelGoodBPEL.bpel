@@ -137,10 +137,6 @@
                                                     <to variable="AddHotelOut" part="confirmation"/>
                                             </copy>
                                     <copy>
-                                        <from>true()</from>
-                                        <to variable="changeItineraryStartDate"/>
-                                    </copy>
-                                    <copy>
                                         <from>'unconfirmed'</from>
                                         <to>$Itinerary/bookingsHotel[$arrayHotelSize]/bookingStatus
                                             <sxed2:editor>
@@ -156,6 +152,10 @@
                                                </sxed2:editor>
                                           </to>
                                      </copy>
+                                    <copy>
+                                        <from>sxxf:date-less-than($GetHotelIn.arrivalDate, $Itinerary/itineraryStartDate)</from>
+                                        <to variable="changeItineraryStartDate"/>
+                                    </copy>
                                 </assign>
                                 <if name="If1">
                                         <condition>$changeItineraryStartDate</condition>
@@ -332,10 +332,6 @@
                                           <from>'Flight added'</from>
                                           <to variable="AddFlightOut" part="confirmation"/>
                                     </copy>
-                                    <copy>
-                                          <from>true()</from>
-                                          <to variable="changeItineraryStartDate"/>
-                                    </copy>
                                   <copy>
                                        <from variable="AddFlightIn" part="bookingNumber"/>
                                        <to>$Itinerary/bookingsFlight[$arrayFlightSize]/bookingNumber
@@ -352,6 +348,10 @@
                                             </sxed2:editor>
                                        </to>
                                   </copy>
+                                 <copy>
+                                     <from>sxxf:date-less-than($GetFlightIn.flightDate, $Itinerary/itineraryStartDate)</from>
+                                     <to variable="changeItineraryStartDate"/>
+                                 </copy>
                              </assign>
                               <if name="If2">
                                     <condition>$changeItineraryStartDate</condition>
@@ -370,6 +370,7 @@
         </repeatUntil>
     </sequence>
 </process>
+
 
 
 

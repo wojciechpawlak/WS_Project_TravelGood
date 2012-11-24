@@ -251,11 +251,11 @@ public class TravelGoodJUnit {
         
         //Ask for the itinerary and check that it is correct using JUnit's assert statements
         ItineraryType myItinerary = port.getItinerary(customerId, itineraryId);
-        myItinerary = cleanNull(myItinerary);
+        //myItinerary = cleanNull(myItinerary);
 
         assertEquals(3,myItinerary.getBookingsFlight().size());
         assertEquals(2,myItinerary.getBookingsHotel().size());
-        //TODO : Make this work //assertEquals(df.newXMLGregorianCalendar("2012-12-22"),myItinerary.getItineraryStartDate());
+        assertEquals(df.newXMLGregorianCalendar("2012-12-22"),myItinerary.getItineraryStartDate());
 
         //in particular, that the booking status for each item is unconfirmed.
         for(BookingType myBookingFlight : myItinerary.getBookingsFlight())
@@ -276,7 +276,7 @@ public class TravelGoodJUnit {
         String result = port.bookingItinerary(customerId, itineraryId,ccit);
         assertEquals("Booking done",result);
         myItinerary = port.getItinerary(customerId, itineraryId);
-        myItinerary = cleanNull(myItinerary);
+        //myItinerary = cleanNull(myItinerary);
 
         //Check that each booking status is now confirmed
         for(BookingType myBookingFlight : myItinerary.getBookingsFlight())
@@ -288,7 +288,7 @@ public class TravelGoodJUnit {
        
     }
 
-    //*/
+    /*
 
     private ItineraryType cleanNull(ItineraryType myItinerary) {
 
@@ -316,5 +316,6 @@ public class TravelGoodJUnit {
         return result;
 
     }
+     */
 
 }
