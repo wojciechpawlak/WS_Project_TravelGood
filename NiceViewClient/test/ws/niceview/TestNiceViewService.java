@@ -7,6 +7,9 @@ package ws.niceview;
 import dk.dtu.imm.fastmoney.types.CreditCardInfoType;
 import dk.dtu.imm.fastmoney.types.ExpirationDateType;
 import java.util.Calendar;
+import javax.xml.datatype.DatatypeConfigurationException;
+import javax.xml.datatype.DatatypeFactory;
+import javax.xml.datatype.XMLGregorianCalendar;
 import org.junit.Before;
 import org.junit.Test;
 import ws.niceview.types.HotelListType;
@@ -41,14 +44,15 @@ public class TestNiceViewService {
     }
 
     @Test
-    public void testGetHotels() {
+    public void testGetHotels() throws DatatypeConfigurationException {
 
         // the getHotels method returns the actual hotels only if the 
         // difference between departure and arrival date is smaller than
         // 14 days. If the difference is more, it randomizes the output.
         // For testing, we need to make sure this difference is smaller.
-        Calendar departureDate = Calendar.getInstance();
-        Calendar arrivalDate = Calendar.getInstance();
+        DatatypeFactory df = DatatypeFactory.newInstance();
+        XMLGregorianCalendar departureDate = df.newXMLGregorianCalendar("2012-11-23");
+        XMLGregorianCalendar arrivalDate = df.newXMLGregorianCalendar("2012-12-25");
 
         testGetHotels("Barcelona", departureDate, arrivalDate, new String[]{"Superb Hotel"});
         testGetHotels("Vienna", departureDate, arrivalDate, new String[]{"Nice Hotel", "Passable Hotel"});
@@ -56,7 +60,7 @@ public class TestNiceViewService {
 
     }
 
-    private void testGetHotels(String city, Calendar departureDate, Calendar arrivalDate, String[] expectedHotelNames) {
+    private void testGetHotels(String city, XMLGregorianCalendar departureDate, XMLGregorianCalendar arrivalDate, String[] expectedHotelNames) {
         HotelListType result = port.getHotels(city, departureDate, arrivalDate);
 
         assertEquals(expectedHotelNames.length, result.getHotel().size());
