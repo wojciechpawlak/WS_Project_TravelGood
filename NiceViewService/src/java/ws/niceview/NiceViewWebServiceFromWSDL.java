@@ -2,7 +2,6 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package ws.niceview;
 
 import dk.dtu.imm.fastmoney.BankService;
@@ -13,6 +12,8 @@ import dk.dtu.imm.fastmoney.types.CreditCardInfoType;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.jws.WebService;
 import javax.xml.datatype.XMLGregorianCalendar;
 import javax.xml.ws.WebServiceRef;
@@ -38,7 +39,8 @@ public class NiceViewWebServiceFromWSDL {
         createHotel("Superb Hotel", "TestStreet", "12345", "Barcelona", "1", 50000.0, true),
         createHotel("Nice Hotel", "TestStreet", "12345", "Vienna", "2", 2000.0, true),
         createHotel("Passable Hotel", "TestStreet", "12345", "Vienna", "3", 500.0, true),
-        createHotel("Shitty Hotel", "TestStreet", "12345", "Zgierz", "4", 10.0, false)
+        createHotel("Shitty Hotel", "TestStreet", "12345", "Zgierz", "4", 10.0, false),
+        createHotel("Sleep Hotel", "BedStreet", "54321", "SleepCity", "5", 42.0, true)
     };
     List<String> bookedHotels = new ArrayList<String>();
 
@@ -48,16 +50,24 @@ public class NiceViewWebServiceFromWSDL {
         boolean randomize = false;
         Random rand = null;
 
-        if(arrivalDate.getDay() - departureDate.getDay() > DAY_LIMIT)
-        {
+        if (city.equals("SleepCity")) {
+            try {
+                Thread.sleep(10000);
+            } catch (InterruptedException ex) {
+                Logger.getLogger(NiceViewWebServiceFromWSDL.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+
+
+        if (arrivalDate.getDay() - departureDate.getDay() > DAY_LIMIT) {
             randomize = true;
             rand = new Random(System.currentTimeMillis());
         }
 
         /*if (arrivalDate.get(java.util.Calendar.DAY_OF_YEAR) -
-                departureDate.get(java.util.Calendar.DAY_OF_YEAR) > DAY_LIMIT) {
-            randomize = true;
-            rand = new Random(System.currentTimeMillis());
+        departureDate.get(java.util.Calendar.DAY_OF_YEAR) > DAY_LIMIT) {
+        randomize = true;
+        rand = new Random(System.currentTimeMillis());
         }*/
 
         for (HotelType hotel : hotelArray) {
@@ -175,5 +185,4 @@ public class NiceViewWebServiceFromWSDL {
 
         return hotel;
     }
-
 }
