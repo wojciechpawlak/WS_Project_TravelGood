@@ -20,7 +20,9 @@
         <partnerLink name="PartnerLink1" xmlns:tns="http://travelgood.ws" partnerLinkType="tns:TravelGoodWSDL" myRole="TravelGoodWSDLPortTypeRole"/>
     </partnerLinks>
     <variables>
-         <variable name="BookHotelOut" xmlns:tns="http://niceview.ws" messageType="tns:bookHotelResponse"/>
+        <variable name="CancelItineraryOut" messageType="ns0:cancelItineraryResponse"/>
+        <variable name="CancelItineraryIn" messageType="ns0:cancelItineraryRequest"/>
+        <variable name="BookHotelOut" xmlns:tns="http://niceview.ws" messageType="tns:bookHotelResponse"/>
          <variable name="BookHotelIn" xmlns:tns="http://niceview.ws" messageType="tns:bookHotelRequest"/>
          <variable name="BookFlightsOut" xmlns:tns="http://lameduck.ws" messageType="tns:bookFlightResponse"/>
          <variable name="BookFlightsIn" xmlns:tns="http://lameduck.ws" messageType="tns:bookFlightRequest"/>
@@ -42,6 +44,10 @@
             <sxed2:editor>
                 <sxed2:predicate path="$Itinerary/bookingsHotel[$arrayHotelSize]" source="to"/>
                  <sxed2:predicate path="$Itinerary/bookingsFlight[$arrayFlightSize]" source="to"/>
+                <sxed2:predicate path="$Itinerary/bookingsFlight[$ForEach1Counter]" source="from"></sxed2:predicate>
+                <sxed2:predicate path="$Itinerary/bookingsFlight[$ForEach1Counter]" source="to"/>
+                <sxed2:predicate path="$Itinerary/bookingsHotel[$ForEach2Counter]" source="from"/>
+                <sxed2:predicate path="$Itinerary/bookingsHotel[$ForEach2Counter]" source="to"/>
             </sxed2:editor>
         </variable>
         <variable name="AddHotelOut" messageType="ns0:addHotelResponse"/>
@@ -133,10 +139,6 @@
                                                     <to variable="AddHotelOut" part="confirmation"/>
                                             </copy>
                                     <copy>
-                                        <from>true()</from>
-                                        <to variable="changeItineraryStartDate"/>
-                                    </copy>
-                                    <copy>
                                         <from>'unconfirmed'</from>
                                         <to>$Itinerary/bookingsHotel[$arrayHotelSize]/bookingStatus
                                             <sxed2:editor>
@@ -152,6 +154,10 @@
                                                </sxed2:editor>
                                           </to>
                                      </copy>
+                                    <copy>
+                                        <from>sxxf:date-less-than($GetHotelIn.arrivalDate, $Itinerary/itineraryStartDate)</from>
+                                        <to variable="changeItineraryStartDate"/>
+                                    </copy>
                                 </assign>
                                 <if name="If1">
                                         <condition>$changeItineraryStartDate</condition>
@@ -184,35 +190,102 @@
                         <correlation set="CustomerItineraryCorrelation" initiate="no"/>
                     </correlations>
                     <sequence name="Sequence4">
-                         <assign name="Assign15">
-                              <copy>
-                                   <from>$Itinerary/bookingsFlight/bookingNumber</from>
-                                   <to>$BookFlightsIn.input/ns3:bookingNumber</to>
-                              </copy>
-                              <copy>
-                                   <from variable="BookingItineraryIn" part="creditCardInfo"/>
-                                   <to>$BookFlightsIn.input/ns3:creditCardInformation</to>
-                              </copy>
-                         </assign>
-                        <invoke name="Invoke3" partnerLink="PartnerLink2" operation="bookFlights" xmlns:tns="http://lameduck.ws" portType="tns:LameDuckWSDLPortType" inputVariable="BookFlightsIn" outputVariable="BookFlightsOut"/>
-                        <assign name="Assign8">
+                        <forEach name="ForEach1" parallel="no" counterName="ForEach1Counter">
+                            <startCounterValue>1</startCounterValue>
+                            <finalCounterValue>$arrayFlightSize</finalCounterValue>
+                            <scope name="Scope1">
+                                <sequence name="Sequence7">
+                                    <if name="If3">
+                                        <condition>$Itinerary/bookingsFlight[$ForEach1Counter]/bookingNumber != 'null'
+                                            <sxed2:editor>
+                                                <sxed2:predicate path="$Itinerary/bookingsFlight[$ForEach1Counter]" source="from"/>
+                                            </sxed2:editor>
+                                        </condition>
+                                        <sequence name="Sequence8">
+                                            <assign name="Assign15">
+                                                <copy>
+                                                    <from variable="BookingItineraryIn" part="creditCardInfo"/>
+                                                        <to>$BookFlightsIn.input/ns3:creditCardInformation</to>
+                                                </copy>
+                                                    <copy>
+                                                        <from>$Itinerary/bookingsFlight[$ForEach1Counter]/bookingNumber
+                                                                    <sxed2:editor>
+                                                                        <sxed2:predicate path="$Itinerary/bookingsFlight[$ForEach1Counter]" source="from"/>
+                                                                    </sxed2:editor>
+                                                            </from>
+                                                            <to>$BookFlightsIn.input/ns3:bookingNumber</to>
+                                                    </copy>
+                                            </assign>
+                                            <invoke name="Invoke3" partnerLink="PartnerLink2" operation="bookFlights" xmlns:tns="http://lameduck.ws" portType="tns:LameDuckWSDLPortType" inputVariable="BookFlightsIn" outputVariable="BookFlightsOut"/>
+                                            <assign name="Assign8">
+                                                <copy>
+                                                    <from>'confirmed'</from>
+                                                    <to>$Itinerary/bookingsFlight[$ForEach1Counter]/bookingStatus
+                                                        <sxed2:editor>
+                                                            <sxed2:predicate path="$Itinerary/bookingsFlight[$ForEach1Counter]" source="to"/>
+                                                        </sxed2:editor>
+                                                    </to>
+                                                </copy>
+                                            </assign>
+                                        </sequence>
+                                    </if>
+                                </sequence>
+                            </scope>
+                        </forEach>
+                        <forEach name="ForEach2" parallel="no" counterName="ForEach2Counter">
+                            <startCounterValue>1</startCounterValue>
+                            <finalCounterValue>$arrayHotelSize</finalCounterValue>
+                            <scope name="Scope2">
+                                <if name="If4">
+                                    <condition>$Itinerary/bookingsHotel[$ForEach2Counter]/bookingNumber != 'null'
+                                        <sxed2:editor>
+                                            <sxed2:predicate path="$Itinerary/bookingsHotel[$ForEach2Counter]" source="from"/>
+                                        </sxed2:editor>
+                                    </condition>
+                                    <sequence name="Sequence9">
+                                        <assign name="Assign17">
+                                            <copy>
+                                                <from>$Itinerary/bookingsHotel[$ForEach2Counter]/bookingNumber
+                                                    <sxed2:editor>
+                                                        <sxed2:predicate path="$Itinerary/bookingsHotel[$ForEach2Counter]" source="from"/>
+                                                    </sxed2:editor>
+                                                </from>
+                                                <to variable="BookHotelIn" part="bookingNumber"/>
+                                            </copy>
+                                            <copy>
+                                                <from>$BookingItineraryIn.creditCardInfo/expirationDate</from>
+                                                <to>$BookHotelIn.creditCardInfo/expirationDate</to>
+                                            </copy>
+                                            <copy>
+                                                <from>$BookingItineraryIn.creditCardInfo/name</from>
+                                                <to>$BookHotelIn.creditCardInfo/name</to>
+                                            </copy>
+                                            <copy>
+                                                <from>$BookingItineraryIn.creditCardInfo/number</from>
+                                                <to>$BookHotelIn.creditCardInfo/number</to>
+                                            </copy>
+                                        </assign>
+                                        <invoke name="Invoke4" partnerLink="PartnerLink3" operation="bookHotel" portType="tns:NiceViewWSDLPortType" inputVariable="BookHotelIn" outputVariable="BookHotelOut"/>
+                                        <assign name="Assign18">
+                                            <copy>
+                                                <from>'confirmed'</from>
+                                                <to>$Itinerary/bookingsHotel[$ForEach2Counter]/bookingStatus
+                                                    <sxed2:editor>
+                                                        <sxed2:predicate path="$Itinerary/bookingsHotel[$ForEach2Counter]" source="to"/>
+                                                    </sxed2:editor>
+                                                </to>
+                                            </copy>
+                                        </assign>
+                                    </sequence>
+                                </if>
+                            </scope>
+                        </forEach>
+                        <assign name="Assign16">
                             <copy>
                                 <from>'Booking done'</from>
                                 <to variable="BookingItineraryOut" part="bookingValidation"/>
                             </copy>
-                              <copy>
-                                   <from variable="BookFlightsOut" part="output"/>
-                                   <to variable="donePlanning"/>
-                              </copy>
-                             <copy>
-                                 <from>'confirmed'</from>
-                                 <to>$Itinerary/bookingsFlight[$arrayFlightSize]/bookingStatus
-                                     <sxed2:editor>
-                                         <sxed2:predicate path="$Itinerary/bookingsFlight[$arrayFlightSize]" source="to"/>
-                                     </sxed2:editor>
-                                 </to>
-                             </copy>
-                         </assign>
+                        </assign>
                         <reply name="Reply5" partnerLink="PartnerLink1" operation="bookingItinerary" portType="ns0:TravelGoodWSDLPortType" variable="BookingItineraryOut"/>
                     </sequence>
                 </onMessage>
@@ -261,10 +334,6 @@
                                           <from>'Flight added'</from>
                                           <to variable="AddFlightOut" part="confirmation"/>
                                     </copy>
-                                    <copy>
-                                          <from>true()</from>
-                                          <to variable="changeItineraryStartDate"/>
-                                    </copy>
                                   <copy>
                                        <from variable="AddFlightIn" part="bookingNumber"/>
                                        <to>$Itinerary/bookingsFlight[$arrayFlightSize]/bookingNumber
@@ -281,6 +350,10 @@
                                             </sxed2:editor>
                                        </to>
                                   </copy>
+                                 <copy>
+                                     <from>sxxf:date-less-than($GetFlightIn.flightDate, $Itinerary/itineraryStartDate)</from>
+                                     <to variable="changeItineraryStartDate"/>
+                                 </copy>
                              </assign>
                               <if name="If2">
                                     <condition>$changeItineraryStartDate</condition>
@@ -294,11 +367,31 @@
                               <reply name="Reply7" partnerLink="PartnerLink1" operation="addFlight" portType="ns0:TravelGoodWSDLPortType" variable="AddFlightOut"/>
                         </sequence>
                   </onMessage>
+                <onMessage partnerLink="PartnerLink1" operation="cancelItinerary" portType="ns0:TravelGoodWSDLPortType" variable="CancelItineraryIn">
+                    <correlations>
+                        <correlation set="CustomerItineraryCorrelation" initiate="no"/>
+                    </correlations>
+                    <sequence name="Sequence10">
+                        <assign name="Assign19">
+                            <copy>
+                                <from>'Planning canceled'</from>
+                                <to variable="CancelItineraryOut" part="cancelValidation"/>
+                            </copy>
+                        </assign>
+                        <reply name="Reply8" partnerLink="PartnerLink1" operation="cancelItinerary" portType="ns0:TravelGoodWSDLPortType" variable="CancelItineraryOut"/>
+                        <exit name="Exit1"/>
+                    </sequence>
+                </onMessage>
             </pick>
             <condition>$donePlanning</condition>
         </repeatUntil>
     </sequence>
 </process>
+
+
+
+
+
 
 
 

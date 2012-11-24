@@ -8,6 +8,8 @@ package ws.lameduck;
 import dk.dtu.imm.fastmoney.BankService;
 import java.util.ArrayList;
 import java.util.Vector;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.jws.WebService;
 import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
@@ -35,6 +37,14 @@ public class LameDuckWebServiceFromWSDL {
  //
 
         populateFlights();
+
+        if (input.getFlightStart().equals("SleepCity")) {
+            try {
+                Thread.sleep(10000);
+            } catch (InterruptedException ex) {
+                Logger.getLogger(LameDuckWebServiceFromWSDL.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
 
         String start = input.getFlightStart();
         String destination = input.getFlightDestination();
@@ -201,9 +211,22 @@ public class LameDuckWebServiceFromWSDL {
         myFlight3.setLandingDate(date);
         myFlightInformation3.setFlight(myFlight3);
 
+        FlightInformationType myFlightInformation4 = new FlightInformationType();
+        myFlightInformation4.setBookingNumber("ZZZzzzZZZ");
+        myFlightInformation4.setAirlineReservationServiceName("PillowCie");
+        myFlightInformation4.setPrice(22);
+        FlightType myFlight4 = new FlightType();
+        myFlight4.setCarrierName("TakeANap");
+        myFlight4.setStartAirport("SleepCity");
+        myFlight4.setDestinationAirport("BedCity");
+        myFlight4.setLiftOffDate(date);
+        myFlight4.setLandingDate(date);
+        myFlightInformation4.setFlight(myFlight4);
+
         flights.add(myFlightInformation);
         flights.add(myFlightInformation2);
         flights.add(myFlightInformation3);
+        flights.add(myFlightInformation4);
 
         onlyOnce = true;
     }
