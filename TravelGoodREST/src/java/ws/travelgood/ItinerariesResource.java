@@ -4,6 +4,7 @@
  */
 package ws.travelgood;
 
+import java.net.URI;
 import ws.travelgood.types.Itinerary;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -16,7 +17,10 @@ import javax.ws.rs.Consumes;
 import javax.ws.rs.Path;
 import javax.ws.rs.GET;
 import javax.ws.rs.Produces;
-import ws.travelgood.types.ItineraryStatus;
+import javax.ws.rs.core.Response.Status;
+import javax.ws.rs.core.UriBuilder;
+import ws.travelgood.domain.ItineraryDAO;
+import ws.travelgood.domain.ItineraryDAOImpl;
 
 /**
  * REST Web Service
@@ -28,15 +32,15 @@ public class ItinerariesResource {
 
     @Context
     private UriInfo context;
-    public static List<Itinerary> itineraryList = new ArrayList<Itinerary>(
+
+    public static ItineraryDAO itineraryDAO = new ItineraryDAOImpl(
+            new ArrayList<Itinerary>(
             Arrays.asList(
             new Itinerary[]{
-                new Itinerary("u1", "1"),
-                new Itinerary("u1", "2"),
-                new Itinerary("u2", "3", ItineraryStatus.BOOKED)
-            }));
-    
-    static int lastAssignedId = 3;
+                new Itinerary("u1"),
+                new Itinerary("u1"),
+                new Itinerary("u2")})));
+
 
     /** Creates a new instance of ItinerariesResource */
     public ItinerariesResource() {
@@ -45,21 +49,22 @@ public class ItinerariesResource {
     @GET
     @Produces("application/xml")
     public List<Itinerary> getCurrentItineraries() {
-        return ItinerariesResource.itineraryList;
+        return ItinerariesResource.itineraryDAO.getAllItineraries();
     }
 
     @POST
-    @Path("create")
     @Consumes("text/plain")
-    @Produces("application/xml")
     public Response createItinearyRequest(String userId) {
 
-        String itineraryId = String.valueOf(++lastAssignedId);
+        Itinerary it = itineraryDAO.createItinerary(new Itinerary(userId));
 
-        Itinerary i = new Itinerary(userId, itineraryId);
-        ItinerariesResource.itineraryList.add(i);
+        URI uri = UriBuilder
+                .fromUri(context.getBaseUri())
+                .path(ItinerariesResource.class)
+                .path(it.getId().toString())
+                .build();
 
-        return Response.ok(i).build();
+        return Response.status(Status.CREATED).location(uri).build();
 
     }
 

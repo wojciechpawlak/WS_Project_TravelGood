@@ -4,20 +4,23 @@
  */
 package ws.travelgood.hotels;
 
+import javax.xml.datatype.DatatypeConfigurationException;
 import ws.travelgood.types.hotel.HotelList;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.util.GregorianCalendar;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.UriInfo;
+import javax.xml.datatype.DatatypeFactory;
+import javax.xml.datatype.XMLGregorianCalendar;
 import ws.niceview.types.HotelListType;
 
 /**
@@ -35,7 +38,7 @@ public class HotelsResource {
     
     @GET
     @Produces("application/xml")
-    public HotelList getXml(@QueryParam("dateFrom") String dateFromStr,
+    public Response getXml(@QueryParam("dateFrom") String dateFromStr,
             @QueryParam("dateTo") String dateToStr,
             @QueryParam("city") String city) {
 
@@ -43,14 +46,17 @@ public class HotelsResource {
 
         Date dateFrom;
         Date dateTo;
+        
         try {
             dateFrom = df.parse(dateFromStr);
             dateTo = df.parse(dateToStr);
 
-        } catch (ParseException ex) {
-            Logger.getLogger(HotelsResource.class.getName()).log(Level.SEVERE,
-                    null, ex);
-            return new HotelList(null);
+        } catch (ParseException e) {
+            return Response.status(Status.BAD_REQUEST).entity(e.getMessage()).build();
+
+        } catch (NullPointerException e) {
+            return Response.status(Status.BAD_REQUEST).build();
+
         }
 
 
@@ -58,18 +64,29 @@ public class HotelsResource {
                 new ws.niceview.NiceViewWSDLService();
         ws.niceview.NiceViewWSDLPortType port = service.getNiceViewWSDLPort();
 
-        Calendar dateFromCal = Calendar.getInstance();
-        dateFromCal.setTime(dateFrom);
-        java.util.Calendar departureDate = dateFromCal;
+        GregorianCalendar dateFromGCal = new GregorianCalendar();
+        dateFromGCal.setTime(dateFrom);
 
-        Calendar dateToCal = Calendar.getInstance();
-        dateToCal.setTime(dateFrom);
-        java.util.Calendar arrivalDate = dateToCal;
+        GregorianCalendar dateToGCal = new GregorianCalendar();
+        dateToGCal.setTime(dateFrom);
 
+        XMLGregorianCalendar departureDate;
+        XMLGregorianCalendar arrivalDate;
+        
+        try {
+            departureDate =
+                    DatatypeFactory.newInstance().
+                    newXMLGregorianCalendar(dateFromGCal);
+            
+            arrivalDate = DatatypeFactory.newInstance().newXMLGregorianCalendar(dateToGCal);
+            
+        } catch (DatatypeConfigurationException ex) {
+            throw new RuntimeException(ex);
+        }
 
         HotelListType result = port.getHotels(city, departureDate, arrivalDate);
 
-        return new HotelList(result.getHotel());
+        return Response.ok(new HotelList(result.getHotel())).build();
 
     }
 
