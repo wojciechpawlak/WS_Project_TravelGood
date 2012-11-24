@@ -40,18 +40,12 @@ public class ItineraryResource {
      */
     @GET
     @Produces("application/xml")
-    public Response getItinerary(@PathParam("id") String itineraryId) {
+    public Response getItinerary(@PathParam("id") Integer itineraryId) {
 
-        try {
-            Itinerary it =  ItinerariesResource.itineraryDAO.getItinerary(Integer.parseInt(
-                    itineraryId));
+        Itinerary it =
+                ItinerariesResource.itineraryDAO.getItinerary(itineraryId);
 
-            return Response.ok(it).build();
-
-        } catch (NumberFormatException e) {
-            return Response.status(Status.BAD_REQUEST).entity(e.getMessage()).build();
-            
-        }
+        return Response.ok(it).build();
 
     }
 
@@ -68,10 +62,8 @@ public class ItineraryResource {
             return Response.status(Status.BAD_REQUEST).build();
         }
 
-        URI uri = UriBuilder
-                .fromResource(ItinerariesResource.class)
-                .segment(id.toString())
-                .build();
+        URI uri = UriBuilder.fromResource(ItinerariesResource.class).segment(id.
+                toString()).build();
 
         return Response.temporaryRedirect(uri).build();
 
@@ -89,10 +81,8 @@ public class ItineraryResource {
             return Response.status(Status.BAD_REQUEST).build();
         }
 
-        URI uri = UriBuilder
-                .fromResource(ItinerariesResource.class)
-                .segment(id.toString())
-                .build();
+        URI uri = UriBuilder.fromResource(ItinerariesResource.class).segment(id.
+                toString()).build();
 
         return Response.temporaryRedirect(uri).build();
     }

@@ -29,11 +29,10 @@ public class FlightResource {
     }
 
     @PUT
-    public Response addFlight(@PathParam("id") String id, @PathParam(
+    public Response addFlight(@PathParam("id") Integer id, @PathParam(
             "bookingNumber") String bookingNumber) {
 
-        boolean added = ItinerariesResource.itineraryDAO.addFlight(Integer.
-                parseInt(id), bookingNumber);
+        boolean added = ItinerariesResource.itineraryDAO.addFlight(id, bookingNumber);
 
         if (!added) {
             return Response.status(Status.BAD_REQUEST).build();
@@ -50,11 +49,10 @@ public class FlightResource {
     }
 
     @DELETE
-    public Response deleteHotel(@PathParam("id") String id, @PathParam(
+    public Response deleteHotel(@PathParam("id") Integer id, @PathParam(
             "bookingNumber") String bookingNumber) {
 
-        boolean deleted = ItinerariesResource.itineraryDAO.deleteFlight(Integer.
-                parseInt(id), bookingNumber);
+        boolean deleted = ItinerariesResource.itineraryDAO.deleteFlight(id, bookingNumber);
 
         if (!deleted) {
             return Response.status(Status.BAD_REQUEST).build();
