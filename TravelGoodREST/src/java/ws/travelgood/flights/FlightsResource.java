@@ -5,18 +5,12 @@
 
 package ws.travelgood.flights;
 
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.GregorianCalendar;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
-import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.UriInfo;
 import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
@@ -25,7 +19,6 @@ import ws.lameduck.LameDuckWSDLPortType;
 import ws.lameduck.LameDuckWSDLService;
 import ws.lameduck.types.FlightInformationListType;
 import ws.lameduck.types.RequestGetFlightType;
-import ws.travelgood.hotels.HotelResource;
 import ws.travelgood.types.flight.FlightList;
 
 /**
@@ -47,35 +40,16 @@ public class FlightsResource {
             @QueryParam("cityTo") String cityTo,
             @QueryParam("date") String dateStr) {
 
-        DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
-
-        Date date;
-
-        try {
-            date = df.parse(dateStr);
-
-        } catch (ParseException e) {
-            return Response.status(Status.BAD_REQUEST).entity(e.getMessage()).build();
-
-        } catch (NullPointerException e) {
-            return Response.status(Status.BAD_REQUEST).build();
-
-        }
-
-
         LameDuckWSDLService service =
                 new LameDuckWSDLService();
         LameDuckWSDLPortType port = service.getLameDuckWSDLPortTypeBindingPort();
-
-        GregorianCalendar dateGCal = new GregorianCalendar();
-        dateGCal.setTime(date);
 
         XMLGregorianCalendar departureDate;
 
         try {
             departureDate =
                     DatatypeFactory.newInstance().
-                    newXMLGregorianCalendar(dateGCal);
+                    newXMLGregorianCalendar(dateStr);
 
         } catch (DatatypeConfigurationException ex) {
             throw new RuntimeException(ex);
