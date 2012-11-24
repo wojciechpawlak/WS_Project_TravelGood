@@ -8,7 +8,32 @@
     <system systemId="http://fastmoney.imm.dtu.dk:8080/BankService?xsd=1" uri="wsdl/fastmoney.imm.dtu.dk_8080/BankService.xsd_1.xsd"/>
     <system systemId="http://OP960-BLT4K4J.b45x.dtu.dk:9080/TravelGoodApp-sun-http-binding/TravelGoodBPEL/localhost_8080/NiceViewService/NiceViewWSDLService.xsd_1.xsd" uri="wsdl/OP960-BLT4K4J.b45x.dtu.dk_9080/TravelGoodApp-sun-http-binding/TravelGoodBPEL/localhost_8080/NiceViewService/NiceViewWSDLService.xsd_1.xsd"/>
     <system systemId="http://OP960-BLT4K4J.b45x.dtu.dk:9080/TravelGoodApp-sun-http-binding/TravelGoodBPEL/localhost_8080/LameDuckService/LameDuckWSDLService.xsd_1.xsd" uri="wsdl/OP960-BLT4K4J.b45x.dtu.dk_9080/TravelGoodApp-sun-http-binding/TravelGoodBPEL/localhost_8080/LameDuckService/LameDuckWSDLService.xsd_1.xsd"/>
+    <system systemId="http://OP960-7N3KM4J.b45x.dtu.dk:9080/TravelGoodApp-sun-http-binding/TravelGoodBPEL/fastmoney.imm.dtu.dk_8080/BankService.xsd_1.xsd" uri="wsdl/OP960-7N3KM4J.b45x.dtu.dk_9080/TravelGoodApp-sun-http-binding/TravelGoodBPEL/fastmoney.imm.dtu.dk_8080/BankService.xsd_1.xsd"/>
 </catalog>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

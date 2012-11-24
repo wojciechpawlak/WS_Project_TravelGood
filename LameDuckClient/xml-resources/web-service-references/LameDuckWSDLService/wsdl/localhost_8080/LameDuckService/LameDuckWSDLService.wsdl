@@ -3,7 +3,7 @@
         <xsd:schema targetNamespace="http://lameduck.ws">
             <xsd:import namespace="http://types.lameduck.ws" schemaLocation="http://localhost:8080/LameDuckService/LameDuckWSDLService?xsd=1"></xsd:import>
             <!-- Here is the import that is making a Broken Reference : <xsd:import namespace="urn://types.fastmoney.imm.dtu.dk" schemaLocation="http://fastmoney.imm.dtu.dk:8080/BankService?xsd=1"/>-->
-            <xsd:import namespace="urn://types.fastmoney.imm.dtu.dk" schemaLocation="http://fastmoney.imm.dtu.dk:8080/BankService?xsd=1"></xsd:import>
+            <!--<xsd:import namespace="urn://types.fastmoney.imm.dtu.dk" schemaLocation="http://fastmoney.imm.dtu.dk:8080/BankService?xsd=1"/>-->
         </xsd:schema>
     </types>
     <message name="getFlightsRequest">

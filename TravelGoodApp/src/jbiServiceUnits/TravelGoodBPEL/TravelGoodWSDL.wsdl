@@ -2,7 +2,7 @@
 <definitions name="TravelGoodWSDL" targetNamespace="http://travelgood.ws"
     xmlns="http://schemas.xmlsoap.org/wsdl/"
     xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
-    xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://travelgood.ws" xmlns:plnk="http://docs.oasis-open.org/wsbpel/2.0/plnktype" xmlns:ns="http://types.niceview.ws" xmlns:vprop="http://docs.oasis-open.org/wsbpel/2.0/varprop" xmlns:ns0="http://types.lameduck.ws" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://travelgood.ws" xmlns:plnk="http://docs.oasis-open.org/wsbpel/2.0/plnktype" xmlns:ns="http://types.niceview.ws" xmlns:vprop="http://docs.oasis-open.org/wsbpel/2.0/varprop" xmlns:ns0="http://types.lameduck.ws" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:ns1="urn://types.fastmoney.imm.dtu.dk"
     >
     <types>
         <xsd:schema targetNamespace="http://travelgood.ws" >
@@ -14,6 +14,7 @@
 
             <xsd:import namespace="http://types.niceview.ws" schemaLocation="localhost_8080/NiceViewService/NiceViewWSDLService.xsd_1.xsd"/>
             <xsd:import namespace="http://types.lameduck.ws" schemaLocation="localhost_8080/LameDuckService/LameDuckWSDLService.xsd_1.xsd"/>
+            <xsd:import namespace="urn://types.fastmoney.imm.dtu.dk" schemaLocation="fastmoney.imm.dtu.dk_8080/BankService.xsd_1.xsd"/>
             <xsd:complexType name="itineraryType">
                 <xsd:sequence>
                     <xsd:element name="bookingsHotel" type="tns:bookingType" maxOccurs="unbounded" minOccurs="0"></xsd:element>
@@ -91,6 +92,7 @@
     <message name="bookingItineraryRequest">
         <part name="customerId" type="xsd:int"/>
         <part name="itineraryId" type="xsd:int"/>
+        <part name="creditCardInfo" type="ns1:creditCardInfoType"/>
     </message>
     <message name="bookingItineraryResponse">
         <part name="bookingValidation" type="xsd:string"/>
@@ -292,6 +294,7 @@ A partner link type characterizes the conversational relationship between two se
     <vprop:propertyAlias propertyName="tns:customerId" messageType="tns:addFlightRequest" part="customerId"/>
     <vprop:propertyAlias propertyName="tns:itineraryId" messageType="tns:addFlightRequest" part="itineraryId"/>
 </definitions>
+
 
 
 

@@ -4,10 +4,10 @@
     targetNamespace="http://types.lameduck.ws"
     xmlns:tns="http://types.lameduck.ws"
     xmlns:jaxb="http://java.sun.com/xml/ns/jaxb"
+    xmlns:ns0="urn://types.fastmoney.imm.dtu.dk"
     elementFormDefault="qualified"
-    jaxb:version="2.0" xmlns:ns0="urn://types.fastmoney.imm.dtu.dk">
-	<!--<xsd:import namespace="urn://types.fastmoney.imm.dtu.dk" schemaLocation="http://fastmoney.imm.dtu.dk:8080/BankService?xsd=1"/>-->
-    <xsd:import schemaLocation="http://fastmoney.imm.dtu.dk:8080/BankService?xsd=1" namespace="urn://types.fastmoney.imm.dtu.dk"/>
+    jaxb:version="2.0">
+    <xsd:import namespace="urn://types.fastmoney.imm.dtu.dk" schemaLocation="http://fastmoney.imm.dtu.dk:8080/BankService?xsd=1"/>
     <xsd:complexType name="requestGetFlightType">
 		<xsd:sequence>
 			<xsd:element name="flightStart" type="xsd:string"></xsd:element>
@@ -63,5 +63,6 @@
     <xsd:element name="CancelFlightFaultElement" type="tns:CancelFlightFaultType"></xsd:element>
     <xsd:element name="BookFlightFaultElement" type="tns:BookFlightFaultType"></xsd:element>
 </xsd:schema>
+
 
 
