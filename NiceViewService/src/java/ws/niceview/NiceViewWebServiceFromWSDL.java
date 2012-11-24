@@ -122,18 +122,24 @@ public class NiceViewWebServiceFromWSDL {
             throw new BookHotelFault("Hotel for booking number " + bookingNumber + " does not exist", new BookHotelFaultType());
         }
 
-        // Card Validation
 
         dk.dtu.imm.fastmoney.BankPortType port = service.getBankPort();
 
         int amount = (int) currentHotelToBook.getHotelStayPrice();
 
-        try {
-            boolean validationResult = port.validateCreditCard(GROUP_NUMBER, creditCardInfo, amount);
-        } catch (CreditCardFaultMessage ex) {
-            CreditCardFaultType fault = new CreditCardFaultType();
-            fault.setMessage(ex.getMessage());
-            throw new BookHotelCreditCardFault("Invalid credit card info provided or amount of money to be charged is not guaranteed", fault);
+        // Card Validation - only if credit card guarantee is required
+
+        if (currentHotelToBook.isIfCreditCardRequired()) {
+
+            try {
+                boolean validationResult = port.validateCreditCard(GROUP_NUMBER, creditCardInfo, amount);
+
+            } catch (CreditCardFaultMessage ex) {
+                CreditCardFaultType fault = new CreditCardFaultType();
+                fault.setMessage(ex.getMessage());
+                throw new BookHotelCreditCardFault("Invalid credit card info provided or amount of money to be charged is not guaranteed", fault);
+
+            }
         }
 
         // Card Charging
