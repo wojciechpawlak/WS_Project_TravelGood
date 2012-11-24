@@ -4,6 +4,7 @@
  */
 package ws.travelgood;
 
+import java.net.URI;
 import ws.travelgood.types.Itinerary;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.UriInfo;
@@ -14,6 +15,7 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
+import javax.ws.rs.core.UriBuilder;
 import ws.travelgood.flights.FlightsResource;
 import ws.travelgood.hotels.HotelsResource;
 
@@ -55,34 +57,44 @@ public class ItineraryResource {
 
     @POST
     @Path("book")
-    public Response bookItinerary(@PathParam("id") String id) {
+    public Response bookItinerary(@PathParam("id") Integer id) {
 
-        // check if itinerary is in PLANNING phase
 
-        // optionally - check if all the items are UNCONFIRMED
+        ItinerariesResource.itineraryDAO.bookItinerary(id);
 
-        // book every single hotel
+        boolean booked = ItinerariesResource.itineraryDAO.bookItinerary(id);
 
-        // book every single flight
+        if (!booked) {
+            return Response.status(Status.BAD_REQUEST).build();
+        }
 
-        // in case of failure - cancel all the previous bookings, return to PLANNING phase
+        URI uri = UriBuilder
+                .fromResource(ItinerariesResource.class)
+                .segment(id.toString())
+                .build();
 
-        return Response.ok().build();
+        return Response.temporaryRedirect(uri).build();
 
     }
 
     @POST
     @Path("cancel")
-    public Response cancelItinerary(@PathParam("id") String id) {
+    public Response cancelItinerary(@PathParam("id") Integer id) {
 
-        // cancel all hotels
+        ItinerariesResource.itineraryDAO.bookItinerary(id);
 
-        // cancel all flights
+        boolean cancelled = ItinerariesResource.itineraryDAO.bookItinerary(id);
 
-        // on error - continue, but notify the user
+        if (!cancelled) {
+            return Response.status(Status.BAD_REQUEST).build();
+        }
 
+        URI uri = UriBuilder
+                .fromResource(ItinerariesResource.class)
+                .segment(id.toString())
+                .build();
 
-        return Response.ok().build();
+        return Response.temporaryRedirect(uri).build();
     }
 
     @Path("hotels")

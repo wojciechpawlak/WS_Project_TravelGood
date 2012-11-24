@@ -139,11 +139,29 @@ public class ItineraryDAOImpl implements ItineraryDAO {
     }
 
     public boolean bookItinerary(Integer itineraryId) {
-        throw new UnsupportedOperationException("Not supported yet.");
+
+        // check if itinerary is in PLANNING phase
+
+        // optionally - check if all the items are UNCONFIRMED
+
+        // book every single hotel
+
+        // book every single flight
+
+        // in case of failure - cancel all the previous bookings, return to PLANNING phase
+        
+        return false;
     }
 
     public boolean cancelItinerary(Integer itineraryId) {
-        throw new UnsupportedOperationException("Not supported yet.");
+
+        // cancel all hotels
+
+        // cancel all flights
+
+        // on error - continue, but notify the user
+
+        return false;
     }
 
     protected boolean updateItinerary(Itinerary it) {
