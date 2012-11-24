@@ -347,7 +347,7 @@ public class TravelGoodJUnit {
         XMLGregorianCalendar arrivalDate = df.newXMLGregorianCalendar("2012-12-29");
         XMLGregorianCalendar departureDate = df.newXMLGregorianCalendar("2012-12-31");
 
-        HotelListType resultGetHotel = port.getHotel("SleepHotel", arrivalDate, departureDate, customerId, itineraryId);
+        HotelListType resultGetHotel = port.getHotel("SleepCity", arrivalDate, departureDate, customerId, itineraryId);
 
         assertEquals(0, resultGetHotel.getHotel().size());
 
