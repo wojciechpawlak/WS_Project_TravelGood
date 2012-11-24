@@ -4,30 +4,44 @@
  */
 package ws.travelgood.domain;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
+import javax.xml.datatype.DatatypeConfigurationException;
+import javax.xml.datatype.DatatypeFactory;
+import javax.xml.datatype.XMLGregorianCalendar;
+import ws.lameduck.LameDuckWSDLPortType;
+import ws.lameduck.LameDuckWSDLService;
+import ws.lameduck.types.FlightInformationListType;
+import ws.lameduck.types.RequestGetFlightType;
+import ws.niceview.types.HotelListType;
 import ws.travelgood.types.Itinerary;
 import ws.travelgood.types.ItineraryStatus;
+import ws.travelgood.types.flight.FlightList;
+import ws.travelgood.types.hotel.HotelList;
 
 /**
  *
  * @author mkucharek
  */
-public class ItineraryDAOImpl implements ItineraryDAO {
+public class ItineraryManagerImpl implements ItineraryManager {
 
     protected List<Itinerary> itineraryList;
     protected int nextId;
     // internal usage only
     private final int ITINERARY_NOT_FOUND = -1;
 
-    public ItineraryDAOImpl() {
+    public ItineraryManagerImpl() {
         this.itineraryList = new ArrayList<Itinerary>();
         this.nextId = 1;
 
     }
 
-    public ItineraryDAOImpl(List<Itinerary> initialItineraryList) {
+    public ItineraryManagerImpl(List<Itinerary> initialItineraryList) {
         this();
 
         if (initialItineraryList != null) {
@@ -76,6 +90,41 @@ public class ItineraryDAOImpl implements ItineraryDAO {
 
     }
 
+    public HotelList getHotels(Date dateFrom, Date dateTo, String cityName) {
+
+        ws.niceview.NiceViewWSDLService service =
+                new ws.niceview.NiceViewWSDLService();
+        ws.niceview.NiceViewWSDLPortType port = service.getNiceViewWSDLPort();
+
+        GregorianCalendar dateFromGCal = new GregorianCalendar();
+        dateFromGCal.setTime(dateFrom);
+
+        GregorianCalendar dateToGCal = new GregorianCalendar();
+        dateToGCal.setTime(dateFrom);
+
+        XMLGregorianCalendar departureDate;
+        XMLGregorianCalendar arrivalDate;
+
+        try {
+            departureDate =
+                    DatatypeFactory.newInstance().
+                    newXMLGregorianCalendar(dateFromGCal);
+
+            arrivalDate = DatatypeFactory.newInstance().newXMLGregorianCalendar(
+                    dateToGCal);
+
+        } catch (DatatypeConfigurationException ex) {
+            throw new RuntimeException(ex);
+            
+        }
+
+        HotelListType result = port.getHotels(cityName, departureDate,
+                arrivalDate);
+
+        return new HotelList(result.getHotel());
+
+    }
+
     public boolean addHotel(Integer itineraryId, String hotelBookingNumber) {
 
         Itinerary it = this.getItinerary(itineraryId);
@@ -108,6 +157,39 @@ public class ItineraryDAOImpl implements ItineraryDAO {
         return this.updateItinerary(it);
     }
 
+    public FlightList getFlights(Date date, String cityFromName,
+            String cityToName) {
+
+        LameDuckWSDLService service =
+                new LameDuckWSDLService();
+        LameDuckWSDLPortType port = service.getLameDuckWSDLPortTypeBindingPort();
+
+        XMLGregorianCalendar departureDate;
+
+        try {
+
+            DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+
+            departureDate =
+                    DatatypeFactory.newInstance().
+                    newXMLGregorianCalendar(df.format(date));
+
+        } catch (DatatypeConfigurationException ex) {
+            throw new RuntimeException(ex);
+        }
+
+        RequestGetFlightType input = new RequestGetFlightType();
+
+        input.setFlightDate(departureDate);
+        input.setFlightStart(cityFromName);
+        input.setFlightDestination(cityToName);
+
+        FlightInformationListType result = port.getFlights(input);
+
+        return new FlightList(result.getFlightInformation());
+
+    }
+
     public boolean addFlight(Integer itineraryId, String hotelBookingNumber) {
         Itinerary it = this.getItinerary(itineraryId);
 
@@ -126,7 +208,7 @@ public class ItineraryDAOImpl implements ItineraryDAO {
     }
 
     public boolean deleteFlight(Integer itineraryId, String hotelBookingNumber) {
-        
+
         Itinerary it = this.getItinerary(itineraryId);
 
         if (it == null) {
@@ -149,7 +231,7 @@ public class ItineraryDAOImpl implements ItineraryDAO {
         // book every single flight
 
         // in case of failure - cancel all the previous bookings, return to PLANNING phase
-        
+
         return false;
     }
 

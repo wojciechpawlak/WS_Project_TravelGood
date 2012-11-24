@@ -31,7 +31,7 @@ public class HotelResource {
     public Response addHotel(@PathParam("id") Integer id, @PathParam(
             "bookingNumber") String bookingNumber) {
 
-        boolean added = ItinerariesResource.itineraryDAO.addHotel(id, bookingNumber);
+        boolean added = ItinerariesResource.itineraryManager.addHotel(id, bookingNumber);
 
         if (!added) {
             return Response.status(Status.BAD_REQUEST).build();
@@ -51,7 +51,7 @@ public class HotelResource {
     public Response deleteHotel(@PathParam("id") Integer id, @PathParam(
             "bookingNumber") String bookingNumber) {
 
-        boolean deleted = ItinerariesResource.itineraryDAO.deleteHotel(id, bookingNumber);
+        boolean deleted = ItinerariesResource.itineraryManager.deleteHotel(id, bookingNumber);
 
         if (!deleted) {
             return Response.status(Status.BAD_REQUEST).build();

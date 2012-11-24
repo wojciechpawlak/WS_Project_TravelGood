@@ -5,15 +5,17 @@
 
 package ws.travelgood.domain;
 
+import java.util.Date;
 import java.util.List;
 import ws.travelgood.types.Itinerary;
-import ws.travelgood.types.hotel.HotelBooking;
+import ws.travelgood.types.flight.FlightList;
+import ws.travelgood.types.hotel.HotelList;
 
 /**
  *
  * @author mkucharek
  */
-public interface ItineraryDAO {
+public interface ItineraryManager {
 
     public List<Itinerary> getAllItineraries();
 
@@ -23,9 +25,13 @@ public interface ItineraryDAO {
 
     public Itinerary createItinerary(Itinerary itinerary);
 
+    public HotelList getHotels(Date dateFrom, Date dateTo, String cityName);
+
     public boolean addHotel(Integer itineraryId, String hotelBookingNumber);
 
     public boolean deleteHotel(Integer itineraryId, String hotelBookingNumber);
+
+    public FlightList getFlights(Date date, String cityFromName, String cityToName);
 
     public boolean addFlight(Integer itineraryId, String hotelBookingNumber);
 

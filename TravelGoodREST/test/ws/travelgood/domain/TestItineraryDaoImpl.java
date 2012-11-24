@@ -20,10 +20,10 @@ import ws.travelgood.types.ItineraryStatus;
  */
 public class TestItineraryDaoImpl {
 
-    private ItineraryDAO itineraryDAO;
+    private ItineraryManager itineraryDAO;
     private int itineraryCount;
 
-    private static ItineraryDAO staticDao = new ItineraryDAOImpl();
+    private static ItineraryManager staticDao = new ItineraryManagerImpl();
 
     @Before
     public void setUp() {
@@ -36,7 +36,7 @@ public class TestItineraryDaoImpl {
                 new Itinerary("u2", 3, ItineraryStatus.BOOKED)
             }));
 
-        this.itineraryDAO = new ItineraryDAOImpl(initialItineraries);
+        this.itineraryDAO = new ItineraryManagerImpl(initialItineraries);
 
         this.itineraryCount = initialItineraries.size();
     }

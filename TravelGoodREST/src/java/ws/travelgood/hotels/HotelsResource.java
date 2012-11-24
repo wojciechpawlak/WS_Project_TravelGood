@@ -4,13 +4,11 @@
  */
 package ws.travelgood.hotels;
 
-import javax.xml.datatype.DatatypeConfigurationException;
 import ws.travelgood.types.hotel.HotelList;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.GregorianCalendar;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -19,9 +17,7 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.UriInfo;
-import javax.xml.datatype.DatatypeFactory;
-import javax.xml.datatype.XMLGregorianCalendar;
-import ws.niceview.types.HotelListType;
+import ws.travelgood.ItinerariesResource;
 
 /**
  *
@@ -38,7 +34,7 @@ public class HotelsResource {
     
     @GET
     @Produces("application/xml")
-    public Response getXml(@QueryParam("dateFrom") String dateFromStr,
+    public Response getHotels(@QueryParam("dateFrom") String dateFromStr,
             @QueryParam("dateTo") String dateToStr,
             @QueryParam("city") String city) {
 
@@ -59,34 +55,10 @@ public class HotelsResource {
 
         }
 
+        HotelList hList = ItinerariesResource.itineraryManager.getHotels(dateFrom,
+                dateTo, city);
 
-        ws.niceview.NiceViewWSDLService service =
-                new ws.niceview.NiceViewWSDLService();
-        ws.niceview.NiceViewWSDLPortType port = service.getNiceViewWSDLPort();
-
-        GregorianCalendar dateFromGCal = new GregorianCalendar();
-        dateFromGCal.setTime(dateFrom);
-
-        GregorianCalendar dateToGCal = new GregorianCalendar();
-        dateToGCal.setTime(dateFrom);
-
-        XMLGregorianCalendar departureDate;
-        XMLGregorianCalendar arrivalDate;
-        
-        try {
-            departureDate =
-                    DatatypeFactory.newInstance().
-                    newXMLGregorianCalendar(dateFromGCal);
-            
-            arrivalDate = DatatypeFactory.newInstance().newXMLGregorianCalendar(dateToGCal);
-            
-        } catch (DatatypeConfigurationException ex) {
-            throw new RuntimeException(ex);
-        }
-
-        HotelListType result = port.getHotels(city, departureDate, arrivalDate);
-
-        return Response.ok(new HotelList(result.getHotel())).build();
+        return Response.ok(hList).build();
 
     }
 

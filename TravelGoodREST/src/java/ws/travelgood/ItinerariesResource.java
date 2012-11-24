@@ -19,8 +19,8 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.UriBuilder;
-import ws.travelgood.domain.ItineraryDAO;
-import ws.travelgood.domain.ItineraryDAOImpl;
+import ws.travelgood.domain.ItineraryManager;
+import ws.travelgood.domain.ItineraryManagerImpl;
 import ws.travelgood.types.ItineraryStatus;
 
 /**
@@ -34,7 +34,7 @@ public class ItinerariesResource {
     @Context
     private UriInfo context;
 
-    public static ItineraryDAO itineraryDAO = new ItineraryDAOImpl(
+    public static ItineraryManager itineraryManager = new ItineraryManagerImpl(
             new ArrayList<Itinerary>(
             Arrays.asList(
             new Itinerary[]{
@@ -50,14 +50,14 @@ public class ItinerariesResource {
     @GET
     @Produces("application/xml")
     public List<Itinerary> getCurrentItineraries() {
-        return ItinerariesResource.itineraryDAO.getAllItineraries();
+        return ItinerariesResource.itineraryManager.getAllItineraries();
     }
 
     @POST
     @Consumes("text/plain")
     public Response createItinearyRequest(String userId) {
 
-        Itinerary it = itineraryDAO.createItinerary(new Itinerary(userId));
+        Itinerary it = itineraryManager.createItinerary(new Itinerary(userId));
 
         URI uri = UriBuilder
                 .fromUri(context.getBaseUri())

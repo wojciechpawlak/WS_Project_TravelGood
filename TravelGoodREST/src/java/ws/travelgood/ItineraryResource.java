@@ -43,7 +43,7 @@ public class ItineraryResource {
     public Response getItinerary(@PathParam("id") Integer itineraryId) {
 
         Itinerary it =
-                ItinerariesResource.itineraryDAO.getItinerary(itineraryId);
+                ItinerariesResource.itineraryManager.getItinerary(itineraryId);
 
         return Response.ok(it).build();
 
@@ -54,9 +54,9 @@ public class ItineraryResource {
     public Response bookItinerary(@PathParam("id") Integer id) {
 
 
-        ItinerariesResource.itineraryDAO.bookItinerary(id);
+        ItinerariesResource.itineraryManager.bookItinerary(id);
 
-        boolean booked = ItinerariesResource.itineraryDAO.bookItinerary(id);
+        boolean booked = ItinerariesResource.itineraryManager.bookItinerary(id);
 
         if (!booked) {
             return Response.status(Status.BAD_REQUEST).build();
@@ -73,9 +73,9 @@ public class ItineraryResource {
     @Path("cancel")
     public Response cancelItinerary(@PathParam("id") Integer id) {
 
-        ItinerariesResource.itineraryDAO.bookItinerary(id);
+        ItinerariesResource.itineraryManager.bookItinerary(id);
 
-        boolean cancelled = ItinerariesResource.itineraryDAO.bookItinerary(id);
+        boolean cancelled = ItinerariesResource.itineraryManager.bookItinerary(id);
 
         if (!cancelled) {
             return Response.status(Status.BAD_REQUEST).build();
