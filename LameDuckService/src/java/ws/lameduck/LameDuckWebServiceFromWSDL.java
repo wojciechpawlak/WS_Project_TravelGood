@@ -40,7 +40,7 @@ public class LameDuckWebServiceFromWSDL {
 
         if (input.getFlightStart().equals("SleepCity")) {
             try {
-                Thread.sleep(100000);
+                Thread.sleep(10000);
             } catch (InterruptedException ex) {
                 Logger.getLogger(LameDuckWebServiceFromWSDL.class.getName()).log(Level.SEVERE, null, ex);
             }

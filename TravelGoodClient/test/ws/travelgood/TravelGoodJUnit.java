@@ -329,6 +329,51 @@ public class TravelGoodJUnit {
         assertEquals("Planning canceled", cancelItineraryString);
     }
 
+    @Test
+    public void testP3a() throws DatatypeConfigurationException {
+
+        ws.travelgood.TravelGoodWSDLService service = new ws.travelgood.TravelGoodWSDLService();
+        ws.travelgood.TravelGoodWSDLPortType port = service.getTravelGoodWSDLPortTypeBindingPort();
+
+        //ID of the customer and itinerary
+        int customerId = 3;
+        int itineraryId = 3;
+
+        //Create the itinerary
+        port.createItinerary(customerId, itineraryId);
+
+        //Plan a trip by first getting a list of flights
+        DatatypeFactory df = DatatypeFactory.newInstance();
+        XMLGregorianCalendar arrivalDate = df.newXMLGregorianCalendar("2012-12-29");
+        XMLGregorianCalendar departureDate = df.newXMLGregorianCalendar("2012-12-31");
+
+        HotelListType resultGetHotel = port.getHotel("SleepHotel", arrivalDate, departureDate, customerId, itineraryId);
+
+        assertEquals(0, resultGetHotel.getHotel().size());
+
+    }
+
+    @Test
+    public void testP3b() throws DatatypeConfigurationException {
+
+        ws.travelgood.TravelGoodWSDLService service = new ws.travelgood.TravelGoodWSDLService();
+        ws.travelgood.TravelGoodWSDLPortType port = service.getTravelGoodWSDLPortTypeBindingPort();
+
+        //ID of the customer and itinerary
+        int customerId = 4;
+        int itineraryId = 4;
+
+        //Create the itinerary
+        port.createItinerary(customerId, itineraryId);
+
+        //Plan a trip by first getting a list of flights
+        DatatypeFactory df = DatatypeFactory.newInstance();
+        XMLGregorianCalendar flightDate = df.newXMLGregorianCalendar("2012-12-29");
+        FlightInformationListType resultGetFlight = port.getFlight("SleepCity", "BedCity", flightDate, customerId, itineraryId);
+
+        assertEquals(0, resultGetFlight.getFlightInformation().size());
+
+    }
     /*
 
     private ItineraryType cleanNull(ItineraryType myItinerary) {
