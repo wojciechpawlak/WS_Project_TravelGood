@@ -10,6 +10,7 @@ import java.util.List;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
+import ws.travelgood.types.flight.FlightBooking;
 import ws.travelgood.types.hotel.HotelBooking;
 
 /**
@@ -22,7 +23,9 @@ public class Itinerary {
     private Integer id;
     private String userId;
     private ItineraryStatus currentStatus;
+
     private List<HotelBooking> hotelBookingList;
+    private List<FlightBooking> flightBookingList;
 
     private Itinerary() {
     }
@@ -37,6 +40,7 @@ public class Itinerary {
         this.userId = userId;
         this.currentStatus = status;
         this.hotelBookingList = new ArrayList<HotelBooking>();
+        this.flightBookingList = new ArrayList<FlightBooking>();
 
     }
 
@@ -45,6 +49,7 @@ public class Itinerary {
         this.userId = it.userId;
         this.currentStatus = it.currentStatus;
         this.hotelBookingList = new ArrayList<HotelBooking>(it.hotelBookingList);
+        this.flightBookingList = new ArrayList<FlightBooking>(it.flightBookingList);
     }
 
     /**
@@ -98,9 +103,29 @@ public class Itinerary {
         return Collections.unmodifiableList(hotelBookingList);
     }
 
+    /**
+     * @return the flightBookingList
+     */
+    @XmlElementWrapper(name = "flights")
+    @XmlElement(name = "flight")
+    public List<FlightBooking> getFlightBookingList() {
+        return Collections.unmodifiableList(flightBookingList);
+    }
+
     public HotelBooking getHotelBooking(String bookingNumber) {
 
         for (HotelBooking hb : this.hotelBookingList) {
+            if (hb.getBookingNumber().equals(bookingNumber)) {
+                return hb;
+            }
+        }
+
+        return null;
+    }
+
+    public FlightBooking getFlightBooking(String bookingNumber) {
+
+        for (FlightBooking hb : this.flightBookingList) {
             if (hb.getBookingNumber().equals(bookingNumber)) {
                 return hb;
             }
@@ -125,7 +150,32 @@ public class Itinerary {
         }
 
         if (toRemove != null) {
-            this.getHotelBookingList().remove(toRemove);
+            this.hotelBookingList.remove(toRemove);
+
+            return true;
+        }
+
+        return false;
+
+    }
+
+    public void addFlight(String bookingNumber) {
+        this.flightBookingList.add(new FlightBooking(bookingNumber));
+    }
+
+    public boolean deleteFlight(String bookingNumber) {
+
+        FlightBooking toRemove = null;
+        for (FlightBooking hb : this.getFlightBookingList()) {
+            if (hb.getBookingNumber().equals(bookingNumber)) {
+                toRemove = hb;
+                break;
+
+            }
+        }
+
+        if (toRemove != null) {
+            this.flightBookingList.remove(toRemove);
 
             return true;
         }
@@ -140,6 +190,7 @@ public class Itinerary {
                 "id = " + this.id + "; " +
                 "userId = " + this.userId + "; " +
                 "status = " + this.currentStatus + "; " +
-                "hotelList = " + this.getHotelBookingList() + "]";
+                "hotelList = " + this.getHotelBookingList() + "; " +
+                "flightList = " + this.getFlightBookingList() + "]";
     }
 }

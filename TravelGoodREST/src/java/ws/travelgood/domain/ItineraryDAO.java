@@ -27,6 +27,10 @@ public interface ItineraryDAO {
 
     public boolean deleteHotel(Integer itineraryId, String hotelBookingNumber);
 
+    public boolean addFlight(Integer itineraryId, String hotelBookingNumber);
+
+    public boolean deleteFlight(Integer itineraryId, String hotelBookingNumber);
+
     public boolean bookItinerary(Integer itineraryId);
 
     public boolean cancelItinerary(Integer itineraryId);

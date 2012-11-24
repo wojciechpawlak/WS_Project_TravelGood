@@ -108,6 +108,36 @@ public class ItineraryDAOImpl implements ItineraryDAO {
         return this.updateItinerary(it);
     }
 
+    public boolean addFlight(Integer itineraryId, String hotelBookingNumber) {
+        Itinerary it = this.getItinerary(itineraryId);
+
+        if (it == null) {
+            return false;
+        }
+
+        if (it.getFlightBooking(hotelBookingNumber) != null) {
+            // flight already added
+            return false;
+        }
+
+        it.addFlight(hotelBookingNumber);
+
+        return this.updateItinerary(it);
+    }
+
+    public boolean deleteFlight(Integer itineraryId, String hotelBookingNumber) {
+        
+        Itinerary it = this.getItinerary(itineraryId);
+
+        if (it == null) {
+            return false;
+        }
+
+        it.deleteFlight(hotelBookingNumber);
+
+        return this.updateItinerary(it);
+    }
+
     public boolean bookItinerary(Integer itineraryId) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
