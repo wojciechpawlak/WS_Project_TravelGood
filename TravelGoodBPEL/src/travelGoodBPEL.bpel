@@ -54,7 +54,7 @@
         <variable name="AddHotelIn" messageType="ns0:addHotelRequest"/>
         <variable name="GetHotelsOut" xmlns:tns="http://niceview.ws" messageType="tns:getHotelsResponse"/>
         <variable name="GetHotelsIn" xmlns:tns="http://niceview.ws" messageType="tns:getHotelsRequest"/>
-        <variable name="GetHotelOut" xmlns:tns="http://travelgood.ws" messageType="tns:getHotelResponse"/>
+        <variable name="GetHotelOut" xmlns:tns="http://travelgood.ws" messageType="tns:getHotelResponse"></variable>
         <variable name="GetHotelIn" xmlns:tns="http://travelgood.ws" messageType="tns:getHotelRequest"/>
         <variable name="CreateItineraryOut" xmlns:tns="http://travelgood.ws" messageType="tns:createItineraryResponse"/>
         <variable name="CreateItineraryIn" xmlns:tns="http://travelgood.ws" messageType="tns:createItineraryRequest"/>
@@ -112,8 +112,30 @@
                                                     <to variable="GetHotelsIn" part="departureDate"/>
                                             </copy>
                                 </assign>
-                                    <invoke name="Invoke1" partnerLink="PartnerLink3" operation="getHotels" xmlns:tns="http://niceview.ws" portType="tns:NiceViewWSDLPortType" inputVariable="GetHotelsIn" outputVariable="GetHotelsOut"/>
-                                    <assign name="Assign3">
+                                 <scope name="Scope3">
+                                      <eventHandlers>
+                                           <onAlarm>
+                                                <for>'P0Y0M0DT0H0M5.0S'</for>
+                                                <scope name="Scope4">
+                                                     <sequence name="Sequence11">
+                                                          <assign name="Assign20">
+                                                               <copy>
+                                                                    <from>
+                                                                         <literal><ns:hotelList
+    xmlns:ns="http://types.niceview.ws"
+    zmlns="http://docs.oasis-open.org/wsbpel/2.0/process/executable"/></literal>
+                                                                    </from>
+                                                                    <to variable="GetHotelOut" part="hotelList"/>
+                                                               </copy>
+                                                          </assign>
+                                                          <reply name="Reply9" partnerLink="PartnerLink1" operation="getHotel" portType="ns0:TravelGoodWSDLPortType" variable="GetHotelOut"/>
+                                                     </sequence>
+                                                </scope>
+                                           </onAlarm>
+                                      </eventHandlers>
+                                      <invoke name="Invoke1" partnerLink="PartnerLink3" operation="getHotels" portType="tns:NiceViewWSDLPortType" inputVariable="GetHotelsIn" outputVariable="GetHotelsOut"/>
+                                 </scope>
+                                 <assign name="Assign3">
                                           <copy>
                                                 <from variable="GetHotelsOut" part="hotels"/>
                                                 <to variable="GetHotelOut" part="hotelList"/>
@@ -308,7 +330,29 @@
                                 <to>$GetFlightsIn.input/ns3:flightDate</to>
                             </copy>
                         </assign>
-                        <invoke name="Invoke2" partnerLink="PartnerLink2" operation="getFlights" xmlns:tns="http://lameduck.ws" portType="tns:LameDuckWSDLPortType" inputVariable="GetFlightsIn" outputVariable="GetFlightsOut"/>
+                         <scope name="Scope5">
+                              <eventHandlers>
+                                   <onAlarm>
+                                        <for>'P0Y0M0DT0H0M5.0S'</for>
+                                        <scope name="Scope6">
+                                             <sequence name="Sequence12">
+                                                  <assign name="Assign21">
+                                                       <copy>
+                                                            <from>
+                                                                 <literal><ns0:flightList
+    xmlns:ns0="http://types.lameduck.ws"
+    zmlns="http://docs.oasis-open.org/wsbpel/2.0/process/executable"/></literal>
+                                                            </from>
+                                                            <to variable="GetFlightOut" part="flightList"/>
+                                                       </copy>
+                                                  </assign>
+                                                  <reply name="Reply10" partnerLink="PartnerLink1" operation="getFlight" portType="ns0:TravelGoodWSDLPortType" variable="GetFlightOut"/>
+                                             </sequence>
+                                        </scope>
+                                   </onAlarm>
+                              </eventHandlers>
+                              <invoke name="Invoke2" partnerLink="PartnerLink2" operation="getFlights" xmlns:tns="http://lameduck.ws" portType="tns:LameDuckWSDLPortType" inputVariable="GetFlightsIn" outputVariable="GetFlightsOut"/>
+                         </scope>
                         <assign name="Assign10">
                               <copy>
                                     <from variable="GetFlightsOut" part="output"/>
@@ -387,6 +431,7 @@
         </repeatUntil>
     </sequence>
 </process>
+
 
 
 
