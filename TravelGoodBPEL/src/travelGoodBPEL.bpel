@@ -20,7 +20,9 @@
         <partnerLink name="PartnerLink1" xmlns:tns="http://travelgood.ws" partnerLinkType="tns:TravelGoodWSDL" myRole="TravelGoodWSDLPortTypeRole"/>
     </partnerLinks>
     <variables>
-         <variable name="BookHotelOut" xmlns:tns="http://niceview.ws" messageType="tns:bookHotelResponse"/>
+        <variable name="CancelItineraryOut" messageType="ns0:cancelItineraryResponse"/>
+        <variable name="CancelItineraryIn" messageType="ns0:cancelItineraryRequest"/>
+        <variable name="BookHotelOut" xmlns:tns="http://niceview.ws" messageType="tns:bookHotelResponse"/>
          <variable name="BookHotelIn" xmlns:tns="http://niceview.ws" messageType="tns:bookHotelRequest"/>
          <variable name="BookFlightsOut" xmlns:tns="http://lameduck.ws" messageType="tns:bookFlightResponse"/>
          <variable name="BookFlightsIn" xmlns:tns="http://lameduck.ws" messageType="tns:bookFlightRequest"/>
@@ -365,11 +367,27 @@
                               <reply name="Reply7" partnerLink="PartnerLink1" operation="addFlight" portType="ns0:TravelGoodWSDLPortType" variable="AddFlightOut"/>
                         </sequence>
                   </onMessage>
+                <onMessage partnerLink="PartnerLink1" operation="cancelItinerary" portType="ns0:TravelGoodWSDLPortType" variable="CancelItineraryIn">
+                    <correlations>
+                        <correlation set="CustomerItineraryCorrelation" initiate="no"/>
+                    </correlations>
+                    <sequence name="Sequence10">
+                        <assign name="Assign19">
+                            <copy>
+                                <from>'Planning canceled'</from>
+                                <to variable="CancelItineraryOut" part="cancelValidation"/>
+                            </copy>
+                        </assign>
+                        <reply name="Reply8" partnerLink="PartnerLink1" operation="cancelItinerary" portType="ns0:TravelGoodWSDLPortType" variable="CancelItineraryOut"/>
+                        <exit name="Exit1"/>
+                    </sequence>
+                </onMessage>
             </pick>
             <condition>$donePlanning</condition>
         </repeatUntil>
     </sequence>
 </process>
+
 
 
 
