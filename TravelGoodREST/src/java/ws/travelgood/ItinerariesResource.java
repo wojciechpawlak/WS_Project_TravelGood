@@ -19,8 +19,8 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.UriBuilder;
-import ws.travelgood.domain.ItineraryManager;
-import ws.travelgood.domain.ItineraryManagerImpl;
+import ws.travelgood.manager.ItineraryManager;
+import ws.travelgood.manager.impl.TravelGoodManager;
 import ws.travelgood.types.ItineraryStatus;
 
 /**
@@ -34,15 +34,6 @@ public class ItinerariesResource {
     @Context
     private UriInfo context;
 
-    public static ItineraryManager itineraryManager = new ItineraryManagerImpl(
-            new ArrayList<Itinerary>(
-            Arrays.asList(
-            new Itinerary[]{
-                new Itinerary("u1"),
-                new Itinerary("u1"),
-                new Itinerary("u2", 3, ItineraryStatus.BOOKED)})));
-
-
     /** Creates a new instance of ItinerariesResource */
     public ItinerariesResource() {
     }
@@ -50,14 +41,14 @@ public class ItinerariesResource {
     @GET
     @Produces("application/xml")
     public List<Itinerary> getCurrentItineraries() {
-        return ItinerariesResource.itineraryManager.getAllItineraries();
+        return TravelGoodManager.getInstance().getAllItineraries();
     }
 
     @POST
     @Consumes("text/plain")
     public Response createItinearyRequest(String userId) {
 
-        Itinerary it = itineraryManager.createItinerary(new Itinerary(userId));
+        Itinerary it = TravelGoodManager.getInstance().createItinerary(new Itinerary(userId));
 
         URI uri = UriBuilder
                 .fromUri(context.getBaseUri())

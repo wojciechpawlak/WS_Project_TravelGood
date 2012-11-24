@@ -17,7 +17,7 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.UriInfo;
-import ws.travelgood.ItinerariesResource;
+import ws.travelgood.manager.impl.LameDuckManager;
 import ws.travelgood.types.flight.FlightList;
 
 /**
@@ -54,7 +54,7 @@ public class FlightsResource {
 
         }
 
-        FlightList fList = ItinerariesResource.itineraryManager.getFlights(date,
+        FlightList fList = LameDuckManager.getInstance().getFlights(date,
                 cityFrom, cityTo);
 
         return Response.ok(fList).build();

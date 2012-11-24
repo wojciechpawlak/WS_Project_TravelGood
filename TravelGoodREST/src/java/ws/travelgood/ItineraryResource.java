@@ -18,6 +18,7 @@ import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.UriBuilder;
 import ws.travelgood.flights.FlightsResource;
 import ws.travelgood.hotels.HotelsResource;
+import ws.travelgood.manager.impl.TravelGoodManager;
 
 /**
  * REST Web Service
@@ -43,7 +44,7 @@ public class ItineraryResource {
     public Response getItinerary(@PathParam("id") Integer itineraryId) {
 
         Itinerary it =
-                ItinerariesResource.itineraryManager.getItinerary(itineraryId);
+                TravelGoodManager.getInstance().getItinerary(itineraryId);
 
         return Response.ok(it).build();
 
@@ -54,9 +55,9 @@ public class ItineraryResource {
     public Response bookItinerary(@PathParam("id") Integer id) {
 
 
-        ItinerariesResource.itineraryManager.bookItinerary(id);
+        TravelGoodManager.getInstance().bookItinerary(id);
 
-        boolean booked = ItinerariesResource.itineraryManager.bookItinerary(id);
+        boolean booked = TravelGoodManager.getInstance().bookItinerary(id);
 
         if (!booked) {
             return Response.status(Status.BAD_REQUEST).build();
@@ -73,9 +74,9 @@ public class ItineraryResource {
     @Path("cancel")
     public Response cancelItinerary(@PathParam("id") Integer id) {
 
-        ItinerariesResource.itineraryManager.bookItinerary(id);
+        TravelGoodManager.getInstance().bookItinerary(id);
 
-        boolean cancelled = ItinerariesResource.itineraryManager.bookItinerary(id);
+        boolean cancelled = TravelGoodManager.getInstance().bookItinerary(id);
 
         if (!cancelled) {
             return Response.status(Status.BAD_REQUEST).build();

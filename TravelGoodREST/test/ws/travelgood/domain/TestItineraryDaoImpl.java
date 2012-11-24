@@ -5,6 +5,8 @@
 
 package ws.travelgood.domain;
 
+import ws.travelgood.manager.ItineraryManager;
+import ws.travelgood.manager.impl.TravelGoodManager;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -23,7 +25,7 @@ public class TestItineraryDaoImpl {
     private ItineraryManager itineraryDAO;
     private int itineraryCount;
 
-    private static ItineraryManager staticDao = new ItineraryManagerImpl();
+    private static ItineraryManager staticDao = new TravelGoodManager();
 
     @Before
     public void setUp() {
@@ -36,7 +38,7 @@ public class TestItineraryDaoImpl {
                 new Itinerary("u2", 3, ItineraryStatus.BOOKED)
             }));
 
-        this.itineraryDAO = new ItineraryManagerImpl(initialItineraries);
+        this.itineraryDAO = new TravelGoodManager(initialItineraries);
 
         this.itineraryCount = initialItineraries.size();
     }

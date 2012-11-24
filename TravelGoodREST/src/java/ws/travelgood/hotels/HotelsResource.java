@@ -17,7 +17,7 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.UriInfo;
-import ws.travelgood.ItinerariesResource;
+import ws.travelgood.manager.impl.NiceViewManager;
 
 /**
  *
@@ -55,7 +55,7 @@ public class HotelsResource {
 
         }
 
-        HotelList hList = ItinerariesResource.itineraryManager.getHotels(dateFrom,
+        HotelList hList = NiceViewManager.getInstance().getHotels(dateFrom,
                 dateTo, city);
 
         return Response.ok(hList).build();

@@ -15,6 +15,7 @@ import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.UriBuilder;
 import javax.ws.rs.core.UriInfo;
 import ws.travelgood.ItinerariesResource;
+import ws.travelgood.manager.impl.TravelGoodManager;
 
 /**
  *
@@ -32,7 +33,7 @@ public class FlightResource {
     public Response addFlight(@PathParam("id") Integer id, @PathParam(
             "bookingNumber") String bookingNumber) {
 
-        boolean added = ItinerariesResource.itineraryManager.addFlight(id, bookingNumber);
+        boolean added = TravelGoodManager.getInstance().addFlight(id, bookingNumber);
 
         if (!added) {
             return Response.status(Status.BAD_REQUEST).build();
@@ -52,7 +53,7 @@ public class FlightResource {
     public Response deleteHotel(@PathParam("id") Integer id, @PathParam(
             "bookingNumber") String bookingNumber) {
 
-        boolean deleted = ItinerariesResource.itineraryManager.deleteFlight(id, bookingNumber);
+        boolean deleted = TravelGoodManager.getInstance().deleteFlight(id, bookingNumber);
 
         if (!deleted) {
             return Response.status(Status.BAD_REQUEST).build();
