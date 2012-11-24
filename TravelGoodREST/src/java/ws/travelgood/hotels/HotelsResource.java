@@ -11,13 +11,13 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.GregorianCalendar;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.UriInfo;
 import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
@@ -38,7 +38,7 @@ public class HotelsResource {
     
     @GET
     @Produces("application/xml")
-    public HotelList getXml(@QueryParam("dateFrom") String dateFromStr,
+    public Response getXml(@QueryParam("dateFrom") String dateFromStr,
             @QueryParam("dateTo") String dateToStr,
             @QueryParam("city") String city) {
 
@@ -51,10 +51,12 @@ public class HotelsResource {
             dateFrom = df.parse(dateFromStr);
             dateTo = df.parse(dateToStr);
 
-        } catch (ParseException ex) {
-            Logger.getLogger(HotelsResource.class.getName()).log(Level.SEVERE,
-                    null, ex);
-            return new HotelList(null);
+        } catch (ParseException e) {
+            return Response.status(Status.BAD_REQUEST).entity(e.getMessage()).build();
+
+        } catch (NullPointerException e) {
+            return Response.status(Status.BAD_REQUEST).build();
+
         }
 
 
@@ -84,7 +86,7 @@ public class HotelsResource {
 
         HotelListType result = port.getHotels(city, departureDate, arrivalDate);
 
-        return new HotelList(result.getHotel());
+        return Response.ok(new HotelList(result.getHotel())).build();
 
     }
 

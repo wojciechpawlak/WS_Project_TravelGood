@@ -4,18 +4,16 @@
  */
 package ws.travelgood.hotels;
 
+import java.net.URI;
 import javax.ws.rs.DELETE;
-import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
+import javax.ws.rs.core.UriBuilder;
 import javax.ws.rs.core.UriInfo;
 import ws.travelgood.ItinerariesResource;
-import ws.travelgood.types.Itinerary;
-import ws.travelgood.types.ItineraryStatus;
-import ws.travelgood.types.hotel.HotelBooking;
-import ws.travelgood.exceptions.InvalidStatusException;
 
 /**
  *
@@ -24,28 +22,29 @@ import ws.travelgood.exceptions.InvalidStatusException;
 public class HotelResource {
 
     @Context
-    private UriInfo context;
+    private UriInfo uriInfo;
 
     public HotelResource() {
     }
 
-    @POST
+    @PUT
     public Response addHotel(@PathParam("id") String id, @PathParam(
             "bookingNumber") String bookingNumber) {
 
-        Itinerary it = ItinerariesResource.itineraryList.get(
-                Integer.parseInt(id));
+        boolean added = ItinerariesResource.itineraryDAO.addHotel(Integer.
+                parseInt(id), bookingNumber);
 
-        if (it.getCurrentStatus() != ItineraryStatus.PLANNING) {
-            throw new InvalidStatusException(
-                    "Cannot add hotel - " + it +
-                    "is no longer in planning state");
+        if (!added) {
+            return Response.status(Status.BAD_REQUEST).build();
         }
 
-        ItinerariesResource.itineraryList.get(Integer.parseInt(id)).
-                getHotelBookingList().add(new HotelBooking(bookingNumber));
+        URI uri = UriBuilder
+                .fromResource(ItinerariesResource.class)
+                .segment(id.toString())
+                .build();
 
-        return Response.ok().build();
+        return Response.temporaryRedirect(uri).build();
+
 
     }
 
@@ -53,25 +52,20 @@ public class HotelResource {
     public Response deleteHotel(@PathParam("id") String id, @PathParam(
             "bookingNumber") String bookingNumber) {
 
-        HotelBooking toRemove = null;
-        for (HotelBooking hb : ItinerariesResource.itineraryList.get(Integer.
-                parseInt(id)).getHotelBookingList()) {
-            if (hb.getBookingNumber().equals(bookingNumber)) {
-                toRemove = hb;
-                break;
+        boolean deleted = ItinerariesResource.itineraryDAO.deleteHotel(Integer.
+                parseInt(id), bookingNumber);
 
-            }
+        if (!deleted) {
+            return Response.status(Status.BAD_REQUEST).build();
         }
 
-        if (toRemove != null) {
-            ItinerariesResource.itineraryList.get(Integer.parseInt(id)).
-                    getHotelBookingList().remove(toRemove);
+        URI uri = UriBuilder
+                .fromResource(ItinerariesResource.class)
+                .segment(id.toString())
+                .build();
 
-            return Response.noContent().build();
-
-        }
-
-        return Response.status(Status.NOT_FOUND).build();
+        return Response.temporaryRedirect(uri).build();
 
     }
+
 }
