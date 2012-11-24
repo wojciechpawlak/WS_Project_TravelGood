@@ -4,6 +4,7 @@
  */
 package ws.travelgood;
 
+import dk.dtu.imm.fastmoney.types.ExpirationDateType;
 import java.net.URI;
 import ws.travelgood.types.Itinerary;
 import javax.ws.rs.core.Context;
@@ -13,12 +14,15 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Produces;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.UriBuilder;
 import ws.travelgood.flights.FlightsResource;
 import ws.travelgood.hotels.HotelsResource;
+import ws.travelgood.manager.BookingException;
 import ws.travelgood.manager.impl.TravelGoodManager;
+import ws.travelgood.types.banking.CreditCardInfo;
 
 /**
  * REST Web Service
@@ -50,40 +54,66 @@ public class ItineraryResource {
 
     }
 
+    @GET
+    @Path("ccinfo")
+    @Produces("application/xml")
+    public CreditCardInfo getInfo() {
+
+        CreditCardInfo ccinfo = new CreditCardInfo();
+
+        ccinfo.setName("TestName");
+
+        ExpirationDateType exp = new ExpirationDateType();
+        exp.setMonth(11);
+        exp.setYear(2014);
+        ccinfo.setExpirationDate(exp);
+
+        ccinfo.setNumber("12345");
+
+        return ccinfo;
+    }
+
     @POST
     @Path("book")
-    public Response bookItinerary(@PathParam("id") Integer id) {
+    public Response bookItinerary(@PathParam("id") String id, CreditCardInfo ccInfo) {
 
+        try {
+            boolean booked = TravelGoodManager.getInstance().book(id, ccInfo);
 
-        TravelGoodManager.getInstance().bookItinerary(id);
+            if (!booked) {
+                return Response.status(Status.BAD_REQUEST).build();
+            }
 
-        boolean booked = TravelGoodManager.getInstance().bookItinerary(id);
+            URI uri = UriBuilder
+                    .fromResource(ItinerariesResource.class)
+                    .segment(id)
+                    .build();
 
-        if (!booked) {
-            return Response.status(Status.BAD_REQUEST).build();
+            return Response.temporaryRedirect(uri).build();
+
+        } catch (BookingException e) {
+            // booking failed, exception contains all the info
+
+            return Response
+                    .status(502)
+                    .entity(e.getMessage())
+                    .type(MediaType.TEXT_PLAIN)
+                    .build();
         }
-
-        URI uri = UriBuilder.fromResource(ItinerariesResource.class).segment(id.
-                toString()).build();
-
-        return Response.temporaryRedirect(uri).build();
 
     }
 
     @POST
     @Path("cancel")
-    public Response cancelItinerary(@PathParam("id") Integer id) {
+    public Response cancelItinerary(@PathParam("id") String id) {
 
-        TravelGoodManager.getInstance().bookItinerary(id);
-
-        boolean cancelled = TravelGoodManager.getInstance().bookItinerary(id);
+        boolean cancelled = TravelGoodManager.getInstance().cancel(id);
 
         if (!cancelled) {
             return Response.status(Status.BAD_REQUEST).build();
         }
 
-        URI uri = UriBuilder.fromResource(ItinerariesResource.class).segment(id.
-                toString()).build();
+        URI uri = UriBuilder.fromResource(ItinerariesResource.class).segment(id).build();
 
         return Response.temporaryRedirect(uri).build();
     }

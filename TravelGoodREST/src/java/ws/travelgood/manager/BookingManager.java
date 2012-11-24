@@ -5,13 +5,15 @@
 
 package ws.travelgood.manager;
 
+import ws.travelgood.types.banking.CreditCardInfo;
+
 /**
  *
  * @author mkucharek
  */
 public interface BookingManager {
 
-    public boolean book(String bookingNumber);
+    public boolean book(String bookingNumber, CreditCardInfo ccInfo) throws BookingException;
 
     public boolean cancel(String bookingNumber);
 

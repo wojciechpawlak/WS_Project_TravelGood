@@ -6,14 +6,20 @@ package ws.travelgood.manager.impl;
 
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
+import ws.niceview.BookHotelCreditCardFault;
+import ws.niceview.BookHotelFault;
 import ws.niceview.NiceViewWSDLPortType;
 import ws.niceview.NiceViewWSDLService;
 import ws.niceview.types.HotelListType;
+import ws.travelgood.manager.BookingException;
 import ws.travelgood.manager.BookingManager;
 import ws.travelgood.manager.HotelManager;
+import ws.travelgood.types.banking.CreditCardInfo;
 import ws.travelgood.types.hotel.HotelList;
 
 /**
@@ -72,8 +78,20 @@ public class NiceViewManager implements HotelManager, BookingManager {
 
     }
 
-    public boolean book(String bookingNumber) {
-        throw new UnsupportedOperationException("Not supported yet.");
+    public boolean book(String bookingNumber, CreditCardInfo ccInfo) throws
+            BookingException {
+        
+        try {
+            return port.bookHotel(bookingNumber, ccInfo);
+
+        } catch (BookHotelCreditCardFault e) {
+            // booking failed due to wrong credit card info
+            throw new BookingException("Hotel Booking [bookingNumber=" + bookingNumber + "] failed - credit card info rejected", e);
+
+        } catch (BookHotelFault e) {
+            throw new BookingException("Hotel Booking [bookingNumber=" + bookingNumber + "] failed - internal error", e);
+        }
+
     }
 
     public boolean cancel(String bookingNumber) {

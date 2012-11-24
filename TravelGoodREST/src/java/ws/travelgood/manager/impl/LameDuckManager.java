@@ -15,8 +15,10 @@ import ws.lameduck.LameDuckWSDLPortType;
 import ws.lameduck.LameDuckWSDLService;
 import ws.lameduck.types.FlightInformationListType;
 import ws.lameduck.types.RequestGetFlightType;
+import ws.travelgood.manager.BookingException;
 import ws.travelgood.manager.BookingManager;
 import ws.travelgood.manager.FlightManager;
+import ws.travelgood.types.banking.CreditCardInfo;
 import ws.travelgood.types.flight.FlightList;
 
 /**
@@ -73,7 +75,7 @@ public class LameDuckManager implements FlightManager, BookingManager {
 
     }
 
-    public boolean book(String bookingNumber) {
+    public boolean book(String bookingNumber, CreditCardInfo ccInfo) throws BookingException {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
