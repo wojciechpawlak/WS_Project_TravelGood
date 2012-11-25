@@ -79,7 +79,7 @@ public class LameDuckManager implements FlightManager, BookingManager {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
-    public boolean cancel(String bookingNumber) {
+    public boolean cancel(String bookingNumber) throws BookingException {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 

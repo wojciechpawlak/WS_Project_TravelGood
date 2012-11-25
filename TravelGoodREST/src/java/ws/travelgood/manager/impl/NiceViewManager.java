@@ -13,6 +13,7 @@ import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
 import ws.niceview.BookHotelCreditCardFault;
 import ws.niceview.BookHotelFault;
+import ws.niceview.CancelHotelFault;
 import ws.niceview.NiceViewWSDLPortType;
 import ws.niceview.NiceViewWSDLService;
 import ws.niceview.types.HotelListType;
@@ -80,21 +81,31 @@ public class NiceViewManager implements HotelManager, BookingManager {
 
     public boolean book(String bookingNumber, CreditCardInfo ccInfo) throws
             BookingException {
-        
+
         try {
             return port.bookHotel(bookingNumber, ccInfo);
 
         } catch (BookHotelCreditCardFault e) {
             // booking failed due to wrong credit card info
-            throw new BookingException("Hotel Booking [bookingNumber=" + bookingNumber + "] failed - credit card info rejected", e);
+            throw new BookingException("Hotel Booking [bookingNumber=" +
+                    bookingNumber + "] failed - credit card info rejected", e);
 
         } catch (BookHotelFault e) {
-            throw new BookingException("Hotel Booking [bookingNumber=" + bookingNumber + "] failed - internal error", e);
+            throw new BookingException("Hotel Booking [bookingNumber=" +
+                    bookingNumber + "] failed - internal error", e);
         }
 
     }
 
-    public boolean cancel(String bookingNumber) {
-        throw new UnsupportedOperationException("Not supported yet.");
+    public boolean cancel(String bookingNumber) throws BookingException {
+        try {
+            port.cancelHotel(bookingNumber);
+            return true;
+
+        } catch (CancelHotelFault e) {
+            throw new BookingException("Cancel failed for HotelBooking[bookingNumber=" +
+                    bookingNumber + "]", e);
+
+        }
     }
 }

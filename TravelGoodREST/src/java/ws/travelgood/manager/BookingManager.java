@@ -15,6 +15,6 @@ public interface BookingManager {
 
     public boolean book(String bookingNumber, CreditCardInfo ccInfo) throws BookingException;
 
-    public boolean cancel(String bookingNumber);
+    public boolean cancel(String bookingNumber) throws BookingException;
 
 }

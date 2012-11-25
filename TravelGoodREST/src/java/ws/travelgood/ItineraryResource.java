@@ -107,15 +107,26 @@ public class ItineraryResource {
     @Path("cancel")
     public Response cancelItinerary(@PathParam("id") String id) {
 
-        boolean cancelled = TravelGoodManager.getInstance().cancel(id);
+        try {
+            boolean cancelled = TravelGoodManager.getInstance().cancel(id);
 
-        if (!cancelled) {
-            return Response.status(Status.BAD_REQUEST).build();
+            if (!cancelled) {
+                return Response.status(Status.BAD_REQUEST).build();
+            }
+
+            URI uri = UriBuilder.fromResource(ItinerariesResource.class).segment(id).build();
+
+            return Response.temporaryRedirect(uri).build();
+
+        } catch (BookingException e) {
+            // cancel failed
+            return Response
+                    .status(502)
+                    .entity(e.getMessage())
+                    .type(MediaType.TEXT_PLAIN)
+                    .build();
+            
         }
-
-        URI uri = UriBuilder.fromResource(ItinerariesResource.class).segment(id).build();
-
-        return Response.temporaryRedirect(uri).build();
     }
 
     @Path("hotels")

@@ -10,6 +10,7 @@ import java.util.Collections;
 import java.util.List;
 import ws.travelgood.manager.BookingException;
 import ws.travelgood.manager.BookingManager;
+import ws.travelgood.types.Booking;
 import ws.travelgood.types.Itinerary;
 import ws.travelgood.types.ItineraryStatus;
 import ws.travelgood.types.banking.CreditCardInfo;
@@ -147,10 +148,11 @@ public class TravelGoodManager implements ItineraryManager, BookingManager {
         return this.updateItinerary(it, false);
     }
 
-    public boolean book(String itineraryIdStr, CreditCardInfo ccInfo) throws BookingException {
+    public boolean book(String itineraryIdStr, CreditCardInfo ccInfo) throws
+            BookingException {
 
         Integer itineraryId = Integer.parseInt(itineraryIdStr);
-        
+
         Itinerary it = getItinerary(itineraryId);
 
         // check if itinerary is in PLANNING phase
@@ -178,7 +180,7 @@ public class TravelGoodManager implements ItineraryManager, BookingManager {
             // cancel all previous bookings
             // revert to PLANNING phase
 
-            this.cancel(itineraryIdStr);
+            this.cancel(it);
 
             return false;
 
@@ -188,24 +190,63 @@ public class TravelGoodManager implements ItineraryManager, BookingManager {
         it.setCurrentStatus(ItineraryStatus.BOOKED);
 
         updateItinerary(it, true);
-        
+
         return true;
     }
 
-    public boolean cancel(String itineraryId) {
+    public boolean cancel(String itineraryIdStr) throws BookingException {
+
+        Integer itineraryId = Integer.parseInt(itineraryIdStr);
+
+        return cancel(getItinerary(itineraryId));
+
+    }
+
+    protected boolean cancel(Itinerary it) throws BookingException {
+
+        List<Booking> failedCancels = new ArrayList<Booking>();
 
         // cancel all hotels
+        for (HotelBooking hb : it.getHotelBookingList()) {
+            try {
+                NiceViewManager.getInstance().cancel(hb.getBookingNumber());
+
+            } catch (BookingException e) {
+                failedCancels.add(hb);
+            }
+
+        }
 
         // cancel all flights
+        for (FlightBooking fb : it.getFlightBookingList()) {
+            try {
+                LameDuckManager.getInstance().cancel(fb.getBookingNumber());
 
-        // on error - continue, but notify the user
+            } catch (BookingException e) {
+                failedCancels.add(fb);
+            }
 
-        return false;
+        }
+
+        if (failedCancels.size() > 0) {
+
+            // change status back to BOOKED
+            it.setCurrentStatus(ItineraryStatus.BOOKED);
+
+            throw new BookingException("Itinerary cancel failed for the following bookings: " + failedCancels);
+        }
+
+        // if all cancels are ok - delete itinerary
+        this.deleteItinerary(it);
+
+        return true;
+
     }
 
     protected boolean updateItinerary(Itinerary it, boolean ignoreStatus) {
 
-        if (!ignoreStatus && !it.getCurrentStatus().equals(ItineraryStatus.PLANNING)) {
+        if (!ignoreStatus && !it.getCurrentStatus().equals(
+                ItineraryStatus.PLANNING)) {
             // cannot update itinerary
             return false;
         }
@@ -222,11 +263,6 @@ public class TravelGoodManager implements ItineraryManager, BookingManager {
             return false;
 
         }
-    }
-
-    protected boolean deleteItinerary(Integer id) {
-        return this.deleteItinerary(this.getItinerary(id));
-
     }
 
     protected boolean deleteItinerary(Itinerary itinerary) {
