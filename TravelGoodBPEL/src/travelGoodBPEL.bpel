@@ -98,8 +98,10 @@
         <reply name="Reply1" partnerLink="PartnerLink1" operation="createItinerary" xmlns:tns="http://travelgood.ws" portType="tns:TravelGoodWSDLPortType" variable="CreateItineraryOut"/>
         <repeatUntil name="RepeatUntil1">
             <pick name="Pick1" xmlns:tns="http://niceview.ws">
+                <documentation>KB : Maybe add an if to each onMessage, to separate the behaviour if donePlanning = true or false</documentation>
                 <onMessage partnerLink="PartnerLink1" operation="getHotel" portType="ns0:TravelGoodWSDLPortType" variable="GetHotelIn">
-                        <correlations>
+                    <documentation>getHotel operation</documentation>
+                    <correlations>
                                 <correlation set="CustomerItineraryCorrelation" initiate="no"/>
                             </correlations>
                             <sequence name="Sequence1">
@@ -150,6 +152,7 @@
                             </sequence>
                     </onMessage>
                     <onMessage partnerLink="PartnerLink1" operation="addHotel" portType="ns0:TravelGoodWSDLPortType" variable="AddHotelIn">
+                        <documentation>addHotel operation</documentation>
                         <correlations>
                                 <correlation set="CustomerItineraryCorrelation" initiate="no"/>
                             </correlations>
@@ -199,6 +202,7 @@
                             </sequence>
                     </onMessage>
                     <onMessage partnerLink="PartnerLink1" operation="getItinerary" portType="ns0:TravelGoodWSDLPortType" variable="GetItineraryIn">
+                        <documentation>getItinerary operation</documentation>
                         <correlations>
                             <correlation set="CustomerItineraryCorrelation" initiate="no"/>
                         </correlations>
@@ -213,6 +217,7 @@
                             </sequence>
                     </onMessage>
                 <onMessage partnerLink="PartnerLink1" operation="bookingItinerary" portType="ns0:TravelGoodWSDLPortType" variable="BookingItineraryIn">
+                    <documentation>bookingItinerary operation</documentation>
                     <correlations>
                         <correlation set="CustomerItineraryCorrelation" initiate="no"/>
                     </correlations>
@@ -321,6 +326,7 @@
                     </sequence>
                 </onMessage>
                 <onMessage partnerLink="PartnerLink1" operation="getFlight" portType="ns0:TravelGoodWSDLPortType" variable="GetFlightIn">
+                    <documentation>getFlight operation</documentation>
                     <correlations>
                         <correlation set="CustomerItineraryCorrelation" initiate="no"/>
                     </correlations>
@@ -372,7 +378,8 @@
                     </sequence>
                 </onMessage>
                   <onMessage partnerLink="PartnerLink1" operation="addFlight" portType="ns0:TravelGoodWSDLPortType" variable="AddFlightIn">
-                        <correlations>
+                      <documentation>addFlight operation</documentation>
+                      <correlations>
                               <correlation set="CustomerItineraryCorrelation" initiate="no"/>
                         </correlations>
                         <sequence name="Sequence6">
@@ -421,6 +428,7 @@
                         </sequence>
                   </onMessage>
                 <onMessage partnerLink="PartnerLink1" operation="cancelItinerary" portType="ns0:TravelGoodWSDLPortType" variable="CancelItineraryIn">
+                    <documentation>cancelItinerary operation</documentation>
                     <correlations>
                         <correlation set="CustomerItineraryCorrelation" initiate="no"/>
                     </correlations>
@@ -436,9 +444,9 @@
                     </sequence>
                 </onMessage>
             </pick>
-            <condition>$donePlanning</condition>
+            <condition>$doneProcess</condition>
         </repeatUntil>
-        <repeatUntil name="RepeatUntil2">
+        <!--<repeatUntil name="RepeatUntil2">
             <pick name="Pick2">
                 <onMessage partnerLink="PartnerLink1" operation="getItinerary" portType="ns0:TravelGoodWSDLPortType" variable="GetItineraryIn">
                     <correlations>
@@ -456,9 +464,11 @@
                 </onMessage>
             </pick>
             <condition>$doneProcess</condition>
-        </repeatUntil>
+        </repeatUntil>-->
     </sequence>
 </process>
+
+
 
 
 
