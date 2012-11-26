@@ -20,6 +20,7 @@
         <partnerLink name="PartnerLink1" xmlns:tns="http://travelgood.ws" partnerLinkType="tns:TravelGoodWSDL" myRole="TravelGoodWSDLPortTypeRole"/>
     </partnerLinks>
     <variables>
+        <variable name="doneProcess" type="xsd:boolean"/>
         <variable name="CancelItineraryOut" messageType="ns0:cancelItineraryResponse"/>
         <variable name="CancelItineraryIn" messageType="ns0:cancelItineraryRequest"/>
         <variable name="BookHotelOut" xmlns:tns="http://niceview.ws" messageType="tns:bookHotelResponse"/>
@@ -89,6 +90,10 @@
                   <from>0</from>
                   <to variable="arrayFlightSize"/>
              </copy>
+            <copy>
+                <from>false()</from>
+                <to variable="doneProcess"/>
+            </copy>
         </assign>
         <reply name="Reply1" partnerLink="PartnerLink1" operation="createItinerary" xmlns:tns="http://travelgood.ws" portType="tns:TravelGoodWSDLPortType" variable="CreateItineraryOut"/>
         <repeatUntil name="RepeatUntil1">
@@ -195,8 +200,8 @@
                     </onMessage>
                     <onMessage partnerLink="PartnerLink1" operation="getItinerary" portType="ns0:TravelGoodWSDLPortType" variable="GetItineraryIn">
                         <correlations>
-                                <correlation set="CustomerItineraryCorrelation" initiate="no"/>
-                            </correlations>
+                            <correlation set="CustomerItineraryCorrelation" initiate="no"/>
+                        </correlations>
                             <sequence name="Sequence3">
                                 <assign name="Assign6">
                                         <copy>
@@ -306,6 +311,10 @@
                             <copy>
                                 <from>'Booking done'</from>
                                 <to variable="BookingItineraryOut" part="bookingValidation"/>
+                            </copy>
+                            <copy>
+                                <from>true()</from>
+                                <to variable="donePlanning"/>
                             </copy>
                         </assign>
                         <reply name="Reply5" partnerLink="PartnerLink1" operation="bookingItinerary" portType="ns0:TravelGoodWSDLPortType" variable="BookingItineraryOut"/>
@@ -429,8 +438,29 @@
             </pick>
             <condition>$donePlanning</condition>
         </repeatUntil>
+        <repeatUntil name="RepeatUntil2">
+            <pick name="Pick2">
+                <onMessage partnerLink="PartnerLink1" operation="getItinerary" portType="ns0:TravelGoodWSDLPortType" variable="GetItineraryIn">
+                    <correlations>
+                        <correlation set="CustomerItineraryCorrelation" initiate="no"/>
+                    </correlations>
+                    <sequence name="Sequence13">
+                        <assign name="Assign22">
+                            <copy>
+                                <from variable="Itinerary"/>
+                                <to variable="GetItineraryOut" part="itinerary"/>
+                            </copy>
+                        </assign>
+                        <reply name="Reply11" partnerLink="PartnerLink1" operation="getItinerary" portType="ns0:TravelGoodWSDLPortType" variable="GetItineraryOut"/>
+                    </sequence>
+                </onMessage>
+            </pick>
+            <condition>$doneProcess</condition>
+        </repeatUntil>
     </sequence>
 </process>
+
+
 
 
 

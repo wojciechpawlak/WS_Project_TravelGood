@@ -23,8 +23,8 @@ import static org.junit.Assert.*;
  */
 public class TravelGoodJUnit {
 
-    /*
-    @Test
+    
+//    @Test
     public void testCreateItinerary() {
 
     ws.travelgood.TravelGoodWSDLService service = new ws.travelgood.TravelGoodWSDLService();
@@ -46,8 +46,8 @@ public class TravelGoodJUnit {
 
     }
 
-    /*
-    @Test
+    
+//    @Test
     public void testGetHotel() throws DatatypeConfigurationException {
 
     ws.travelgood.TravelGoodWSDLService service = new ws.travelgood.TravelGoodWSDLService();
@@ -73,10 +73,10 @@ public class TravelGoodJUnit {
 
     assertFalse(result.getHotel().isEmpty());
 
-    port.bookingItinerary(customerId, itineraryId);
+//    port.bookingItinerary(customerId, itineraryId);
     }
 
-    @Test
+//    @Test
     public void testAddHotel() throws DatatypeConfigurationException {
 
     ws.travelgood.TravelGoodWSDLService service = new ws.travelgood.TravelGoodWSDLService();
@@ -104,11 +104,11 @@ public class TravelGoodJUnit {
 
     assertEquals("Hotel added", result);
 
-    port.bookingItinerary(customerId, itineraryId);
+//    port.bookingItinerary(customerId, itineraryId);
 
     }
 
-    @Test
+//    @Test
     public void testGetFlight() throws DatatypeConfigurationException {
 
     ws.travelgood.TravelGoodWSDLService service = new ws.travelgood.TravelGoodWSDLService();
@@ -126,11 +126,11 @@ public class TravelGoodJUnit {
 
     assertFalse(result.getFlightInformation().isEmpty());
 
-    port.bookingItinerary(customerId, itineraryId);
+//    port.bookingItinerary(customerId, itineraryId);
 
     }
 
-    @Test
+//    @Test
     public void testAddFlight() throws DatatypeConfigurationException {
 
     ws.travelgood.TravelGoodWSDLService service = new ws.travelgood.TravelGoodWSDLService();
@@ -150,11 +150,11 @@ public class TravelGoodJUnit {
 
     assertEquals("Flight added", result);
 
-    port.bookingItinerary(customerId, itineraryId);
+//    port.bookingItinerary(customerId, itineraryId);
 
     }
 
-    @Test
+    //@Test
     public void testGetItinerary() throws DatatypeConfigurationException {
 
     ws.travelgood.TravelGoodWSDLService service = new ws.travelgood.TravelGoodWSDLService();
@@ -196,10 +196,10 @@ public class TravelGoodJUnit {
 
     assertEquals(flightDate.toString(), result.getItineraryStartDate().toString());
 
-    port.bookingItinerary(customerId, itineraryId);
+    //port.bookingItinerary(customerId, itineraryId);
 
-    }*/
-    @Test
+    }
+//    @Test
     public void testP1() throws DatatypeConfigurationException {
 
         ws.travelgood.TravelGoodWSDLService service = new ws.travelgood.TravelGoodWSDLService();
@@ -329,7 +329,7 @@ public class TravelGoodJUnit {
         assertEquals("Planning canceled", cancelItineraryString);
     }
 
-    @Test
+//    @Test
     public void testP3a() throws DatatypeConfigurationException {
 
         ws.travelgood.TravelGoodWSDLService service = new ws.travelgood.TravelGoodWSDLService();
@@ -353,7 +353,7 @@ public class TravelGoodJUnit {
 
     }
 
-    @Test
+//    @Test
     public void testP3b() throws DatatypeConfigurationException {
 
         ws.travelgood.TravelGoodWSDLService service = new ws.travelgood.TravelGoodWSDLService();
