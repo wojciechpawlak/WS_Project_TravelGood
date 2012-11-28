@@ -8,8 +8,8 @@
                     >
                     -->
 
-            <xsd:import namespace="http://types.niceview.ws" schemaLocation="http://OP960-DLT4K4J.b45x.dtu.dk:9080/TravelGoodApp-sun-http-binding/TravelGoodBPEL/localhost_8080/NiceViewService/NiceViewWSDLService.xsd_1.xsd"/>
-            <xsd:import namespace="http://types.lameduck.ws" schemaLocation="http://OP960-DLT4K4J.b45x.dtu.dk:9080/TravelGoodApp-sun-http-binding/TravelGoodBPEL/localhost_8080/LameDuckService/LameDuckWSDLService.xsd_1.xsd"/>
+            <xsd:import namespace="http://types.niceview.ws" schemaLocation="http://OP960-7N3KM4J.b45x.dtu.dk:9080/TravelGoodApp-sun-http-binding/TravelGoodBPEL/localhost_8080/NiceViewService/NiceViewWSDLService.xsd_1.xsd"/>
+            <xsd:import namespace="http://types.lameduck.ws" schemaLocation="http://OP960-7N3KM4J.b45x.dtu.dk:9080/TravelGoodApp-sun-http-binding/TravelGoodBPEL/localhost_8080/LameDuckService/LameDuckWSDLService.xsd_1.xsd"/>
             <!--<xsd:import namespace="urn://types.fastmoney.imm.dtu.dk" schemaLocation="fastmoney.imm.dtu.dk_8080/BankService.xsd_1.xsd"/>-->
             <xsd:complexType name="itineraryType">
                 <xsd:sequence>
@@ -305,7 +305,7 @@
   </binding>
   <service name="TravelGoodWSDLService">
     <port name="TravelGoodWSDLPortTypeBindingPort" binding="tns:TravelGoodWSDLPortTypeBinding">
-      <soap:address location="http://OP960-DLT4K4J.b45x.dtu.dk:9080/service"/>
+      <soap:address location="http://OP960-7N3KM4J.b45x.dtu.dk:9080/service"/>
     </port>
   </service>
     <plnk:partnerLinkType name="TravelGoodWSDL">
