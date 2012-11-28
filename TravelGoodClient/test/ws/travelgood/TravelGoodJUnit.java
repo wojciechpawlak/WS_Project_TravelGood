@@ -199,7 +199,8 @@ public class TravelGoodJUnit {
     //port.bookingItinerary(customerId, itineraryId);
 
     }
-    @Test
+    
+    //@Test
     public void testP1() throws DatatypeConfigurationException {
 
         ws.travelgood.TravelGoodWSDLService service = new ws.travelgood.TravelGoodWSDLService();
@@ -294,7 +295,7 @@ public class TravelGoodJUnit {
 
     }
 
-    @Test
+    //@Test
     public void testP2() throws DatatypeConfigurationException {
 
         ws.travelgood.TravelGoodWSDLService service = new ws.travelgood.TravelGoodWSDLService();
@@ -329,7 +330,7 @@ public class TravelGoodJUnit {
         assertEquals("Planning canceled", cancelItineraryString);
     }
 
-    @Test
+    //@Test
     public void testP3a() throws DatatypeConfigurationException {
 
         ws.travelgood.TravelGoodWSDLService service = new ws.travelgood.TravelGoodWSDLService();
@@ -353,11 +354,21 @@ public class TravelGoodJUnit {
         //Check that the resulting list of hotels is empty.
         assertEquals(0, resultGetHotel.getHotel().size());
 
+//        resultGetHotel = port.getHotel("Vienna", arrivalDate, departureDate, customerId, itineraryId);
+//        assertFalse(resultGetHotel.getHotel().isEmpty());
+//        assertEquals("Vienna",resultGetHotel.getHotel().get(0).getHotelAddress().getCity());
+//
+//        //The getHotels operation to the hotel reservations service does not answer within 5 seconds
+//        resultGetHotel = port.getHotel("SleepCity", arrivalDate, departureDate, customerId, itineraryId);
+//
+//        //Check that the resulting list of hotels is empty.
+//        assertEquals(0, resultGetHotel.getHotel().size());
+
         //Cancel planning TODO
 
     }
 
-    @Test
+    //@Test
     public void testP3b() throws DatatypeConfigurationException {
 
         ws.travelgood.TravelGoodWSDLService service = new ws.travelgood.TravelGoodWSDLService();
@@ -384,7 +395,7 @@ public class TravelGoodJUnit {
 
     }
 
-    //@Test
+    @Test
     public void testB() throws DatatypeConfigurationException {
 
         ws.travelgood.TravelGoodWSDLService service = new ws.travelgood.TravelGoodWSDLService();
@@ -405,11 +416,10 @@ public class TravelGoodJUnit {
             port.addFlight(resultGetFlight.getFlightInformation().get(0).getBookingNumber(), customerId, itineraryId);
         }
 
-        XMLGregorianCalendar arrivalDate = df.newXMLGregorianCalendar("2012-12-22");
-        XMLGregorianCalendar departureDate = df.newXMLGregorianCalendar("2012-12-25");
-        HotelListType resultGetHotel = port.getHotel("Vienna", arrivalDate, departureDate, customerId, itineraryId);
-        if (resultGetHotel.getHotel().size() > 0) {
-            port.addHotel(resultGetHotel.getHotel().get(0).getBookingNumber(), customerId, itineraryId);
+        flightDate = df.newXMLGregorianCalendar("2012-12-23");
+        resultGetFlight = port.getFlight("FailCity", "Paris", flightDate, customerId, itineraryId);
+        if (resultGetFlight.getFlightInformation().size() > 0) {
+            port.addFlight(resultGetFlight.getFlightInformation().get(0).getBookingNumber(), customerId, itineraryId);
         }
 
         flightDate = df.newXMLGregorianCalendar("2012-12-25");
@@ -431,10 +441,10 @@ public class TravelGoodJUnit {
 
         //Then book the itinerary. During booking, the second booking should fail
         CreditCardInfoWrapperType ccit = new CreditCardInfoWrapperType();
-        ccit.setName("Anne Strandberg");
-        ccit.setNumber("50408816");
+        ccit.setName("Bech Camilla"); //Only have a limit of 1000
+        ccit.setNumber("50408822");
         ExpirationDateType edt = new ExpirationDateType();
-        edt.setMonth(5);
+        edt.setMonth(7);
         edt.setYear(9);
         ccit.setExpirationDate(edt);
         String resultBooking = port.bookingItinerary(customerId, itineraryId, ccit);
@@ -448,7 +458,7 @@ public class TravelGoodJUnit {
 
         //and unconfirmed for the status of the second and third booking.
         assertEquals("unconfirmed", myItinerary.getBookingsFlight().get(1).getBookingStatus());
-        assertEquals("unconfirmed", myItinerary.getBookingsHotel().get(0).getBookingStatus());
+        assertEquals("unconfirmed", myItinerary.getBookingsFlight().get(2).getBookingStatus());
     }
 
     //@Test
@@ -588,6 +598,80 @@ public class TravelGoodJUnit {
         assertEquals("confirmed", myItinerary.getBookingsHotel().get(0).getBookingStatus());
     }
 
+    @Test //TODO : Move this test to another file
+    public void testB2() throws DatatypeConfigurationException {
+
+        ws.travelgood.TravelGoodWSDLService service = new ws.travelgood.TravelGoodWSDLService();
+        ws.travelgood.TravelGoodWSDLPortType port = service.getTravelGoodWSDLPortTypeBindingPort();
+
+        //ID of the customer and itinerary
+        int customerId = 8;
+        int itineraryId = 8;
+
+        //Create the itinerary
+        port.createItinerary(customerId, itineraryId);
+
+        //Plan an itinerary with three bookings.
+        DatatypeFactory df = DatatypeFactory.newInstance();
+        XMLGregorianCalendar flightDate = df.newXMLGregorianCalendar("2012-12-22");
+        FlightInformationListType resultGetFlight = port.getFlight("Copenhagen", "Bucharest", flightDate, customerId, itineraryId);
+        if (resultGetFlight.getFlightInformation().size() > 0) {
+            port.addFlight(resultGetFlight.getFlightInformation().get(0).getBookingNumber(), customerId, itineraryId);
+        }
+
+        flightDate = df.newXMLGregorianCalendar("2012-12-25");
+        resultGetFlight = port.getFlight("Moscow", "Berlin", flightDate, customerId, itineraryId);
+        if (resultGetFlight.getFlightInformation().size() > 0) {
+            port.addFlight(resultGetFlight.getFlightInformation().get(0).getBookingNumber(), customerId, itineraryId);
+        }
+
+        //then by planning a hotel
+        XMLGregorianCalendar arrivalDate = df.newXMLGregorianCalendar("2012-12-22");
+        XMLGregorianCalendar departureDate = df.newXMLGregorianCalendar("2012-12-25");
+        HotelListType resultGetHotel = port.getHotel("Zgierz", arrivalDate, departureDate, customerId, itineraryId);
+        if (resultGetHotel.getHotel().size() > 0) {
+            port.addHotel(resultGetHotel.getHotel().get(0).getBookingNumber(), customerId, itineraryId);
+        }
+
+        resultGetHotel = port.getHotel("Barcelona", arrivalDate, departureDate, customerId, itineraryId);
+        if (resultGetHotel.getHotel().size() > 0) {
+            port.addHotel(resultGetHotel.getHotel().get(0).getBookingNumber(), customerId, itineraryId);
+        }
+
+        //Get the itinerary and make sure that the booking status is unconfirmed for each entry.
+        ItineraryType myItinerary = port.getItinerary(customerId, itineraryId);
+
+        for (BookingType myBookingFlight : myItinerary.getBookingsFlight()) {
+            assertEquals("unconfirmed", myBookingFlight.getBookingStatus());
+        }
+
+        for (BookingType myBookingHotel : myItinerary.getBookingsHotel()) {
+            assertEquals("unconfirmed", myBookingHotel.getBookingStatus());
+        }
+
+        //Then book the itinerary. During booking, the second booking should fail
+        CreditCardInfoWrapperType ccit = new CreditCardInfoWrapperType();
+        ccit.setName("Bech Camilla"); //Only have a limit of 1000
+        ccit.setNumber("50408822");
+        ExpirationDateType edt = new ExpirationDateType();
+        edt.setMonth(7);
+        edt.setYear(9);
+        ccit.setExpirationDate(edt);
+        String resultBooking = port.bookingItinerary(customerId, itineraryId, ccit);
+
+        //Get the itinerary and check that the result of the bookTrip operation records a failure
+        assertEquals("Booking failure", resultBooking);
+        myItinerary = port.getItinerary(customerId, itineraryId);
+
+        //and that the returned itinerary has cancelled as the booking status of the first booking
+        for (BookingType myBookingFlight : myItinerary.getBookingsFlight()) {
+            assertEquals("cancelled", myBookingFlight.getBookingStatus());
+        }
+
+        //and unconfirmed for the status of the second and third booking.
+        assertEquals("cancelled", myItinerary.getBookingsHotel().get(0).getBookingStatus());
+        assertEquals("unconfirmed", myItinerary.getBookingsHotel().get(1).getBookingStatus());
+    }
     /*
 
     private ItineraryType cleanNull(ItineraryType myItinerary) {
