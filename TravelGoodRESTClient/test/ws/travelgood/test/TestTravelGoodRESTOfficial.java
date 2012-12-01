@@ -24,6 +24,7 @@ import ws.travelgood.types.ItineraryStatus;
 import ws.travelgood.types.banking.CreditCardInfo;
 import ws.travelgood.types.banking.ExpirationDate;
 import ws.travelgood.types.flight.FlightBooking;
+import ws.travelgood.types.hotel.HotelBooking;
 
 /**
  *
@@ -62,7 +63,8 @@ public class TestTravelGoodRESTOfficial {
                 .entity(it, MediaType.APPLICATION_XML)
                 .post(ClientResponse.class);
 
-        printClientRespone(createResponse);
+        // validating it got created successfully
+        Assert.assertEquals(201, createResponse.getStatus());
 
         // getting itinerary id
         String idStr = getId(createResponse.getLocation());
@@ -73,12 +75,38 @@ public class TestTravelGoodRESTOfficial {
         testItinerary(itRet, it.getUserId(), ItineraryStatus.PLANNING);
 
         // getting flight list
+        
+
+        // adding a flight
         List<FlightBooking> fbList = getFlightList(idStr, "Moscow", "Berlin", "2012-12-25");
 
-        // adding a flight to our itinerary
         ClientResponse addFlightResponse = addFlight(idStr, fbList.get(0));
-        printClientRespone(addFlightResponse);
+        Assert.assertEquals(201, addFlightResponse.getStatus());
 
+        // adding a hotel
+        List<HotelBooking> hbList = getHotelList(idStr, "Vienna", "2012-12-23", "2012-12-25");
+        Assert.assertEquals(2, hbList.size());
+
+        ClientResponse addHotelResponse = addHotel(idStr, hbList.get(0));
+        Assert.assertEquals(201, addHotelResponse.getStatus());
+
+        // adding a flight
+        fbList = getFlightList(idStr, "Copenhagen", "Bucharest", "2012-12-22");
+
+        addFlightResponse = addFlight(idStr, fbList.get(0));
+        Assert.assertEquals(201, addFlightResponse.getStatus());
+
+        // adding a flight
+        fbList = getFlightList(idStr, "Paris", "Tokyo", "2012-12-29");
+
+        addFlightResponse = addFlight(idStr, fbList.get(0));
+        Assert.assertEquals(201, addFlightResponse.getStatus());
+
+        // adding a hotel
+        addHotelResponse = addHotel(idStr, hbList.get(1));
+        Assert.assertEquals(201, addHotelResponse.getStatus());
+
+        // booking
         CreditCardInfo ccInfo = new CreditCardInfo(new ExpirationDate(5,9),
                 "Anne Strandberg", "50408816");
 
@@ -90,7 +118,7 @@ public class TestTravelGoodRESTOfficial {
     }
 
     @Test
-    public void testP2() {
+    public void testC1() {
 
         // creating itinerary
         Itinerary it = new Itinerary("test");
@@ -117,7 +145,7 @@ public class TestTravelGoodRESTOfficial {
 
         // adding a flight to our itinerary
         ClientResponse addFlightResponse = addFlight(idStr, fbList.get(0));
-        printClientRespone(addFlightResponse);
+        Assert.assertEquals(201, addFlightResponse.getStatus());
 
         CreditCardInfo ccInfo = new CreditCardInfo(new ExpirationDate(5,9),
                 "Anne Strandberg", "50408816");
@@ -162,6 +190,18 @@ public class TestTravelGoodRESTOfficial {
                 .put(ClientResponse.class);
     }
 
+    private ClientResponse addHotel(String itineraryId, HotelBooking fb) {
+
+        URI uri = UriBuilder.fromUri(itinerariesWebResource.getURI())
+                .segment(itineraryId)
+                .segment("hotels")
+                .build();
+
+        return client.resource(uri)
+                .entity(fb, MediaType.APPLICATION_XML)
+                .post(ClientResponse.class);
+    }
+
     private ClientResponse addFlight(String itineraryId, FlightBooking fb) {
 
         URI uri = UriBuilder.fromUri(itinerariesWebResource.getURI())
@@ -190,6 +230,30 @@ public class TestTravelGoodRESTOfficial {
         List<FlightBooking> fbList = client.resource(uri)
                 .queryParams(params)
                 .get(new GenericType<List<FlightBooking>>(){});
+
+        Assert.assertNotNull(fbList);
+        Assert.assertTrue(!fbList.isEmpty());
+
+        return fbList;
+
+    }
+
+    private List<HotelBooking> getHotelList(String itineraryId, String city, String dateFromStr, String dateToStr) {
+        // getting the list of flights
+        MultivaluedMap<String, String> params = new MultivaluedMapImpl();
+        params.add("city", city);
+        params.add("dateFrom", dateFromStr);
+        params.add("dateTo", dateToStr);
+
+
+        URI uri = UriBuilder.fromUri(itinerariesWebResource.getURI())
+                .segment(itineraryId)
+                .segment("hotels")
+                .build();
+
+        List<HotelBooking> fbList = client.resource(uri)
+                .queryParams(params)
+                .get(new GenericType<List<HotelBooking>>(){});
 
         Assert.assertNotNull(fbList);
         Assert.assertTrue(!fbList.isEmpty());
