@@ -36,15 +36,15 @@
     <part name="itineraryId" type="xsd:int">
     </part>
   </message>
-  <message name="cancelItineraryRequest">
+  <message name="addHotelRequest">
+    <part name="bookingNumber" type="xsd:string">
+    </part>
     <part name="customerId" type="xsd:int">
     </part>
     <part name="itineraryId" type="xsd:int">
     </part>
   </message>
-  <message name="addHotelRequest">
-    <part name="bookingNumber" type="xsd:string">
-    </part>
+  <message name="cancelItineraryRequest">
     <part name="customerId" type="xsd:int">
     </part>
     <part name="itineraryId" type="xsd:int">
@@ -60,14 +60,6 @@
     <part name="confirmation" type="xsd:string">
     </part>
   </message>
-  <message name="removeHotelRequest">
-    <part name="bookingNumber" type="xsd:string">
-    </part>
-    <part name="customerId" type="xsd:int">
-    </part>
-    <part name="itineraryId" type="xsd:int">
-    </part>
-  </message>
   <message name="getFlightRequest">
     <part name="flightStart" type="xsd:string">
     </part>
@@ -80,28 +72,16 @@
     <part name="itineraryId" type="xsd:int">
     </part>
   </message>
+  <message name="addFlightResponse">
+    <part name="confirmation" type="xsd:string">
+    </part>
+  </message>
   <message name="bookingItineraryRequest">
     <part name="customerId" type="xsd:int">
     </part>
     <part name="itineraryId" type="xsd:int">
     </part>
     <part name="creditCardInfo" type="ns0:creditCardInfoWrapperType">
-    </part>
-  </message>
-  <message name="addFlightResponse">
-    <part name="confirmation" type="xsd:string">
-    </part>
-  </message>
-  <message name="removeFlightRequest">
-    <part name="bookingNumber" type="xsd:string">
-    </part>
-    <part name="customerId" type="xsd:int">
-    </part>
-    <part name="itineraryId" type="xsd:int">
-    </part>
-  </message>
-  <message name="removeFlightResponse">
-    <part name="confirmation" type="xsd:string">
     </part>
   </message>
   <message name="getHotelRequest">
@@ -124,20 +104,16 @@
     <part name="cancelValidation" type="xsd:string">
     </part>
   </message>
-  <message name="removeHotelResponse">
-    <part name="confirmation" type="xsd:string">
-    </part>
-  </message>
   <message name="getItineraryResponse">
     <part name="itinerary" type="tns:itineraryType">
     </part>
   </message>
-  <message name="bookingItineraryResponse">
-    <part name="bookingValidation" type="xsd:string">
-    </part>
-  </message>
   <message name="getHotelResponse">
     <part name="hotelList" type="ns:hotelListType">
+    </part>
+  </message>
+  <message name="bookingItineraryResponse">
+    <part name="bookingValidation" type="xsd:string">
     </part>
   </message>
   <message name="addFlightRequest">
@@ -177,18 +153,6 @@
       <input name="input5" message="tns:addHotelRequest">
     </input>
       <output name="output5" message="tns:addHotelResponse">
-    </output>
-    </operation>
-    <operation name="removeFlight">
-      <input name="input6" message="tns:removeFlightRequest">
-    </input>
-      <output name="output6" message="tns:removeFlightResponse">
-    </output>
-    </operation>
-    <operation name="removeHotel">
-      <input name="input7" message="tns:removeHotelRequest">
-    </input>
-      <output name="output7" message="tns:removeHotelResponse">
     </output>
     </operation>
     <operation name="bookingItinerary">
@@ -254,24 +218,6 @@
         <soap:body use="literal" namespace="http://travelgood.ws"/>
       </input>
       <output name="output5">
-        <soap:body use="literal" namespace="http://travelgood.ws"/>
-      </output>
-    </operation>
-    <operation name="removeFlight">
-      <soap:operation/>
-      <input name="input6">
-        <soap:body use="literal" namespace="http://travelgood.ws"/>
-      </input>
-      <output name="output6">
-        <soap:body use="literal" namespace="http://travelgood.ws"/>
-      </output>
-    </operation>
-    <operation name="removeHotel">
-      <soap:operation/>
-      <input name="input7">
-        <soap:body use="literal" namespace="http://travelgood.ws"/>
-      </input>
-      <output name="output7">
         <soap:body use="literal" namespace="http://travelgood.ws"/>
       </output>
     </operation>

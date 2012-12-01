@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?><!-- Published by JAX-WS RI at http://jax-ws.dev.java.net. RI's version is JAX-WS RI 2.1.3.3-hudson-757-SNAPSHOT. --><xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://types.lameduck.ws" xmlns:jaxb="http://java.sun.com/xml/ns/jaxb" xmlns:ns0="urn://types.fastmoney.imm.dtu.dk" targetNamespace="http://types.lameduck.ws" elementFormDefault="qualified" jaxb:version="2.0">
+    <xsd:import namespace="urn://types.fastmoney.imm.dtu.dk" schemaLocation="http://fastmoney.imm.dtu.dk:8080/BankService?xsd=1"></xsd:import>
+    <xsd:complexType name="requestGetFlightType">
+		<xsd:sequence>
+			<xsd:element name="flightStart" type="xsd:string"></xsd:element>
+			<xsd:element name="flightDestination" type="xsd:string"></xsd:element>
+			<xsd:element name="flightDate" type="xsd:date"></xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="flightInformationType">
+		<xsd:sequence>
+			<xsd:element name="bookingNumber" type="xsd:string"></xsd:element>
+			<xsd:element name="price" type="xsd:double"></xsd:element>
+			<xsd:element name="airlineReservationServiceName" type="xsd:string"></xsd:element>
+			<xsd:element name="flight" type="tns:flightType"></xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="flightType">
+		<xsd:sequence>
+			<xsd:element name="startAirport" type="xsd:string"></xsd:element>
+			<xsd:element name="destinationAirport" type="xsd:string"></xsd:element>
+			<xsd:element name="liftOffDate" type="xsd:date"></xsd:element>
+			<xsd:element name="landingDate" type="xsd:date"></xsd:element>
+			<xsd:element name="carrierName" type="xsd:string"></xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="flightInformationListType">
+		<xsd:sequence>
+			<xsd:element name="flightInformation" type="tns:flightInformationType" minOccurs="0" maxOccurs="unbounded"></xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="requestBookFlightType">
+		<xsd:sequence>
+			<xsd:element name="bookingNumber" type="xsd:string"></xsd:element>
+		 <xsd:element name="creditCardInformation" type="tns:creditCardInfoWrapperType"></xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="requestCancelFlightType">
+		<xsd:sequence>
+			<xsd:element name="bookingNumber" type="xsd:string"></xsd:element>
+			<xsd:element name="price" type="xsd:double"></xsd:element>
+		 <xsd:element name="creditCardInformation" type="tns:creditCardInfoWrapperType"></xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+    <xsd:complexType name="CancelFlightFaultType">
+        <xsd:sequence>
+            <xsd:element name="Message" type="xsd:string"></xsd:element>
+        </xsd:sequence>
+    </xsd:complexType>
+    <xsd:complexType name="BookFlightFaultType">
+        <xsd:sequence>
+            <xsd:element name="Message" type="xsd:string"></xsd:element>
+        </xsd:sequence>
+    </xsd:complexType>
+    <xsd:element name="CancelFlightFaultElement" type="tns:CancelFlightFaultType"></xsd:element>
+    <xsd:element name="BookFlightFaultElement" type="tns:BookFlightFaultType"></xsd:element>
+    <xsd:complexType name="creditCardInfoWrapperType">
+        <xsd:complexContent>
+            <xsd:extension xmlns:tns="urn://types.fastmoney.imm.dtu.dk" base="ns0:creditCardInfoType">
+                <xsd:sequence></xsd:sequence>
+            </xsd:extension>
+        </xsd:complexContent>
+    </xsd:complexType>
+</xsd:schema>

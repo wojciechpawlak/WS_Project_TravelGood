@@ -69,6 +69,11 @@ public class LameDuckWebServiceFromWSDL {
     }
 
     public boolean cancelFlight(ws.lameduck.types.RequestCancelFlightType input) throws CancelFlightFault {
+
+        if (input.getBookingNumber().equals("456CANCEL")) {
+            throw new CancelFlightFault("Can not cancel 456CANCEL", null);
+        }
+
         int priceOfFlight = 0;
         //get price of flight
         for(FlightInformationType fit : flights)
@@ -101,7 +106,6 @@ public class LameDuckWebServiceFromWSDL {
     }
 
     public boolean bookFlights(ws.lameduck.types.RequestBookFlightType input) throws BookFlightFault {
-
 
         int priceOfFlight = 0;
         //get price of flight
@@ -222,11 +226,39 @@ public class LameDuckWebServiceFromWSDL {
         myFlight4.setLiftOffDate(date);
         myFlight4.setLandingDate(date);
         myFlightInformation4.setFlight(myFlight4);
+        
+        date = df.newXMLGregorianCalendar("2012-12-23");
+
+        FlightInformationType myFlightInformation5 = new FlightInformationType();
+        myFlightInformation5.setBookingNumber("123FAIL");
+        myFlightInformation5.setAirlineReservationServiceName("FlightProblem");
+        myFlightInformation5.setPrice(999999999);
+        FlightType myFlight5 = new FlightType();
+        myFlight5.setCarrierName("Crash");
+        myFlight5.setStartAirport("FailCity");
+        myFlight5.setDestinationAirport("Paris");
+        myFlight5.setLiftOffDate(date);
+        myFlight5.setLandingDate(date);
+        myFlightInformation5.setFlight(myFlight5);
+
+        FlightInformationType myFlightInformation6 = new FlightInformationType();
+        myFlightInformation6.setBookingNumber("456CANCEL");
+        myFlightInformation6.setAirlineReservationServiceName("FlightProblem");
+        myFlightInformation6.setPrice(999999999);
+        FlightType myFlight6 = new FlightType();
+        myFlight6.setCarrierName("CancelCarrier");
+        myFlight6.setStartAirport("CancelCity");
+        myFlight6.setDestinationAirport("Paris");
+        myFlight6.setLiftOffDate(date);
+        myFlight6.setLandingDate(date);
+        myFlightInformation6.setFlight(myFlight6);
 
         flights.add(myFlightInformation);
         flights.add(myFlightInformation2);
         flights.add(myFlightInformation3);
         flights.add(myFlightInformation4);
+        flights.add(myFlightInformation5);
+        flights.add(myFlightInformation6);
 
         onlyOnce = true;
     }

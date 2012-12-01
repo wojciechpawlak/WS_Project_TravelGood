@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+<inspection xmlns="http://schemas.xmlsoap.org/ws/2001/10/inspection/">
+    
+	<service>
+        <name>LameDuck</name>
+        <abstract>The flight registration services offered by the LameDuck the company</abstract>
+        <description referencedNamespace="http://schemas.xmlsoap.org/wsdl/"
+                 location="http://localhost:8080/LameDuckService/LameDuckWSDLService?wsdl"/>
+    </service>
+    
+	<service>
+        <name>NiceView</name>
+        <abstract>The hotel registration services offered by the the NiceView company</abstract>
+        <description referencedNamespace="http://schemas.xmlsoap.org/wsdl/"
+                 location="http://localhost:8080/NiceViewService/NiceViewWSDLService?wsdl"/>
+    </service>
+    
+	<service>
+        <name>TravelGood</name>
+        <abstract>The travel planning services offered by the the TraveGood company</abstract>
+        <description referencedNamespace="http://schemas.xmlsoap.org/wsdl/"
+                 location="http://localhost:9080/service?wsdl"/>
+    </service>
+    
+	<link referencedNamespace="http://schemas.xmlsoap.org/ws/2001/10/inspection/" 
+         location="http://localhost:8080/path to NiceView WSIL" >
+      <abstract>Hotel registration company</abstract>
+    </link>    
+    
+	<link referencedNamespace="http://schemas.xmlsoap.org/ws/2001/10/inspection/" 
+         location="http://localhost:8080/path to TravelGood WSIL" >
+      <abstract>Travel planning company</abstract>
+    </link>
+         
+</inspection>

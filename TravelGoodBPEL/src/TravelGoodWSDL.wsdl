@@ -2,7 +2,7 @@
 <definitions name="TravelGoodWSDL" targetNamespace="http://travelgood.ws"
     xmlns="http://schemas.xmlsoap.org/wsdl/"
     xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
-    xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://travelgood.ws" xmlns:plnk="http://docs.oasis-open.org/wsbpel/2.0/plnktype" xmlns:ns="http://types.niceview.ws" xmlns:vprop="http://docs.oasis-open.org/wsbpel/2.0/varprop" xmlns:ns0="http://types.lameduck.ws" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:ns1="urn://types.fastmoney.imm.dtu.dk"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://travelgood.ws" xmlns:plnk="http://docs.oasis-open.org/wsbpel/2.0/plnktype" xmlns:ns="http://types.niceview.ws" xmlns:vprop="http://docs.oasis-open.org/wsbpel/2.0/varprop" xmlns:ns0="http://types.lameduck.ws" xmlns:ns1="urn://types.fastmoney.imm.dtu.dk" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
     >
     <types>
         <xsd:schema targetNamespace="http://travelgood.ws" >
@@ -73,22 +73,6 @@
     <message name="addHotelResponse">
         <part name="confirmation" type="xsd:string"/>
     </message>
-    <message name="removeFlightRequest">
-        <part name="bookingNumber" type="xsd:string"/>
-        <part name="customerId" type="xsd:int"/>
-        <part name="itineraryId" type="xsd:int"/>
-    </message>
-    <message name="removeFlightResponse">
-        <part name="confirmation" type="xsd:string"/>
-    </message>
-    <message name="removeHotelRequest">
-        <part name="bookingNumber" type="xsd:string"/>
-        <part name="customerId" type="xsd:int"/>
-        <part name="itineraryId" type="xsd:int"/>
-    </message>
-    <message name="removeHotelResponse">
-        <part name="confirmation" type="xsd:string"/>
-    </message>
     <message name="bookingItineraryRequest">
         <part name="customerId" type="xsd:int"/>
         <part name="itineraryId" type="xsd:int"/>
@@ -131,14 +115,6 @@
         <operation name="addHotel">
             <input name="input5" message="tns:addHotelRequest"/>
             <output name="output5" message="tns:addHotelResponse"/>
-        </operation>
-        <operation name="removeFlight">
-            <input name="input6" message="tns:removeFlightRequest"/>
-            <output name="output6" message="tns:removeFlightResponse"/>
-        </operation>
-        <operation name="removeHotel">
-            <input name="input7" message="tns:removeHotelRequest"/>
-            <output name="output7" message="tns:removeHotelResponse"/>
         </operation>
         <operation name="bookingItinerary">
             <input name="input8" message="tns:bookingItineraryRequest"/>
@@ -210,28 +186,6 @@
                 namespace="http://travelgood.ws" />
             </output>
         </operation>
-        <operation name="removeFlight">
-            <soap:operation/>
-            <input name="input6">
-                <soap:body use="literal"
-                namespace="http://travelgood.ws" />
-            </input>
-            <output name="output6">
-                <soap:body use="literal"
-                namespace="http://travelgood.ws" />
-            </output>
-        </operation>
-        <operation name="removeHotel">
-            <soap:operation/>
-            <input name="input7">
-                <soap:body use="literal"
-                namespace="http://travelgood.ws" />
-            </input>
-            <output name="output7">
-                <soap:body use="literal"
-                namespace="http://travelgood.ws" />
-            </output>
-        </operation>
         <operation name="bookingItinerary">
             <soap:operation/>
             <input name="input8">
@@ -296,6 +250,7 @@ A partner link type characterizes the conversational relationship between two se
     <vprop:propertyAlias propertyName="tns:itineraryId" messageType="tns:cancelItineraryRequest" part="itineraryId"/>
     <vprop:propertyAlias propertyName="tns:customerId" messageType="tns:cancelItineraryRequest" part="customerId"/>
 </definitions>
+
 
 
 
