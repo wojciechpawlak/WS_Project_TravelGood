@@ -621,7 +621,8 @@ zmlns="http://docs.oasis-open.org/wsbpel/2.0/process/executable"/></literal>
                                                          </copy>
                                                  </assign>
                                                  <forEach name="ForEach3" parallel="no" counterName="ForEach3Counter">
-                                                         <startCounterValue>1</startCounterValue>
+                                                     <documentation>Loop for cancelling flights</documentation>
+                                                     <startCounterValue>1</startCounterValue>
                                                              <finalCounterValue>$arrayFlightSize</finalCounterValue>
                                                              <scope name="Scope14">
                                                                  <variables>
@@ -672,7 +673,8 @@ zmlns="http://docs.oasis-open.org/wsbpel/2.0/process/executable"/></literal>
                                                              </scope>
                                                      </forEach>
                                                      <forEach name="ForEach4" parallel="no" counterName="ForEach4Counter">
-                                                 <startCounterValue>1</startCounterValue>
+                                                         <documentation>Loop for cancelling hotels</documentation>
+                                                         <startCounterValue>1</startCounterValue>
                                                      <finalCounterValue>$arrayHotelSize</finalCounterValue>
                                                      <scope name="Scope15">
                                                          <variables>
@@ -723,6 +725,7 @@ zmlns="http://docs.oasis-open.org/wsbpel/2.0/process/executable"/></literal>
                     </sequence>
                 </onMessage>
                 <onAlarm>
+                    <documentation>Timer that simulates waiting for 1 day before the start of itinerary</documentation>
                     <for>'P0Y0M0DT0H0M10.0S'</for>
                     <sequence name="Sequence32">
                         <if name="If11">
@@ -760,6 +763,7 @@ zmlns="http://docs.oasis-open.org/wsbpel/2.0/process/executable"/></literal>
         </repeatUntil>-->
     </sequence>
 </process>
+
 
 
 
