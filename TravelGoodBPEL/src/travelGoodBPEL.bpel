@@ -603,60 +603,75 @@ zmlns="http://docs.oasis-open.org/wsbpel/2.0/process/executable"/></literal>
                                                  <from>'Planning cancelled'</from>
                                                  <to variable="CancelItineraryOut" part="cancelValidation"/>
                                              </copy>
-                                         </assign>
-                                         <reply name="Reply8" partnerLink="PartnerLink1" operation="cancelItinerary" portType="ns0:TravelGoodWSDLPortType" variable="CancelItineraryOut"/>
-                                     <exit name="Exit1"/>
+                                         <copy>
+                                             <from>true()</from>
+                                             <to variable="doneProcess"/>
+                                         </copy>
+                                     </assign>
                                  </sequence>
                              </sequence>
                              <else>
-                                 <scope name="Scope13">
-                                     <variables>
-                                         <variable name="CancelItineraryOut" messageType="ns0:cancelItineraryResponse"/>
-                                         <variable name="CancelItineraryOut1" messageType="ns0:cancelItineraryResponse"/>
-                                     </variables>
-                                     <sequence name="Sequence28">
-                                             <forEach name="ForEach3" parallel="no" counterName="ForEach3Counter">
-                                                 <startCounterValue>1</startCounterValue>
-                                                     <finalCounterValue>$arrayFlightSize</finalCounterValue>
-                                                 <scope name="Scope14">
-                                                     <variables>
-                                                         <variable name="CancelFlightOut" messageType="ns5:cancelFlightResponse"/>
-                                                         <variable name="CancelFlightIn" messageType="ns5:cancelFlightRequest"/>
-                                                     </variables>
-                                                     <sequence name="Sequence29">
-                                                         <assign name="Assign34">
-                                                             <copy>
-                                                                 <from variable="BookingItineraryIn" part="creditCardInfo"/>
-                                                                 <to>$CancelFlightIn.input/ns3:creditCardInformation</to>
-                                                             </copy>
-                                                             <copy>
-                                                                 <from>0</from>
-                                                                 <to>$CancelFlightIn.input/ns3:price</to>
-                                                             </copy>
-                                                             <copy>
-                                                                 <from>$Itinerary/bookingsFlight[$ForEach3Counter]/bookingNumber
+                                 <sequence name="Sequence31">
+                                     <scope name="Scope13">
+                                             <sequence name="Sequence28">
+                                                 <assign name="Assign38">
+                                                     <copy>
+                                                             <from>'Itinerary cancelled'</from>
+                                                                 <to variable="CancelItineraryOut" part="cancelValidation"/>
+                                                         </copy>
+                                                 </assign>
+                                                 <forEach name="ForEach3" parallel="no" counterName="ForEach3Counter">
+                                                         <startCounterValue>1</startCounterValue>
+                                                             <finalCounterValue>$arrayFlightSize</finalCounterValue>
+                                                             <scope name="Scope14">
+                                                                 <variables>
+                                                                         <variable name="CancelFlightOut" messageType="ns5:cancelFlightResponse"/>
+                                                                             <variable name="CancelFlightIn" messageType="ns5:cancelFlightRequest"/>
+                                                                     </variables>
+                                                                 <faultHandlers>
+                                                                     <catchAll>
+                                                                         <assign name="Assign39">
+                                                                             <copy>
+                                                                                 <from>'Cancel failed. Some of the bookings were not cancelled'</from>
+                                                                                 <to variable="CancelItineraryOut" part="cancelValidation"/>
+                                                                             </copy>
+                                                                         </assign>
+                                                                     </catchAll>
+                                                                 </faultHandlers>
+                                                                 <sequence name="Sequence29">
+                                                                         <assign name="Assign34">
+                                                                                 <copy>
+                                                                                         <from variable="BookingItineraryIn" part="creditCardInfo"/>
+                                                                                             <to>$CancelFlightIn.input/ns3:creditCardInformation</to>
+                                                                                     </copy>
+                                                                                     <copy>
+                                                                                         <from>0</from>
+                                                                                             <to>$CancelFlightIn.input/ns3:price</to>
+                                                                                     </copy>
+                                                                                     <copy>
+                                                                                         <from>$Itinerary/bookingsFlight[$ForEach3Counter]/bookingNumber
                                                                      <sxed2:editor>
-                                                                         <sxed2:predicate path="$Itinerary/bookingsFlight[$ForEach3Counter]" source="from"/>
-                                                                     </sxed2:editor>
-                                                                 </from>
-                                                                 <to>$CancelFlightIn.input/ns3:bookingNumber</to>
-                                                             </copy>
-                                                         </assign>
-                                                         <invoke name="Invoke7" partnerLink="PartnerLink2" operation="cancelFlight" portType="ns5:LameDuckWSDLPortType" inputVariable="CancelFlightIn" outputVariable="CancelFlightOut"/>
-                                                         <assign name="Assign35">
-                                                             <copy>
-                                                                 <from>'cancelled'</from>
-                                                                 <to>$Itinerary/bookingsFlight[$ForEach3Counter]/bookingStatus
+                                                                                                         <sxed2:predicate path="$Itinerary/bookingsFlight[$ForEach3Counter]" source="from"/>
+                                                                                                     </sxed2:editor>
+                                                                                             </from>
+                                                                                             <to>$CancelFlightIn.input/ns3:bookingNumber</to>
+                                                                                     </copy>
+                                                                             </assign>
+                                                                             <invoke name="Invoke7" partnerLink="PartnerLink2" operation="cancelFlight" portType="ns5:LameDuckWSDLPortType" inputVariable="CancelFlightIn" outputVariable="CancelFlightOut"/>
+                                                                             <assign name="Assign35">
+                                                                                 <copy>
+                                                                                         <from>'cancelled'</from>
+                                                                                             <to>$Itinerary/bookingsFlight[$ForEach3Counter]/bookingStatus
                                                                      <sxed2:editor>
-                                                                         <sxed2:predicate path="$Itinerary/bookingsFlight[$ForEach3Counter]" source="to"/>
-                                                                     </sxed2:editor>
-                                                                 </to>
-                                                             </copy>
-                                                         </assign>
-                                                     </sequence>
-                                                 </scope>
-                                             </forEach>
-                                                 <forEach name="ForEach4" parallel="no" counterName="ForEach4Counter">
+                                                                                                         <sxed2:predicate path="$Itinerary/bookingsFlight[$ForEach3Counter]" source="to"/>
+                                                                                                     </sxed2:editor>
+                                                                                             </to>
+                                                                                     </copy>
+                                                                             </assign>
+                                                                     </sequence>
+                                                             </scope>
+                                                     </forEach>
+                                                     <forEach name="ForEach4" parallel="no" counterName="ForEach4Counter">
                                                  <startCounterValue>1</startCounterValue>
                                                      <finalCounterValue>$arrayHotelSize</finalCounterValue>
                                                      <scope name="Scope15">
@@ -664,6 +679,16 @@ zmlns="http://docs.oasis-open.org/wsbpel/2.0/process/executable"/></literal>
                                                              <variable name="CancelHotelOut" messageType="tns:cancelHotelResponse"/>
                                                              <variable name="CancelHotelIn" messageType="tns:cancelHotelRequest"/>
                                                          </variables>
+                                                         <faultHandlers>
+                                                             <catchAll>
+                                                                 <assign name="Assign40">
+                                                                     <copy>
+                                                                         <from>'Cancel failed. Some of the bookings were not cancelled'</from>
+                                                                         <to variable="CancelItineraryOut" part="cancelValidation"/>
+                                                                     </copy>
+                                                                 </assign>
+                                                             </catchAll>
+                                                         </faultHandlers>
                                                          <sequence name="Sequence30">
                                                              <assign name="Assign36">
                                                                  <copy>
@@ -689,19 +714,28 @@ zmlns="http://docs.oasis-open.org/wsbpel/2.0/process/executable"/></literal>
                                                          </sequence>
                                                      </scope>
                                                  </forEach>
-                                         <assign name="Assign38">
-                                             <copy>
-                                                 <from>'Itinerary cancelled'</from>
-                                                 <to variable="CancelItineraryOut" part="cancelValidation"/>
-                                             </copy>
-                                         </assign>
-                                         <reply name="Reply11" partnerLink="PartnerLink1" operation="cancelItinerary" portType="ns0:TravelGoodWSDLPortType" variable="CancelItineraryOut"/>
-                                     </sequence>
-                                 </scope>
+                                             </sequence>
+                                     </scope>
+                                 </sequence>
                              </else>
                          </if>
+                        <reply name="Reply8" partnerLink="PartnerLink1" operation="cancelItinerary" portType="ns0:TravelGoodWSDLPortType" variable="CancelItineraryOut"/>
                     </sequence>
                 </onMessage>
+                <onAlarm>
+                    <for>'P0Y0M0DT0H0M10.0S'</for>
+                    <sequence name="Sequence32">
+                        <if name="If11">
+                            <condition>$donePlanning</condition>
+                            <assign name="Assign41">
+                                <copy>
+                                    <from>true()</from>
+                                        <to variable="doneProcess"/>
+                                </copy>
+                            </assign>
+                        </if>
+                    </sequence>
+                </onAlarm>
             </pick>
             <condition>$doneProcess</condition>
         </repeatUntil>
@@ -726,6 +760,11 @@ zmlns="http://docs.oasis-open.org/wsbpel/2.0/process/executable"/></literal>
         </repeatUntil>-->
     </sequence>
 </process>
+
+
+
+
+
 
 
 

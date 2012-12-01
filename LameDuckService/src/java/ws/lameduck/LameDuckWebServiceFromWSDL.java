@@ -69,6 +69,11 @@ public class LameDuckWebServiceFromWSDL {
     }
 
     public boolean cancelFlight(ws.lameduck.types.RequestCancelFlightType input) throws CancelFlightFault {
+
+        if (input.getBookingNumber().equals("456CANCEL")) {
+            throw new CancelFlightFault("Can not cancel 456CANCEL", null);
+        }
+
         int priceOfFlight = 0;
         //get price of flight
         for(FlightInformationType fit : flights)
@@ -236,11 +241,24 @@ public class LameDuckWebServiceFromWSDL {
         myFlight5.setLandingDate(date);
         myFlightInformation5.setFlight(myFlight5);
 
+        FlightInformationType myFlightInformation6 = new FlightInformationType();
+        myFlightInformation6.setBookingNumber("456CANCEL");
+        myFlightInformation6.setAirlineReservationServiceName("FlightProblem");
+        myFlightInformation6.setPrice(999999999);
+        FlightType myFlight6 = new FlightType();
+        myFlight6.setCarrierName("CancelCarrier");
+        myFlight6.setStartAirport("CancelCity");
+        myFlight6.setDestinationAirport("Paris");
+        myFlight6.setLiftOffDate(date);
+        myFlight6.setLandingDate(date);
+        myFlightInformation6.setFlight(myFlight6);
+
         flights.add(myFlightInformation);
         flights.add(myFlightInformation2);
         flights.add(myFlightInformation3);
         flights.add(myFlightInformation4);
         flights.add(myFlightInformation5);
+        flights.add(myFlightInformation6);
 
         onlyOnce = true;
     }

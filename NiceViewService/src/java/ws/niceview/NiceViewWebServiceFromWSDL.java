@@ -40,7 +40,8 @@ public class NiceViewWebServiceFromWSDL {
         createHotel("Nice Hotel", "TestStreet", "12345", "Vienna", "2", 2000.0, true),
         createHotel("Passable Hotel", "TestStreet", "12345", "Vienna", "3", 500.0, true),
         createHotel("Shitty Hotel", "TestStreet", "12345", "Zgierz", "4", 10.0, false),
-        createHotel("Sleep Hotel", "BedStreet", "54321", "SleepCity", "5", 42.0, true)
+        createHotel("Sleep Hotel", "BedStreet", "54321", "SleepCity", "5", 42.0, true),
+        createHotel("Cancel Hotel", "CancelStreet", "54321", "CancelCity", "6", 42.0, true)
     };
     List<String> bookedHotels = new ArrayList<String>();
 
@@ -164,6 +165,10 @@ public class NiceViewWebServiceFromWSDL {
     public boolean cancelHotel(java.lang.String bookingNumber) throws CancelHotelFault {
         if (bookingNumber == null || "".equals(bookingNumber)) {
             throw new CancelHotelFault("Booking number was not provided", new CancelHotelFaultType());
+        }
+
+        if (bookingNumber.equals("6")) {
+            throw new CancelHotelFault("Can not cancel FailCity", new CancelHotelFaultType());
         }
 
         if (!bookedHotels.remove(bookingNumber)) {
