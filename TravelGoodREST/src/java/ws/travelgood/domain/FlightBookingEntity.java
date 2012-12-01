@@ -3,19 +3,16 @@
  * and open the template in the editor.
  */
 
-package ws.travelgood.types.flight;
+package ws.travelgood.domain;
 
 import java.util.Date;
-import javax.xml.bind.annotation.XmlRootElement;
-import ws.travelgood.types.Booking;
 
 /**
  *
  * @author mkucharek
  */
-@XmlRootElement
-public class FlightBooking extends Booking {
-    
+public class FlightBookingEntity extends BookingEntity {
+
     private String airlineName;
     private String startAirport;
     private String destinationAirport;
@@ -23,16 +20,14 @@ public class FlightBooking extends Booking {
     private Date landingDate;
     private String carrierName;
 
-    private FlightBooking() {
-        super("", 0.0);
-        
+    public FlightBookingEntity(Integer id, String bookingNumber, double price) {
+        super(id, bookingNumber, price);
     }
 
-    public FlightBooking(String bookingNumber, double price, String airlineName,
-            String startAirport, String destinationAirport, Date liftOffDate,
-            Date landingDate, String carrierName) {
-        super(bookingNumber, price);
-
+    public FlightBookingEntity(Integer id, String bookingNumber, double price,
+            String airlineName, String startAirport, String destinationAirport,
+            Date liftOffDate, Date landingDate, String carrierName) {
+        super(id, bookingNumber, price);
         this.airlineName = airlineName;
         this.startAirport = startAirport;
         this.destinationAirport = destinationAirport;
@@ -124,5 +119,5 @@ public class FlightBooking extends Booking {
     public void setCarrierName(String carrierName) {
         this.carrierName = carrierName;
     }
-
+    
 }

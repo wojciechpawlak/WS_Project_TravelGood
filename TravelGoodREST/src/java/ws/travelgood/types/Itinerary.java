@@ -5,7 +5,6 @@
 package ws.travelgood.types;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
@@ -20,7 +19,6 @@ import ws.travelgood.types.hotel.HotelBooking;
 @XmlRootElement
 public class Itinerary {
 
-    private Integer id;
     private String userId;
     private ItineraryStatus currentStatus;
 
@@ -28,42 +26,26 @@ public class Itinerary {
     private List<FlightBooking> flightBookingList;
 
     private Itinerary() {
+        this.hotelBookingList = new ArrayList<HotelBooking>();
+        this.flightBookingList = new ArrayList<FlightBooking>();
+        
     }
 
     public Itinerary(String userId) {
-        this(userId, null, ItineraryStatus.PLANNING);
+        this(userId, ItineraryStatus.PLANNING);
 
     }
 
-    public Itinerary(String userId, Integer itineraryId, ItineraryStatus status) {
-        this.id = itineraryId;
+    public Itinerary(String userId, ItineraryStatus status) {
+        this(userId, status, new ArrayList<HotelBooking>(), new ArrayList<FlightBooking>());
+
+    }
+
+    public Itinerary(String userId, ItineraryStatus status, List<HotelBooking> hotelBookingList, List<FlightBooking> flightBookingList) {
         this.userId = userId;
         this.currentStatus = status;
-        this.hotelBookingList = new ArrayList<HotelBooking>();
-        this.flightBookingList = new ArrayList<FlightBooking>();
-
-    }
-
-    public Itinerary(Itinerary it) {
-        this.id = it.id;
-        this.userId = it.userId;
-        this.currentStatus = it.currentStatus;
-        this.hotelBookingList = new ArrayList<HotelBooking>(it.hotelBookingList);
-        this.flightBookingList = new ArrayList<FlightBooking>(it.flightBookingList);
-    }
-
-    /**
-     * @return the id
-     */
-    public Integer getId() {
-        return id;
-    }
-
-    /**
-     * @param id the id to set
-     */
-    public void setId(Integer id) {
-        this.id = id;
+        this.hotelBookingList = hotelBookingList;
+        this.flightBookingList = flightBookingList;
     }
 
     /**
@@ -100,7 +82,7 @@ public class Itinerary {
     @XmlElementWrapper(name = "hotels")
     @XmlElement(name = "hotel")
     public List<HotelBooking> getHotelBookingList() {
-        return Collections.unmodifiableList(hotelBookingList);
+        return hotelBookingList;
     }
 
     /**
@@ -109,88 +91,16 @@ public class Itinerary {
     @XmlElementWrapper(name = "flights")
     @XmlElement(name = "flight")
     public List<FlightBooking> getFlightBookingList() {
-        return Collections.unmodifiableList(flightBookingList);
-    }
-
-    public HotelBooking getHotelBooking(String bookingNumber) {
-
-        for (HotelBooking hb : this.hotelBookingList) {
-            if (hb.getBookingNumber().equals(bookingNumber)) {
-                return hb;
-            }
-        }
-
-        return null;
-    }
-
-    public FlightBooking getFlightBooking(String bookingNumber) {
-
-        for (FlightBooking hb : this.flightBookingList) {
-            if (hb.getBookingNumber().equals(bookingNumber)) {
-                return hb;
-            }
-        }
-
-        return null;
-    }
-
-    public void addHotel(String bookingNumber) {
-        this.hotelBookingList.add(new HotelBooking(bookingNumber));
-    }
-
-    public boolean deleteHotel(String bookingNumber) {
-
-        HotelBooking toRemove = null;
-        for (HotelBooking hb : this.getHotelBookingList()) {
-            if (hb.getBookingNumber().equals(bookingNumber)) {
-                toRemove = hb;
-                break;
-
-            }
-        }
-
-        if (toRemove != null) {
-            this.hotelBookingList.remove(toRemove);
-
-            return true;
-        }
-
-        return false;
-
-    }
-
-    public void addFlight(String bookingNumber) {
-        this.flightBookingList.add(new FlightBooking(bookingNumber));
-    }
-
-    public boolean deleteFlight(String bookingNumber) {
-
-        FlightBooking toRemove = null;
-        for (FlightBooking hb : this.getFlightBookingList()) {
-            if (hb.getBookingNumber().equals(bookingNumber)) {
-                toRemove = hb;
-                break;
-
-            }
-        }
-
-        if (toRemove != null) {
-            this.flightBookingList.remove(toRemove);
-
-            return true;
-        }
-
-        return false;
-
+        return flightBookingList;
     }
 
     @Override
     public String toString() {
         return "Itineary [" +
-                "id = " + this.id + "; " +
                 "userId = " + this.userId + "; " +
                 "status = " + this.currentStatus + "; " +
-                "hotelList = " + this.getHotelBookingList() + "; " +
-                "flightList = " + this.getFlightBookingList() + "]";
+                "hotelList = " + this.hotelBookingList + "; " +
+                "flightList = " + this.flightBookingList + "]";
     }
+    
 }

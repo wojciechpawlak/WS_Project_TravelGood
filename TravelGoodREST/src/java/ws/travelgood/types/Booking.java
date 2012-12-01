@@ -5,31 +5,27 @@
 
 package ws.travelgood.types;
 
+import javax.xml.bind.annotation.XmlRootElement;
+
 /**
  *
  * @author mkucharek
  */
+@XmlRootElement
 public abstract class Booking {
 
-    private String bookingType;
-
     private String bookingNumber;
+
+    private double price;
 
     private Booking() {
 
     }
     
-    protected Booking(String bookingType, String bookingNumber) {
+    protected Booking(String bookingNumber, double price) {
         this.bookingNumber = bookingNumber;
-        this.bookingType = bookingType;
+        this.price = price;
         
-    }
-
-    /**
-     * @return the bookingType
-     */
-    public String getBookingType() {
-        return bookingType;
     }
 
     /**
@@ -40,17 +36,24 @@ public abstract class Booking {
     }
 
     /**
-     * @param bookingType the bookingType to set
-     */
-    public void setBookingType(String bookingType) {
-        this.bookingType = bookingType;
-    }
-
-    /**
      * @param bookingNumber the bookingNumber to set
      */
     public void setBookingNumber(String bookingNumber) {
         this.bookingNumber = bookingNumber;
+    }
+
+    /**
+     * @return the price
+     */
+    public double getPrice() {
+        return price;
+    }
+
+    /**
+     * @param price the price to set
+     */
+    public void setPrice(double price) {
+        this.price = price;
     }
 
 }

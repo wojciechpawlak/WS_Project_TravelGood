@@ -3,36 +3,32 @@
  * and open the template in the editor.
  */
 
-package ws.travelgood.types.hotel;
-
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
-import ws.travelgood.types.Booking;
+package ws.travelgood.domain;
 
 /**
  *
  * @author mkucharek
  */
-@XmlRootElement
-public class HotelBooking extends Booking {
+public class HotelBookingEntity extends BookingEntity {
 
     private String hotelName;
-    private Address hotelAddress;
+    private AddressEntity hotelAddress;
     private boolean ifCreditCardRequired;
 
-    private HotelBooking() {
-        super("",0.0);
-        
+    public HotelBookingEntity(Integer id, String bookingNumber, double price) {
+        super(id, bookingNumber, price);
     }
 
-    public HotelBooking(String hotelName, Address hotelAddress, String bookingNumber, double price, boolean ifCreditCardRequired) {
-        super(bookingNumber, price);
-
+    public HotelBookingEntity(Integer id, String bookingNumber, double price,
+            String hotelName, AddressEntity hotelAddress,
+            boolean ifCreditCardRequired) {
+        super(id, bookingNumber, price);
         this.hotelName = hotelName;
         this.hotelAddress = hotelAddress;
         this.ifCreditCardRequired = ifCreditCardRequired;
-
     }
+
+    
 
     /**
      * @return the hotelName
@@ -51,15 +47,14 @@ public class HotelBooking extends Booking {
     /**
      * @return the hotelAddress
      */
-    @XmlElement()
-    public Address getHotelAddress() {
+    public AddressEntity getHotelAddress() {
         return hotelAddress;
     }
 
     /**
      * @param hotelAddress the hotelAddress to set
      */
-    public void setHotelAddress(Address hotelAddress) {
+    public void setHotelAddress(AddressEntity hotelAddress) {
         this.hotelAddress = hotelAddress;
     }
 
@@ -76,5 +71,5 @@ public class HotelBooking extends Booking {
     public void setIfCreditCardRequired(boolean ifCreditCardRequired) {
         this.ifCreditCardRequired = ifCreditCardRequired;
     }
-
+    
 }

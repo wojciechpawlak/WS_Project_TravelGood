@@ -6,13 +6,13 @@ package ws.travelgood.types;
 
 import javax.xml.bind.annotation.XmlEnum;
 import javax.xml.bind.annotation.XmlEnumValue;
-import javax.xml.bind.annotation.XmlType;
+import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
  * @author mkucharek
  */
-@XmlType
+@XmlRootElement
 @XmlEnum(String.class)
 public enum ItineraryStatus {
 

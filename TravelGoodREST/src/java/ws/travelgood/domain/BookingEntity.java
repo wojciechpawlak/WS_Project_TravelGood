@@ -3,29 +3,22 @@
  * and open the template in the editor.
  */
 
-package ws.travelgood.types;
-
-import javax.xml.bind.annotation.XmlRootElement;
+package ws.travelgood.domain;
 
 /**
  *
  * @author mkucharek
  */
-@XmlRootElement
-public abstract class Booking {
+public abstract class BookingEntity extends AbstractEntity {
 
     private String bookingNumber;
 
     private double price;
 
-    private Booking() {
-
-    }
-    
-    protected Booking(String bookingNumber, double price) {
+    public BookingEntity(Integer id, String bookingNumber, double price) {
+        super(id);
         this.bookingNumber = bookingNumber;
         this.price = price;
-        
     }
 
     /**
@@ -55,5 +48,5 @@ public abstract class Booking {
     public void setPrice(double price) {
         this.price = price;
     }
-
+    
 }

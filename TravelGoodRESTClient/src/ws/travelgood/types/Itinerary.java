@@ -2,7 +2,6 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package ws.travelgood.types;
 
 import java.util.ArrayList;
@@ -10,7 +9,7 @@ import java.util.List;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlType;
+import ws.travelgood.types.flight.FlightBooking;
 import ws.travelgood.types.hotel.HotelBooking;
 
 /**
@@ -20,43 +19,33 @@ import ws.travelgood.types.hotel.HotelBooking;
 @XmlRootElement
 public class Itinerary {
 
-    private String id;
-
     private String userId;
-
     private ItineraryStatus currentStatus;
 
     private List<HotelBooking> hotelBookingList;
+    private List<FlightBooking> flightBookingList;
 
     private Itinerary() {
-
-    }
-    
-    public Itinerary(String userId, String itineraryId) {
-        this(userId, itineraryId, ItineraryStatus.PLANNING);
-
+        this.hotelBookingList = new ArrayList<HotelBooking>();
+        this.flightBookingList = new ArrayList<FlightBooking>();
+        
     }
 
-    public Itinerary(String userId, String itineraryId, ItineraryStatus status) {
-        this.id = itineraryId;
+    public Itinerary(String userId) {
+        this(userId, ItineraryStatus.PLANNING);
+
+    }
+
+    public Itinerary(String userId, ItineraryStatus status) {
+        this(userId, status, new ArrayList<HotelBooking>(), new ArrayList<FlightBooking>());
+
+    }
+
+    public Itinerary(String userId, ItineraryStatus status, List<HotelBooking> hotelBookingList, List<FlightBooking> flightBookingList) {
         this.userId = userId;
         this.currentStatus = status;
-        this.hotelBookingList = new ArrayList<HotelBooking>();
-
-    }
-
-    /**
-     * @return the id
-     */
-    public String getId() {
-        return id;
-    }
-
-    /**
-     * @param id the id to set
-     */
-    public void setId(String id) {
-        this.id = id;
+        this.hotelBookingList = hotelBookingList;
+        this.flightBookingList = flightBookingList;
     }
 
     /**
@@ -90,28 +79,28 @@ public class Itinerary {
     /**
      * @return the hotelBookingList
      */
-    @XmlElementWrapper(name="hotels")
-    @XmlElement(name="hotel")
+    @XmlElementWrapper(name = "hotels")
+    @XmlElement(name = "hotel")
     public List<HotelBooking> getHotelBookingList() {
         return hotelBookingList;
     }
 
     /**
-     * @param hotelBookingList the hotelBookingList to set
+     * @return the flightBookingList
      */
-    public void setHotelBookingList(List<HotelBooking> hotelBookingList) {
-        this.hotelBookingList = hotelBookingList;
+    @XmlElementWrapper(name = "flights")
+    @XmlElement(name = "flight")
+    public List<FlightBooking> getFlightBookingList() {
+        return flightBookingList;
     }
-
-    
 
     @Override
     public String toString() {
         return "Itineary [" +
-                "id = " + this.id + "; " +
                 "userId = " + this.userId + "; " +
                 "status = " + this.currentStatus + "; " +
-                "hotelList = " + this.getHotelBookingList() + "]";
+                "hotelList = " + this.hotelBookingList + "; " +
+                "flightList = " + this.flightBookingList + "]";
     }
-
+    
 }

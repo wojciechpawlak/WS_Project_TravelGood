@@ -5,6 +5,7 @@
 
 package ws.travelgood.types.hotel;
 
+import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import ws.travelgood.types.Booking;
 
@@ -15,14 +16,65 @@ import ws.travelgood.types.Booking;
 @XmlRootElement
 public class HotelBooking extends Booking {
 
-    private static final String TYPE = "HOTEL";
+    private String hotelName;
+    private Address hotelAddress;
+    private boolean ifCreditCardRequired;
 
     private HotelBooking() {
-        super(TYPE, "");
+        super("",0.0);
         
     }
-    public HotelBooking(String bookingNumber) {
-        super(TYPE, bookingNumber);
+
+    public HotelBooking(String hotelName, Address hotelAddress, String bookingNumber, double price, boolean ifCreditCardRequired) {
+        super(bookingNumber, price);
+
+        this.hotelName = hotelName;
+        this.hotelAddress = hotelAddress;
+        this.ifCreditCardRequired = ifCreditCardRequired;
 
     }
+
+    /**
+     * @return the hotelName
+     */
+    public String getHotelName() {
+        return hotelName;
+    }
+
+    /**
+     * @param hotelName the hotelName to set
+     */
+    public void setHotelName(String hotelName) {
+        this.hotelName = hotelName;
+    }
+
+    /**
+     * @return the hotelAddress
+     */
+    @XmlElement()
+    public Address getHotelAddress() {
+        return hotelAddress;
+    }
+
+    /**
+     * @param hotelAddress the hotelAddress to set
+     */
+    public void setHotelAddress(Address hotelAddress) {
+        this.hotelAddress = hotelAddress;
+    }
+
+    /**
+     * @return the ifCreditCardRequired
+     */
+    public boolean isIfCreditCardRequired() {
+        return ifCreditCardRequired;
+    }
+
+    /**
+     * @param ifCreditCardRequired the ifCreditCardRequired to set
+     */
+    public void setIfCreditCardRequired(boolean ifCreditCardRequired) {
+        this.ifCreditCardRequired = ifCreditCardRequired;
+    }
+
 }

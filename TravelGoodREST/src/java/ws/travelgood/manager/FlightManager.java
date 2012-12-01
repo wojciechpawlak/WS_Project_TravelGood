@@ -5,6 +5,9 @@
 package ws.travelgood.manager;
 
 import java.util.Date;
+import java.util.List;
+import ws.travelgood.domain.FlightBookingEntity;
+import ws.travelgood.types.banking.CreditCardInfo;
 import ws.travelgood.types.flight.FlightList;
 
 /**
@@ -13,6 +16,11 @@ import ws.travelgood.types.flight.FlightList;
  */
 public interface FlightManager {
 
-    public FlightList getFlights(Date date, String cityFromName,
+    public List<FlightBookingEntity> getFlights(Date date, String cityFromName,
             String cityToName);
+
+    public boolean bookFlight(String bookingNumber, CreditCardInfo ccInfo) throws BookingException;
+
+    public boolean cancelFlight(String bookingNumber, double price, CreditCardInfo ccInfo) throws BookingException;
+
 }
