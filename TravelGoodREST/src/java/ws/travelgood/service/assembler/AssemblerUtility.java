@@ -7,7 +7,6 @@ package ws.travelgood.service.assembler;
 
 import java.util.ArrayList;
 import java.util.List;
-import ws.lameduck.types.FlightInformationType;
 import ws.travelgood.domain.AddressEntity;
 import ws.travelgood.domain.FlightBookingEntity;
 import ws.travelgood.domain.HotelBookingEntity;
@@ -25,6 +24,10 @@ public class AssemblerUtility {
 
     public static Itinerary toItinerary(ItineraryEntity ite) {
 
+        if (ite == null) {
+            return null;
+        }
+
         List<HotelBooking> hbList = new ArrayList<HotelBooking>();
 
         for (HotelBookingEntity hbe : ite.getHotelBookingList()) {
@@ -41,6 +44,11 @@ public class AssemblerUtility {
     }
 
     public static HotelBooking toHotelBooking(HotelBookingEntity hbe) {
+
+        if (hbe == null) {
+            return null;
+        }
+
         return new HotelBooking(hbe.getHotelName(),
                 new Address(hbe.getHotelAddress().getStreet(), hbe.getHotelAddress().getPostcode(), hbe.getHotelAddress().getCity()),
                 hbe.getBookingNumber(),
@@ -50,6 +58,10 @@ public class AssemblerUtility {
     }
 
     public static HotelBookingEntity toHotelBookingEntity(HotelBooking hb) {
+
+        if (hb == null) {
+            return null;
+        }
 
         return new HotelBookingEntity(null,
                 hb.getBookingNumber(),
@@ -64,6 +76,10 @@ public class AssemblerUtility {
 
     public static FlightBooking toFlightBooking(FlightBookingEntity fbe) {
 
+        if (fbe == null) {
+            return null;
+        }
+
         return new FlightBooking(fbe.getBookingNumber(),
                 fbe.getPrice(),
                 fbe.getAirlineName(),
@@ -75,6 +91,10 @@ public class AssemblerUtility {
     }
 
     public static FlightBookingEntity toFlightBookingEntity(FlightBooking fb) {
+
+        if (fb == null) {
+            return null;
+        }
 
         return new FlightBookingEntity(null,
                 fb.getBookingNumber(),

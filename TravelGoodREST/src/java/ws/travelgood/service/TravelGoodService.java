@@ -8,6 +8,7 @@ package ws.travelgood.service;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 import ws.travelgood.domain.AbstractEntity;
 import ws.travelgood.domain.BookingEntity;
@@ -95,6 +96,28 @@ public class TravelGoodService implements ItineraryService {
     public Itinerary getItinerary(Integer id) {
         return AssemblerUtility.toItinerary(getItineraryEntity(id));
         
+    }
+
+    public boolean deleteItinerary(Integer id) throws InvalidStatusException {
+
+        Iterator<ItineraryEntity> it = itineraryList.iterator();
+
+        while (it.hasNext()) {
+            ItineraryEntity ite = it.next();
+            if (ite.getId().equals(id)) {
+                if (ite.getCurrentStatus() == ItineraryStatus.PLANNING) {
+                    it.remove();
+                    return true;
+
+                } else {
+                    throw new InvalidStatusException();
+
+                }
+            }
+        }
+
+        return false;
+
     }
 
     protected ItineraryEntity getItineraryEntity(Integer id) {

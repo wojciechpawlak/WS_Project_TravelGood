@@ -56,6 +56,7 @@ public class TestTravelGoodRESTOfficial {
 
     @Test
     public void testP1() {
+
         Itinerary it = new Itinerary("test");
 
         // creating itinerary
@@ -118,6 +119,47 @@ public class TestTravelGoodRESTOfficial {
     }
 
     @Test
+    public void testP2() {
+
+        Itinerary it = new Itinerary("test");
+
+        // creating itinerary
+        ClientResponse createResponse = itinerariesWebResource
+                .entity(it, MediaType.APPLICATION_XML)
+                .post(ClientResponse.class);
+
+        // validating it got created successfully
+        Assert.assertEquals(201, createResponse.getStatus());
+
+        // getting itinerary id
+        String idStr = getId(createResponse.getLocation());
+
+        // getting our itinerary
+        Itinerary itRet = client.resource(createResponse.getLocation()).get(Itinerary.class);
+
+        testItinerary(itRet, it.getUserId(), ItineraryStatus.PLANNING);
+
+        // getting flight list
+
+
+        // adding a flight
+        List<FlightBooking> fbList = getFlightList(idStr, "Moscow", "Berlin", "2012-12-25");
+
+        ClientResponse addFlightResponse = addFlight(idStr, fbList.get(0));
+        Assert.assertEquals(201, addFlightResponse.getStatus());
+
+        // cancel planning
+        ClientResponse cancelPlanningResponse = cancelPlanning(idStr);
+        Assert.assertEquals(200, cancelPlanningResponse.getStatus());
+
+        // verify that the itinerary does not exist anymore
+        ClientResponse resp = getItinerary(idStr);
+        Assert.assertEquals(404, resp.getStatus());
+
+
+    }
+
+    @Test
     public void testC1() {
 
         // creating itinerary
@@ -166,6 +208,24 @@ public class TestTravelGoodRESTOfficial {
         String path = uri.getPath();
         return path.substring(path.lastIndexOf('/') + 1);
 
+    }
+
+    private ClientResponse getItinerary(String itineraryId) {
+        URI uri = UriBuilder.fromUri(itinerariesWebResource.getURI())
+                .segment(itineraryId)
+                .build();
+
+        return client.resource(uri)
+                .get(ClientResponse.class);
+    }
+
+    private ClientResponse cancelPlanning(String itineraryId) {
+        URI uri = UriBuilder.fromUri(itinerariesWebResource.getURI())
+                .segment(itineraryId)
+                .build();
+
+        return client.resource(uri)
+                .delete(ClientResponse.class);
     }
 
     private ClientResponse bookItinerary(String itineraryId, CreditCardInfo ccInfo) {

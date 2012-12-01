@@ -27,6 +27,8 @@ public interface ItineraryService {
 
     public Itinerary getItinerary(Integer id);
 
+    public boolean deleteItinerary(Integer id) throws InvalidStatusException;
+
     public HotelBooking getHotelBooking(Integer itineraryId, Integer bookingId);
 
     public Integer addHotel(Integer itineraryId, HotelBooking booking);

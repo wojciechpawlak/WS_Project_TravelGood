@@ -6,6 +6,7 @@ package ws.travelgood.resource;
 
 import dk.dtu.imm.fastmoney.types.ExpirationDateType;
 import java.net.URI;
+import javax.ws.rs.DELETE;
 import ws.travelgood.types.Itinerary;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.UriInfo;
@@ -22,6 +23,7 @@ import javax.ws.rs.core.UriBuilder;
 import ws.travelgood.resource.flight.FlightsResource;
 import ws.travelgood.resource.hotel.HotelsResource;
 import ws.travelgood.manager.BookingException;
+import ws.travelgood.service.InvalidStatusException;
 import ws.travelgood.service.TravelGoodService;
 import ws.travelgood.types.ItineraryStatus;
 import ws.travelgood.types.banking.CreditCardInfo;
@@ -52,7 +54,13 @@ public class ItineraryResource {
         Itinerary it =
                 TravelGoodService.getInstance().getItinerary(itineraryId);
 
-        return Response.ok(it).build();
+        if (it != null) {
+            return Response.ok(it).build();
+
+        } else {
+            return Response.status(Status.NOT_FOUND).build();
+            
+        }
 
     }
 
@@ -64,6 +72,27 @@ public class ItineraryResource {
         Itinerary it = TravelGoodService.getInstance().getItinerary(id);
 
         return it.getCurrentStatus();
+    }
+
+    @DELETE
+    public Response cancelPlanning(@PathParam("itineraryId") Integer id) {
+
+        try {
+            boolean deleted = TravelGoodService.getInstance().deleteItinerary(id);
+
+            if (deleted) {
+                return Response.ok().build();
+
+            } else {
+                return Response.status(Status.NOT_FOUND).build();
+            }
+
+        } catch (InvalidStatusException e) {
+            // cannot cancel - status is not PLANNING
+            return Response.status(Status.BAD_REQUEST).build();
+
+        }
+
     }
 
     @PUT
