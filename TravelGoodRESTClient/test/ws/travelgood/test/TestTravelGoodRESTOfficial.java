@@ -10,7 +10,6 @@ import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.GenericType;
 import com.sun.jersey.api.client.WebResource;
 import com.sun.jersey.core.util.MultivaluedMapImpl;
-import dk.dtu.imm.fastmoney.types.ExpirationDateType;
 import java.net.URI;
 import java.util.List;
 import javax.ws.rs.core.MediaType;
@@ -23,6 +22,7 @@ import org.junit.Test;
 import ws.travelgood.types.Itinerary;
 import ws.travelgood.types.ItineraryStatus;
 import ws.travelgood.types.banking.CreditCardInfo;
+import ws.travelgood.types.banking.ExpirationDate;
 import ws.travelgood.types.flight.FlightBooking;
 
 /**
@@ -79,13 +79,8 @@ public class TestTravelGoodRESTOfficial {
         ClientResponse addFlightResponse = addFlight(idStr, fbList.get(0));
         printClientRespone(addFlightResponse);
 
-        CreditCardInfo ccInfo = new CreditCardInfo();
-             ccInfo.setName("Anne Strandberg");
-             ccInfo.setNumber("50408816");
-             ExpirationDateType edt = new ExpirationDateType();
-             edt.setMonth(5);
-             edt.setYear(9);
-             ccInfo.setExpirationDate(edt);
+        CreditCardInfo ccInfo = new CreditCardInfo(new ExpirationDate(5,9),
+                "Anne Strandberg", "50408816");
 
         ClientResponse bookItineraryResponse = bookItinerary(idStr, ccInfo);
         printClientRespone(bookItineraryResponse);
@@ -124,13 +119,8 @@ public class TestTravelGoodRESTOfficial {
         ClientResponse addFlightResponse = addFlight(idStr, fbList.get(0));
         printClientRespone(addFlightResponse);
 
-        CreditCardInfo ccInfo = new CreditCardInfo();
-             ccInfo.setName("Anne Strandberg");
-             ccInfo.setNumber("50408816");
-             ExpirationDateType edt = new ExpirationDateType();
-             edt.setMonth(5);
-             edt.setYear(9);
-             ccInfo.setExpirationDate(edt);
+        CreditCardInfo ccInfo = new CreditCardInfo(new ExpirationDate(5,9),
+                "Anne Strandberg", "50408816");
 
         ClientResponse bookItineraryResponse = bookItinerary(idStr, ccInfo);
         printClientRespone(bookItineraryResponse);

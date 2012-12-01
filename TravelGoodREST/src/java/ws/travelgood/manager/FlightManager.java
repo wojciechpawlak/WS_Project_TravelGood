@@ -8,7 +8,6 @@ import java.util.Date;
 import java.util.List;
 import ws.travelgood.domain.FlightBookingEntity;
 import ws.travelgood.types.banking.CreditCardInfo;
-import ws.travelgood.types.flight.FlightList;
 
 /**
  *

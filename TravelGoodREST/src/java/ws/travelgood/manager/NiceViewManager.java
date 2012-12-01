@@ -4,6 +4,8 @@
  */
 package ws.travelgood.manager;
 
+import dk.dtu.imm.fastmoney.types.CreditCardInfoType;
+import dk.dtu.imm.fastmoney.types.ExpirationDateType;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -76,7 +78,17 @@ public class NiceViewManager implements HotelManager {
             BookingException {
 
         try {
-            return port.bookHotel(bookingNumber, ccInfo);
+
+            CreditCardInfoType ccit = new CreditCardInfoType();
+            ccit.setName(ccInfo.getName());
+            ccit.setNumber(ccInfo.getNumber());
+
+            ExpirationDateType edt = new ExpirationDateType();
+            edt.setMonth(ccInfo.getExpirationDate().getMonth());
+            edt.setYear(ccInfo.getExpirationDate().getYear());
+            ccit.setExpirationDate(edt);
+
+            return port.bookHotel(bookingNumber, ccit);
 
         } catch (BookHotelCreditCardFault e) {
             // booking failed due to wrong credit card info

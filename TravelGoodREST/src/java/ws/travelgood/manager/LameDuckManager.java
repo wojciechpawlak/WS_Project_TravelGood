@@ -79,7 +79,7 @@ public class LameDuckManager implements FlightManager {
 
         try {
             RequestBookFlightType input = new RequestBookFlightType();
-            input.setBookingNumber("12345A");
+            input.setBookingNumber(bookingNumber);
 
             CreditCardInfoWrapperType ccit = new CreditCardInfoWrapperType();
             ccit.setName(ccInfo.getName());
@@ -114,7 +114,12 @@ public class LameDuckManager implements FlightManager {
             CreditCardInfoWrapperType ccInfoWrapper = new CreditCardInfoWrapperType();
             ccInfoWrapper.setName(ccInfo.getName());
             ccInfoWrapper.setNumber(ccInfo.getNumber());
-            ccInfoWrapper.setExpirationDate(ccInfo.getExpirationDate());
+
+            ExpirationDateType edt = new ExpirationDateType();
+            edt.setMonth(ccInfo.getExpirationDate().getMonth());
+            edt.setYear(ccInfo.getExpirationDate().getYear());
+
+            ccInfoWrapper.setExpirationDate(edt);
 
             input.setCreditCardInformation(ccInfoWrapper);
 
