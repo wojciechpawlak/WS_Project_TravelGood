@@ -137,6 +137,7 @@ public class LameDuckManager implements FlightManager {
     private FlightBookingEntity toFlightBookingEntity(FlightInformationType fit) {
         
         return new FlightBookingEntity(null,
+                null,
                 fit.getBookingNumber(),
                 fit.getPrice(),
                 fit.getAirlineReservationServiceName(),

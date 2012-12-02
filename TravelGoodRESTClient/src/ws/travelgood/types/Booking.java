@@ -6,6 +6,7 @@
 package ws.travelgood.types;
 
 import javax.xml.bind.annotation.XmlRootElement;
+import ws.travelgood.states.BookingStatus;
 
 /**
  *
@@ -14,6 +15,8 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 public abstract class Booking {
 
+    private BookingStatus bookingStatus;
+    
     private String bookingNumber;
 
     private double price;
@@ -22,10 +25,19 @@ public abstract class Booking {
 
     }
     
-    protected Booking(String bookingNumber, double price) {
+    protected Booking(BookingStatus bookingStatus, String bookingNumber, double price) {
+        this.bookingStatus = bookingStatus;
         this.bookingNumber = bookingNumber;
         this.price = price;
         
+    }
+
+    public BookingStatus getBookingStatus() {
+        return bookingStatus;
+    }
+
+    public void setBookingStatus(BookingStatus bookingStatus) {
+        this.bookingStatus = bookingStatus;
     }
 
     /**

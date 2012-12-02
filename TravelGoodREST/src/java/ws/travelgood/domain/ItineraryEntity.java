@@ -4,7 +4,7 @@
  */
 package ws.travelgood.domain;
 
-import ws.travelgood.types.*;
+import ws.travelgood.states.ItineraryStatus;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;

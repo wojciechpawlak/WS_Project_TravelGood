@@ -5,6 +5,8 @@
 
 package ws.travelgood.domain;
 
+import ws.travelgood.states.BookingStatus;
+
 /**
  *
  * @author mkucharek
@@ -15,14 +17,14 @@ public class HotelBookingEntity extends BookingEntity {
     private AddressEntity hotelAddress;
     private boolean ifCreditCardRequired;
 
-    public HotelBookingEntity(Integer id, String bookingNumber, double price) {
-        super(id, bookingNumber, price);
+    public HotelBookingEntity(Integer id, BookingStatus bookingStatus, String bookingNumber, double price) {
+        super(id, bookingStatus, bookingNumber, price);
     }
 
-    public HotelBookingEntity(Integer id, String bookingNumber, double price,
+    public HotelBookingEntity(Integer id, BookingStatus bookingStatus, String bookingNumber, double price,
             String hotelName, AddressEntity hotelAddress,
             boolean ifCreditCardRequired) {
-        super(id, bookingNumber, price);
+        super(id, bookingStatus, bookingNumber, price);
         this.hotelName = hotelName;
         this.hotelAddress = hotelAddress;
         this.ifCreditCardRequired = ifCreditCardRequired;

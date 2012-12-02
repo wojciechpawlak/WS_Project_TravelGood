@@ -19,8 +19,9 @@ import ws.travelgood.manager.LameDuckManager;
 import ws.travelgood.manager.NiceViewManager;
 import ws.travelgood.domain.ItineraryEntity;
 import ws.travelgood.service.assembler.AssemblerUtility;
+import ws.travelgood.states.BookingStatus;
 import ws.travelgood.types.Itinerary;
-import ws.travelgood.types.ItineraryStatus;
+import ws.travelgood.states.ItineraryStatus;
 import ws.travelgood.types.banking.CreditCardInfo;
 import ws.travelgood.types.flight.FlightBooking;
 import ws.travelgood.types.hotel.HotelBooking;
@@ -105,7 +106,7 @@ public class TravelGoodService implements ItineraryService {
         while (it.hasNext()) {
             ItineraryEntity ite = it.next();
             if (ite.getId().equals(id)) {
-                if (ite.getCurrentStatus() == ItineraryStatus.PLANNING) {
+                if (ItineraryStatus.PLANNING.equals(ite.getCurrentStatus())) {
                     it.remove();
                     return true;
 
@@ -146,11 +147,12 @@ public class TravelGoodService implements ItineraryService {
             return null;
         }
 
-        if (ite.getCurrentStatus() == ItineraryStatus.PLANNING) {
+        if (ItineraryStatus.PLANNING.equals(ite.getCurrentStatus())) {
             Integer hotelId = getNextId(ite.getHotelBookingList());
 
             HotelBookingEntity hbe = AssemblerUtility.toHotelBookingEntity(hotelBooking);
             hbe.setId(hotelId);
+            hbe.setBookingStatus(BookingStatus.UNCONFIRMED);
 
             ite.addHotel(hbe);
 
@@ -170,7 +172,7 @@ public class TravelGoodService implements ItineraryService {
             return false;
         }
 
-        if (ite.getCurrentStatus() == ItineraryStatus.PLANNING) {
+        if (ItineraryStatus.PLANNING.equals(ite.getCurrentStatus())) {
             ite.deleteHotel(hotelBookingId);
             return true;
 
@@ -196,11 +198,12 @@ public class TravelGoodService implements ItineraryService {
             return null;
         }
 
-        if (ite.getCurrentStatus() == ItineraryStatus.PLANNING) {
+        if (ItineraryStatus.PLANNING.equals(ite.getCurrentStatus())) {
             Integer flightId = getNextId(ite.getFlightBookingList());
 
             FlightBookingEntity fbe = AssemblerUtility.toFlightBookingEntity(flightBooking);
             fbe.setId(flightId);
+            fbe.setBookingStatus(BookingStatus.UNCONFIRMED);
             
             ite.addFlight(fbe);
 
@@ -219,7 +222,7 @@ public class TravelGoodService implements ItineraryService {
             return false;
         }
 
-        if (ite.getCurrentStatus() == ItineraryStatus.PLANNING) {
+        if (ItineraryStatus.PLANNING.equals(ite.getCurrentStatus())) {
             ite.deleteFlight(flightBookingId);
             return true;
 
@@ -244,21 +247,34 @@ public class TravelGoodService implements ItineraryService {
             // book every single hotel
             for (HotelBookingEntity hbe : ite.getHotelBookingList()) {
                 this.niceViewManager.bookHotel(hbe.getBookingNumber(), ccInfo);
+                hbe.setBookingStatus(BookingStatus.CONFIRMED);
 
             }
 
             // book every single flight
             for (FlightBookingEntity fbe : ite.getFlightBookingList()) {
                 this.lameDuckManager.bookFlight(fbe.getBookingNumber(), ccInfo);
+                fbe.setBookingStatus(BookingStatus.CONFIRMED);
 
             }
 
         } catch (BookingException e) {
             // booking failure
             // cancel all previous bookings
-            // revert to PLANNING phase
+            // delete
 
-            this.cancelItinerary(itineraryId, ccInfo);
+            List<BookingEntity> failedBookingCancels = cancelAllBookings(ite, ccInfo);
+
+            if (failedBookingCancels.size() > 0) {
+
+                // change status back to BOOKED, as some bookings could not have been cancelled
+                ite.setCurrentStatus(ItineraryStatus.BOOKED);
+                
+                throw new BookingException("Itinerary cancel failed for the following bookings: " +
+                        failedBookingCancels);
+            }
+
+            // keep status as PLANNING
 
             return false;
 
@@ -275,12 +291,39 @@ public class TravelGoodService implements ItineraryService {
 
         ItineraryEntity ite = this.getItineraryEntity(itineraryId);
 
+        // check if itinerary is in BOOKED phase
+        if (!ItineraryStatus.BOOKED.equals(ite.getCurrentStatus())) {
+            // cannot cancel as it is not in booked phase
+            return false;
+
+        }
+
+        List<BookingEntity> failedBookingCancels = cancelAllBookings(ite, ccInfo);
+
+        if (failedBookingCancels.size() > 0) {
+
+            // change status back to BOOKED
+
+            throw new BookingException("Itinerary cancel failed for the following bookings: " +
+                    failedBookingCancels);
+        }
+
+        // if all cancels are ok - delete itinerary
+        this.itineraryList.remove(ite);
+
+        return true;
+
+    }
+
+    private List<BookingEntity> cancelAllBookings(ItineraryEntity ite, CreditCardInfo ccInfo) {
+
         List<BookingEntity> failedBookingCancels = new ArrayList<BookingEntity>();
 
         // cancel all hotels
         for (HotelBookingEntity hbe : ite.getHotelBookingList()) {
             try {
                 niceViewManager.cancelHotel(hbe.getBookingNumber());
+                hbe.setBookingStatus(BookingStatus.UNCONFIRMED);
 
             } catch (BookingException e) {
                 failedBookingCancels.add(hbe);
@@ -292,6 +335,7 @@ public class TravelGoodService implements ItineraryService {
         for (FlightBookingEntity fbe : ite.getFlightBookingList()) {
             try {
                 lameDuckManager.cancelFlight(fbe.getBookingNumber(), fbe.getPrice(), ccInfo);
+                fbe.setBookingStatus(BookingStatus.UNCONFIRMED);
 
             } catch (BookingException e) {
                 failedBookingCancels.add(fbe);
@@ -300,19 +344,7 @@ public class TravelGoodService implements ItineraryService {
 
         }
 
-        if (failedBookingCancels.size() > 0) {
-
-            // change status back to BOOKED
-//            ite.setCurrentStatus(ItineraryStatus.BOOKED);
-
-            throw new BookingException("Itinerary cancel failed for the following bookings: " +
-                    failedBookingCancels);
-        }
-
-        // if all cancels are ok - delete itinerary
-        this.itineraryList.remove(ite);
-
-        return true;
+        return failedBookingCancels;
 
     }
 

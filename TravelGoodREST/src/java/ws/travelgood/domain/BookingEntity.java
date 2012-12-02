@@ -5,20 +5,33 @@
 
 package ws.travelgood.domain;
 
+import ws.travelgood.states.BookingStatus;
+
 /**
  *
  * @author mkucharek
  */
 public abstract class BookingEntity extends AbstractEntity {
 
+    private BookingStatus bookingStatus;
+
     private String bookingNumber;
 
     private double price;
 
-    public BookingEntity(Integer id, String bookingNumber, double price) {
+    public BookingEntity(Integer id, BookingStatus bookingStatus, String bookingNumber, double price) {
         super(id);
+        this.bookingStatus = bookingStatus;
         this.bookingNumber = bookingNumber;
         this.price = price;
+    }
+
+    public BookingStatus getBookingStatus() {
+        return bookingStatus;
+    }
+
+    public void setBookingStatus(BookingStatus bookingStatus) {
+        this.bookingStatus = bookingStatus;
     }
 
     /**

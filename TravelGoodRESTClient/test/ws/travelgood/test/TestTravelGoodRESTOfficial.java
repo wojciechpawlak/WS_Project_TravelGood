@@ -19,8 +19,10 @@ import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import ws.travelgood.states.BookingStatus;
+import ws.travelgood.states.ItineraryStatus;
+import ws.travelgood.types.Booking;
 import ws.travelgood.types.Itinerary;
-import ws.travelgood.types.ItineraryStatus;
 import ws.travelgood.types.banking.CreditCardInfo;
 import ws.travelgood.types.banking.ExpirationDate;
 import ws.travelgood.types.flight.FlightBooking;
@@ -70,14 +72,6 @@ public class TestTravelGoodRESTOfficial {
         // getting itinerary id
         String idStr = getId(createResponse.getLocation());
 
-        // getting our itinerary
-        Itinerary itRet = client.resource(createResponse.getLocation()).get(Itinerary.class);
-
-        testItinerary(itRet, it.getUserId(), ItineraryStatus.PLANNING);
-
-        // getting flight list
-        
-
         // adding a flight
         List<FlightBooking> fbList = getFlightList(idStr, "Moscow", "Berlin", "2012-12-25");
 
@@ -107,12 +101,24 @@ public class TestTravelGoodRESTOfficial {
         addHotelResponse = addHotel(idStr, hbList.get(1));
         Assert.assertEquals(201, addHotelResponse.getStatus());
 
+
+        // getting our itinerary to verify
+        Itinerary itRet = client.resource(createResponse.getLocation()).get(Itinerary.class);
+
+        testItinerary(itRet, it.getUserId(), ItineraryStatus.PLANNING, BookingStatus.UNCONFIRMED);
+
+
         // booking
         CreditCardInfo ccInfo = new CreditCardInfo(new ExpirationDate(5,9),
                 "Anne Strandberg", "50408816");
 
         ClientResponse bookItineraryResponse = bookItinerary(idStr, ccInfo);
-        printClientRespone(bookItineraryResponse);
+        Assert.assertEquals(200, bookItineraryResponse.getStatus());
+
+        // verifying that the status has changed
+        itRet = client.resource(createResponse.getLocation()).get(Itinerary.class);
+
+        testItinerary(itRet, it.getUserId(), ItineraryStatus.BOOKED, BookingStatus.CONFIRMED);
 
         Assert.assertNotNull(bookItineraryResponse);
 
@@ -137,7 +143,7 @@ public class TestTravelGoodRESTOfficial {
         // getting our itinerary
         Itinerary itRet = client.resource(createResponse.getLocation()).get(Itinerary.class);
 
-        testItinerary(itRet, it.getUserId(), ItineraryStatus.PLANNING);
+        testItinerary(itRet, it.getUserId(), ItineraryStatus.PLANNING, BookingStatus.UNCONFIRMED);
 
         // getting flight list
 
@@ -180,7 +186,7 @@ public class TestTravelGoodRESTOfficial {
         Itinerary itRet = client.resource(createResponse.getLocation()).get(Itinerary.class);
 
         // validating that the itinerary is correct
-        testItinerary(itRet, it.getUserId(), ItineraryStatus.PLANNING);
+        testItinerary(itRet, it.getUserId(), ItineraryStatus.PLANNING, BookingStatus.UNCONFIRMED);
 
         // getting flight list
         List<FlightBooking> fbList = getFlightList(idStr, "Moscow", "Berlin", "2012-12-25");
@@ -242,7 +248,7 @@ public class TestTravelGoodRESTOfficial {
     private ClientResponse cancelItinerary(String itineraryId, CreditCardInfo ccInfo) {
         URI uri = UriBuilder.fromUri(itinerariesWebResource.getURI())
                 .segment(itineraryId)
-                .segment("cancel")
+                .segment("status")
                 .build();
 
         return client.resource(uri)
@@ -322,11 +328,19 @@ public class TestTravelGoodRESTOfficial {
 
     }
 
-    private void testItinerary(Itinerary it, String expectedUserId, ItineraryStatus expectedStatus) {
+    private void testItinerary(Itinerary it, String expectedUserId, ItineraryStatus expectedStatus, BookingStatus expBookingStatus) {
         Assert.assertNotNull(it);
 
         Assert.assertEquals(expectedUserId, it.getUserId());
         Assert.assertEquals(expectedStatus, it.getCurrentStatus());
+
+        for (Booking b : it.getHotelBookingList()) {
+            Assert.assertEquals(expBookingStatus, b.getBookingStatus());
+        }
+
+        for (Booking b : it.getFlightBookingList()) {
+            Assert.assertEquals(expBookingStatus, b.getBookingStatus());
+        }
 
     }
 

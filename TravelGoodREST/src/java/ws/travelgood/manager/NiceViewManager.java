@@ -116,6 +116,7 @@ public class NiceViewManager implements HotelManager {
 
     private HotelBookingEntity toHotelBookingEntity(HotelType ht) {
         return new HotelBookingEntity(null,
+                null,
                 ht.getBookingNumber(),
                 ht.getHotelStayPrice(),
                 ht.getHotelName(),

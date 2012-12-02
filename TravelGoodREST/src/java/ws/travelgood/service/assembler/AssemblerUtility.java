@@ -49,7 +49,8 @@ public class AssemblerUtility {
             return null;
         }
 
-        return new HotelBooking(hbe.getHotelName(),
+        return new HotelBooking(hbe.getBookingStatus(),
+                hbe.getHotelName(),
                 new Address(hbe.getHotelAddress().getStreet(), hbe.getHotelAddress().getPostcode(), hbe.getHotelAddress().getCity()),
                 hbe.getBookingNumber(),
                 hbe.getPrice(),
@@ -64,6 +65,7 @@ public class AssemblerUtility {
         }
 
         return new HotelBookingEntity(null,
+                null,
                 hb.getBookingNumber(),
                 hb.getPrice(),
                 hb.getHotelName(),
@@ -80,7 +82,8 @@ public class AssemblerUtility {
             return null;
         }
 
-        return new FlightBooking(fbe.getBookingNumber(),
+        return new FlightBooking(fbe.getBookingStatus(),
+                fbe.getBookingNumber(),
                 fbe.getPrice(),
                 fbe.getAirlineName(),
                 fbe.getStartAirport(),
@@ -97,6 +100,7 @@ public class AssemblerUtility {
         }
 
         return new FlightBookingEntity(null,
+                null,
                 fb.getBookingNumber(),
                 fb.getPrice(),
                 fb.getAirlineName(),

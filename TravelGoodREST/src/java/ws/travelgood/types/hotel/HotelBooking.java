@@ -7,6 +7,7 @@ package ws.travelgood.types.hotel;
 
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+import ws.travelgood.states.BookingStatus;
 import ws.travelgood.types.Booking;
 
 /**
@@ -21,12 +22,12 @@ public class HotelBooking extends Booking {
     private boolean ifCreditCardRequired;
 
     private HotelBooking() {
-        super("",0.0);
+        super(null, "", 0.0);
         
     }
 
-    public HotelBooking(String hotelName, Address hotelAddress, String bookingNumber, double price, boolean ifCreditCardRequired) {
-        super(bookingNumber, price);
+    public HotelBooking(BookingStatus bookingStatus, String hotelName, Address hotelAddress, String bookingNumber, double price, boolean ifCreditCardRequired) {
+        super(bookingStatus, bookingNumber, price);
 
         this.hotelName = hotelName;
         this.hotelAddress = hotelAddress;

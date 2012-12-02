@@ -3,12 +3,12 @@
  * and open the template in the editor.
  */
 
-package ws.travelgood.types;
+package ws.travelgood.states;
 
 /**
  *
  * @author mkucharek
  */
-public enum ItineraryElementStatus {
+public enum BookingStatus {
     UNCONFIRMED, CONFIRMED, CANCELLED
 }

@@ -4,6 +4,7 @@
  */
 package ws.travelgood.types;
 
+import ws.travelgood.states.ItineraryStatus;
 import java.util.ArrayList;
 import java.util.List;
 import javax.xml.bind.annotation.XmlElement;

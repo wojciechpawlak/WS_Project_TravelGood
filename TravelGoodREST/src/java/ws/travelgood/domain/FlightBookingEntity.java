@@ -6,6 +6,7 @@
 package ws.travelgood.domain;
 
 import java.util.Date;
+import ws.travelgood.states.BookingStatus;
 
 /**
  *
@@ -20,14 +21,14 @@ public class FlightBookingEntity extends BookingEntity {
     private Date landingDate;
     private String carrierName;
 
-    public FlightBookingEntity(Integer id, String bookingNumber, double price) {
-        super(id, bookingNumber, price);
+    public FlightBookingEntity(Integer id, BookingStatus bookingStatus, String bookingNumber, double price) {
+        super(id, bookingStatus, bookingNumber, price);
     }
 
-    public FlightBookingEntity(Integer id, String bookingNumber, double price,
+    public FlightBookingEntity(Integer id, BookingStatus bookingStatus, String bookingNumber, double price,
             String airlineName, String startAirport, String destinationAirport,
             Date liftOffDate, Date landingDate, String carrierName) {
-        super(id, bookingNumber, price);
+        super(id, bookingStatus, bookingNumber, price);
         this.airlineName = airlineName;
         this.startAirport = startAirport;
         this.destinationAirport = destinationAirport;

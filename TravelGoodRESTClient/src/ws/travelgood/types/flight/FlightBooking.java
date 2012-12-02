@@ -7,6 +7,7 @@ package ws.travelgood.types.flight;
 
 import java.util.Date;
 import javax.xml.bind.annotation.XmlRootElement;
+import ws.travelgood.states.BookingStatus;
 import ws.travelgood.types.Booking;
 
 /**
@@ -24,14 +25,14 @@ public class FlightBooking extends Booking {
     private String carrierName;
 
     private FlightBooking() {
-        super("", 0.0);
+        super(null, "", 0.0);
         
     }
 
-    public FlightBooking(String bookingNumber, double price, String airlineName,
+    public FlightBooking(BookingStatus bookingStatus, String bookingNumber, double price, String airlineName,
             String startAirport, String destinationAirport, Date liftOffDate,
             Date landingDate, String carrierName) {
-        super(bookingNumber, price);
+        super(bookingStatus, bookingNumber, price);
 
         this.airlineName = airlineName;
         this.startAirport = startAirport;

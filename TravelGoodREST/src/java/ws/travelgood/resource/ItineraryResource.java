@@ -25,7 +25,7 @@ import ws.travelgood.resource.hotel.HotelsResource;
 import ws.travelgood.manager.BookingException;
 import ws.travelgood.service.InvalidStatusException;
 import ws.travelgood.service.TravelGoodService;
-import ws.travelgood.types.ItineraryStatus;
+import ws.travelgood.states.ItineraryStatus;
 import ws.travelgood.types.banking.CreditCardInfo;
 
 /**
@@ -62,16 +62,6 @@ public class ItineraryResource {
             
         }
 
-    }
-
-    @GET
-    @Path("status")
-    @Produces("application/xml")
-    public ItineraryStatus getStatus(@PathParam("itineraryId") Integer id) {
-
-        Itinerary it = TravelGoodService.getInstance().getItinerary(id);
-
-        return it.getCurrentStatus();
     }
 
     @DELETE
@@ -125,8 +115,18 @@ public class ItineraryResource {
 
     }
 
+    @GET
+    @Path("status")
+    @Produces("application/xml")
+    public ItineraryStatus getStatus(@PathParam("itineraryId") Integer id) {
+
+        Itinerary it = TravelGoodService.getInstance().getItinerary(id);
+
+        return it.getCurrentStatus();
+    }
+
     @PUT
-    @Path("cancel")
+    @Path("status")
     public Response cancelItinerary(@PathParam("itineraryId") Integer id, CreditCardInfo ccInfo) {
 
         try {
