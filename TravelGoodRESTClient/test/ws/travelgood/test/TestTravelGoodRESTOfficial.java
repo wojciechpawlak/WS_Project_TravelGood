@@ -59,7 +59,7 @@ public class TestTravelGoodRESTOfficial {
     @Test
     public void testP1() {
 
-        Itinerary it = new Itinerary("test");
+        Itinerary it = new Itinerary("P1");
 
         // creating itinerary
         ClientResponse createResponse = itinerariesWebResource
@@ -128,7 +128,7 @@ public class TestTravelGoodRESTOfficial {
     @Test
     public void testP2() {
 
-        Itinerary it = new Itinerary("test");
+        Itinerary it = new Itinerary("P2");
 
         // creating itinerary
         ClientResponse createResponse = itinerariesWebResource
@@ -170,7 +170,7 @@ public class TestTravelGoodRESTOfficial {
     public void testB() {
 
         // creating itinerary
-        Itinerary it = new Itinerary("test");
+        Itinerary it = new Itinerary("B");
 
         ClientResponse createResponse = itinerariesWebResource
                 .entity(it, MediaType.APPLICATION_XML)
@@ -247,7 +247,7 @@ public class TestTravelGoodRESTOfficial {
     public void testC1() {
 
         // creating itinerary
-        Itinerary it = new Itinerary("test");
+        Itinerary it = new Itinerary("C1");
         
         ClientResponse createResponse = itinerariesWebResource
                 .entity(it, MediaType.APPLICATION_XML)
@@ -304,6 +304,95 @@ public class TestTravelGoodRESTOfficial {
         // verify that the itinerary does not exist anymore
         ClientResponse resp = getItinerary(idStr);
         Assert.assertEquals(404, resp.getStatus());
+
+    }
+
+    @Test
+    public void testC2() {
+
+        // creating itinerary
+        Itinerary it = new Itinerary("C2");
+
+        ClientResponse createResponse = itinerariesWebResource
+                .entity(it, MediaType.APPLICATION_XML)
+                .post(ClientResponse.class);
+
+        Assert.assertEquals(201, createResponse.getStatus());
+
+        // getting our itinerary
+        Itinerary itRet = client.resource(createResponse.getLocation()).get(Itinerary.class);
+        testItinerary(itRet, it.getUserId(), ItineraryStatus.PLANNING, 0, 0);
+
+        // getting itinerary id
+        String idStr = getId(createResponse.getLocation());
+
+        // adding a CANCEL_FAILING flight to our itinerary (since hotels are processed before the flights during both booking & cancel, this one will be processed as second booking)
+        List<FlightBooking> fbList = getFlightList(idStr, "CancelCity", "Paris", "2012-12-23");
+
+        ClientResponse addFlightResponse = addFlight(idStr, fbList.get(0));
+        Assert.assertEquals(201, addFlightResponse.getStatus());
+
+        // adding a hotel
+        List<HotelBooking> hbList = getHotelList(idStr, "Vienna", "2012-12-23", "2012-12-25");
+        Assert.assertEquals(2, hbList.size());
+
+        ClientResponse addHotelResponse = addHotel(idStr, hbList.get(0));
+        Assert.assertEquals(201, addHotelResponse.getStatus());
+
+        // adding a flight
+        fbList = getFlightList(idStr, "Copenhagen", "Bucharest", "2012-12-22");
+
+        addFlightResponse = addFlight(idStr, fbList.get(0));
+        Assert.assertEquals(201, addFlightResponse.getStatus());
+
+        // getting our itinerary
+        itRet = client.resource(createResponse.getLocation()).get(Itinerary.class);
+        testItinerary(itRet, it.getUserId(), ItineraryStatus.PLANNING, 1, 2);
+
+
+        // booking
+        CreditCardInfo ccInfo = new CreditCardInfo(new ExpirationDate(5,9),
+                "Anne Strandberg", "50408816");
+        ClientResponse bookItineraryResponse = bookItinerary(idStr, ccInfo);
+        Assert.assertEquals(200, bookItineraryResponse.getStatus());
+
+        // getting our itinerary to verify
+        itRet = client.resource(createResponse.getLocation()).get(Itinerary.class);
+        testItinerary(itRet, it.getUserId(), ItineraryStatus.BOOKED, 1, 2);
+
+        // cancelling (should fail)
+        ClientResponse cancelItineraryResponse = cancelItinerary(idStr, ccInfo);
+        Assert.assertEquals(502, cancelItineraryResponse.getStatus());
+
+        // getting our itinerary to verify
+        itRet = client.resource(createResponse.getLocation()).get(Itinerary.class);
+
+        // verifying manually
+        Assert.assertNotNull(itRet);
+
+        Assert.assertEquals(it.getUserId(), itRet.getUserId());
+        Assert.assertEquals(ItineraryStatus.BOOKED, itRet.getCurrentStatus());
+
+        Assert.assertEquals(1, itRet.getHotelBookingList().size());
+        Assert.assertEquals(2, itRet.getFlightBookingList().size());
+
+
+        // hotel should be cancelled
+        for (Booking b : itRet.getHotelBookingList()) {
+            Assert.assertEquals(BookingStatus.CANCELLED, b.getBookingStatus());
+        }
+
+        // failed flight should be confirmed, second one should be cancelled
+        for (Booking b : itRet.getFlightBookingList()) {
+            if (b.getBookingNumber().equals("456CANCEL")) {
+                Assert.assertEquals(BookingStatus.CONFIRMED, b.getBookingStatus());
+
+            } else {
+                Assert.assertEquals(BookingStatus.CANCELLED, b.getBookingStatus());
+
+            }
+        }
+
 
     }
 
