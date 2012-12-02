@@ -145,9 +145,6 @@ public class TestTravelGoodRESTOfficial {
 
         testItinerary(itRet, it.getUserId(), ItineraryStatus.PLANNING, BookingStatus.UNCONFIRMED);
 
-        // getting flight list
-
-
         // adding a flight
         List<FlightBooking> fbList = getFlightList(idStr, "Moscow", "Berlin", "2012-12-25");
 
@@ -182,12 +179,6 @@ public class TestTravelGoodRESTOfficial {
         // getting itinerary id
         String idStr = getId(createResponse.getLocation());
 
-        // getting our itinerary
-        Itinerary itRet = client.resource(createResponse.getLocation()).get(Itinerary.class);
-
-        // validating that the itinerary is correct
-        testItinerary(itRet, it.getUserId(), ItineraryStatus.PLANNING, BookingStatus.UNCONFIRMED);
-
         // getting flight list
         List<FlightBooking> fbList = getFlightList(idStr, "Moscow", "Berlin", "2012-12-25");
 
@@ -195,6 +186,26 @@ public class TestTravelGoodRESTOfficial {
         ClientResponse addFlightResponse = addFlight(idStr, fbList.get(0));
         Assert.assertEquals(201, addFlightResponse.getStatus());
 
+        // adding a hotel
+        List<HotelBooking> hbList = getHotelList(idStr, "Vienna", "2012-12-23", "2012-12-25");
+        Assert.assertEquals(2, hbList.size());
+
+        ClientResponse addHotelResponse = addHotel(idStr, hbList.get(0));
+        Assert.assertEquals(201, addHotelResponse.getStatus());
+
+        // adding a flight
+        fbList = getFlightList(idStr, "Copenhagen", "Bucharest", "2012-12-22");
+
+        addFlightResponse = addFlight(idStr, fbList.get(0));
+        Assert.assertEquals(201, addFlightResponse.getStatus());
+
+        // getting our itinerary to verify
+        Itinerary itRet = client.resource(createResponse.getLocation()).get(Itinerary.class);
+
+        testItinerary(itRet, it.getUserId(), ItineraryStatus.PLANNING, BookingStatus.UNCONFIRMED);
+
+
+        // booking
         CreditCardInfo ccInfo = new CreditCardInfo(new ExpirationDate(5,9),
                 "Anne Strandberg", "50408816");
 
@@ -203,9 +214,17 @@ public class TestTravelGoodRESTOfficial {
 
         Assert.assertEquals(200, bookItineraryResponse.getStatus());
 
-        ClientResponse cancelItineraryResponse = cancelItinerary(idStr, ccInfo);
+        // getting our itinerary to verify
+        itRet = client.resource(createResponse.getLocation()).get(Itinerary.class);
+        testItinerary(itRet, it.getUserId(), ItineraryStatus.BOOKED, BookingStatus.CONFIRMED);
 
+        // cancelling
+        ClientResponse cancelItineraryResponse = cancelItinerary(idStr, ccInfo);
         Assert.assertEquals(200, cancelItineraryResponse.getStatus());
+
+        // verify that the itinerary does not exist anymore
+        ClientResponse resp = getItinerary(idStr);
+        Assert.assertEquals(404, resp.getStatus());
 
     }
 
