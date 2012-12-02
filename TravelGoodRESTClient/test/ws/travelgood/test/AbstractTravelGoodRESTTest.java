@@ -35,6 +35,11 @@ public abstract class AbstractTravelGoodRESTTest {
 
     protected Client client;
 
+    protected static final String BOOKING_SEGMENT = "booking";
+    protected static final String STATUS_SEGMENT = "status";
+    protected static final String HOTELS_SEGMENT = "hotels";
+    protected static final String FLIGHTS_SEGMENT = "flights";
+
     @Before
     public void setUp() {
         client = Client.create();
@@ -46,7 +51,14 @@ public abstract class AbstractTravelGoodRESTTest {
 
     protected abstract String getItineraryResourceLocation();
 
-        protected String getId(URI resourceLocation) {
+    // utility methods
+
+    /**
+     * Extracts the resource identifier from the URI (obviously, it has to end with an identifier, like itineraries/1)
+     * @param resourceLocation
+     * @return
+     */
+    protected String getId(URI resourceLocation) {
         URI uri = resourceLocation;
         String path = uri.getPath();
         return path.substring(path.lastIndexOf('/') + 1);
@@ -74,7 +86,7 @@ public abstract class AbstractTravelGoodRESTTest {
     protected ClientResponse bookItinerary(String itineraryId, CreditCardInfo ccInfo) {
         URI uri = UriBuilder.fromUri(itinerariesWebResource.getURI())
                 .segment(itineraryId)
-                .segment("book")
+                .segment(BOOKING_SEGMENT)
                 .build();
 
         return client.resource(uri)
@@ -85,7 +97,7 @@ public abstract class AbstractTravelGoodRESTTest {
     protected ClientResponse cancelItinerary(String itineraryId, CreditCardInfo ccInfo) {
         URI uri = UriBuilder.fromUri(itinerariesWebResource.getURI())
                 .segment(itineraryId)
-                .segment("status")
+                .segment(STATUS_SEGMENT)
                 .build();
 
         return client.resource(uri)
@@ -97,7 +109,7 @@ public abstract class AbstractTravelGoodRESTTest {
 
         URI uri = UriBuilder.fromUri(itinerariesWebResource.getURI())
                 .segment(itineraryId)
-                .segment("hotels")
+                .segment(HOTELS_SEGMENT)
                 .build();
 
         return client.resource(uri)
@@ -109,7 +121,7 @@ public abstract class AbstractTravelGoodRESTTest {
 
         URI uri = UriBuilder.fromUri(itinerariesWebResource.getURI())
                 .segment(itineraryId)
-                .segment("flights")
+                .segment(FLIGHTS_SEGMENT)
                 .build();
 
         return client.resource(uri)
@@ -127,7 +139,7 @@ public abstract class AbstractTravelGoodRESTTest {
 
         URI uri = UriBuilder.fromUri(itinerariesWebResource.getURI())
                 .segment(itineraryId)
-                .segment("flights")
+                .segment(FLIGHTS_SEGMENT)
                 .build();
 
         List<FlightBooking> fbList = client.resource(uri)
@@ -151,7 +163,7 @@ public abstract class AbstractTravelGoodRESTTest {
 
         URI uri = UriBuilder.fromUri(itinerariesWebResource.getURI())
                 .segment(itineraryId)
-                .segment("hotels")
+                .segment(HOTELS_SEGMENT)
                 .build();
 
         List<HotelBooking> fbList = client.resource(uri)

@@ -86,7 +86,7 @@ public class ItineraryResource {
     }
 
     @PUT
-    @Path("book")
+    @Path("booking")
     public Response bookItinerary(@PathParam("itineraryId") Integer id, CreditCardInfo ccInfo) {
 
         try {
