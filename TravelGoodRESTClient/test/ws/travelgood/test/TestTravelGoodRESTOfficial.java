@@ -69,6 +69,11 @@ public class TestTravelGoodRESTOfficial {
         // validating it got created successfully
         Assert.assertEquals(201, createResponse.getStatus());
 
+        // getting our itinerary to verify
+        Itinerary itRet = client.resource(createResponse.getLocation()).get(Itinerary.class);
+
+        testItinerary(itRet, it.getUserId(), ItineraryStatus.PLANNING, 0, 0);
+
         // getting itinerary id
         String idStr = getId(createResponse.getLocation());
 
@@ -103,9 +108,8 @@ public class TestTravelGoodRESTOfficial {
 
 
         // getting our itinerary to verify
-        Itinerary itRet = client.resource(createResponse.getLocation()).get(Itinerary.class);
-
-        testItinerary(itRet, it.getUserId(), ItineraryStatus.PLANNING, BookingStatus.UNCONFIRMED);
+        itRet = client.resource(createResponse.getLocation()).get(Itinerary.class);
+        testItinerary(itRet, it.getUserId(), ItineraryStatus.PLANNING, 2, 3);
 
 
         // booking
@@ -117,10 +121,7 @@ public class TestTravelGoodRESTOfficial {
 
         // verifying that the status has changed
         itRet = client.resource(createResponse.getLocation()).get(Itinerary.class);
-
-        testItinerary(itRet, it.getUserId(), ItineraryStatus.BOOKED, BookingStatus.CONFIRMED);
-
-        Assert.assertNotNull(bookItineraryResponse);
+        testItinerary(itRet, it.getUserId(), ItineraryStatus.BOOKED, 2, 3);
 
     }
 
@@ -137,19 +138,22 @@ public class TestTravelGoodRESTOfficial {
         // validating it got created successfully
         Assert.assertEquals(201, createResponse.getStatus());
 
-        // getting itinerary id
-        String idStr = getId(createResponse.getLocation());
-
         // getting our itinerary
         Itinerary itRet = client.resource(createResponse.getLocation()).get(Itinerary.class);
-
-        testItinerary(itRet, it.getUserId(), ItineraryStatus.PLANNING, BookingStatus.UNCONFIRMED);
+        testItinerary(itRet, it.getUserId(), ItineraryStatus.PLANNING, 0, 0);
+        
+        // getting itinerary id
+        String idStr = getId(createResponse.getLocation());
 
         // adding a flight
         List<FlightBooking> fbList = getFlightList(idStr, "Moscow", "Berlin", "2012-12-25");
 
         ClientResponse addFlightResponse = addFlight(idStr, fbList.get(0));
         Assert.assertEquals(201, addFlightResponse.getStatus());
+
+        // getting our itinerary
+        itRet = client.resource(createResponse.getLocation()).get(Itinerary.class);
+        testItinerary(itRet, it.getUserId(), ItineraryStatus.PLANNING, 0, 1);
 
         // cancel planning
         ClientResponse cancelPlanningResponse = cancelPlanning(idStr);
@@ -159,6 +163,83 @@ public class TestTravelGoodRESTOfficial {
         ClientResponse resp = getItinerary(idStr);
         Assert.assertEquals(404, resp.getStatus());
 
+
+    }
+
+    @Test
+    public void testB() {
+
+        // creating itinerary
+        Itinerary it = new Itinerary("test");
+
+        ClientResponse createResponse = itinerariesWebResource
+                .entity(it, MediaType.APPLICATION_XML)
+                .post(ClientResponse.class);
+
+        Assert.assertEquals(201, createResponse.getStatus());
+
+        // getting our itinerary
+        Itinerary itRet = client.resource(createResponse.getLocation()).get(Itinerary.class);
+        testItinerary(itRet, it.getUserId(), ItineraryStatus.PLANNING, 0, 0);
+
+        // getting itinerary id
+        String idStr = getId(createResponse.getLocation());
+
+        // adding a FAILING flight to our itinerary (since hotels are processed before the flights, this one will be processed as second booking)
+        List<FlightBooking> fbList = getFlightList(idStr, "FailCity", "Paris", "2012-12-23");
+        // changing booking number to make it fail
+        fbList.get(0).setBookingNumber("not_found");
+
+        ClientResponse addFlightResponse = addFlight(idStr, fbList.get(0));
+        Assert.assertEquals(201, addFlightResponse.getStatus());
+
+        // adding a hotel
+        List<HotelBooking> hbList = getHotelList(idStr, "Vienna", "2012-12-23", "2012-12-25");
+        Assert.assertEquals(2, hbList.size());
+
+        ClientResponse addHotelResponse = addHotel(idStr, hbList.get(0));
+        Assert.assertEquals(201, addHotelResponse.getStatus());
+
+        // adding a flight
+        fbList = getFlightList(idStr, "Copenhagen", "Bucharest", "2012-12-22");
+
+        addFlightResponse = addFlight(idStr, fbList.get(0));
+        Assert.assertEquals(201, addFlightResponse.getStatus());
+
+        // getting our itinerary
+        itRet = client.resource(createResponse.getLocation()).get(Itinerary.class);
+        testItinerary(itRet, it.getUserId(), ItineraryStatus.PLANNING, 1, 2);
+
+
+        // booking (should fail)
+        CreditCardInfo ccInfo = new CreditCardInfo(new ExpirationDate(5,9),
+                "Anne Strandberg", "50408816");
+        ClientResponse bookItineraryResponse = bookItinerary(idStr, ccInfo);
+        Assert.assertEquals(502, bookItineraryResponse.getStatus());
+
+        // getting our itinerary to verify
+        itRet = client.resource(createResponse.getLocation()).get(Itinerary.class);
+
+        // verifying manually
+        Assert.assertNotNull(itRet);
+
+        Assert.assertEquals(it.getUserId(), itRet.getUserId());
+        Assert.assertEquals(ItineraryStatus.PLANNING, itRet.getCurrentStatus());
+
+        Assert.assertEquals(1, itRet.getHotelBookingList().size());
+        Assert.assertEquals(2, itRet.getFlightBookingList().size());
+
+        
+        // hotel should be cancelled
+        for (Booking b : itRet.getHotelBookingList()) {
+            Assert.assertEquals(BookingStatus.CANCELLED, b.getBookingStatus());
+        }
+
+        //flights should be unconfirmed
+        for (Booking b : itRet.getFlightBookingList()) {
+            Assert.assertEquals(BookingStatus.UNCONFIRMED, b.getBookingStatus());
+        }
+        
 
     }
 
@@ -174,7 +255,9 @@ public class TestTravelGoodRESTOfficial {
 
         Assert.assertEquals(201, createResponse.getStatus());
 
-        printClientRespone(createResponse);
+        // getting our itinerary
+        Itinerary itRet = client.resource(createResponse.getLocation()).get(Itinerary.class);
+        testItinerary(itRet, it.getUserId(), ItineraryStatus.PLANNING, 0, 0);
 
         // getting itinerary id
         String idStr = getId(createResponse.getLocation());
@@ -199,24 +282,20 @@ public class TestTravelGoodRESTOfficial {
         addFlightResponse = addFlight(idStr, fbList.get(0));
         Assert.assertEquals(201, addFlightResponse.getStatus());
 
-        // getting our itinerary to verify
-        Itinerary itRet = client.resource(createResponse.getLocation()).get(Itinerary.class);
-
-        testItinerary(itRet, it.getUserId(), ItineraryStatus.PLANNING, BookingStatus.UNCONFIRMED);
+        // getting our itinerary
+        itRet = client.resource(createResponse.getLocation()).get(Itinerary.class);
+        testItinerary(itRet, it.getUserId(), ItineraryStatus.PLANNING, 1, 2);
 
 
         // booking
         CreditCardInfo ccInfo = new CreditCardInfo(new ExpirationDate(5,9),
                 "Anne Strandberg", "50408816");
-
         ClientResponse bookItineraryResponse = bookItinerary(idStr, ccInfo);
-        printClientRespone(bookItineraryResponse);
-
         Assert.assertEquals(200, bookItineraryResponse.getStatus());
 
         // getting our itinerary to verify
         itRet = client.resource(createResponse.getLocation()).get(Itinerary.class);
-        testItinerary(itRet, it.getUserId(), ItineraryStatus.BOOKED, BookingStatus.CONFIRMED);
+        testItinerary(itRet, it.getUserId(), ItineraryStatus.BOOKED, 1, 2);
 
         // cancelling
         ClientResponse cancelItineraryResponse = cancelItinerary(idStr, ccInfo);
@@ -347,11 +426,23 @@ public class TestTravelGoodRESTOfficial {
 
     }
 
-    private void testItinerary(Itinerary it, String expectedUserId, ItineraryStatus expectedStatus, BookingStatus expBookingStatus) {
+    private void testItinerary(Itinerary it, String expectedUserId, ItineraryStatus expectedStatus, int expHotelBookingQuantity, int expFlightBookingQuantity) {
         Assert.assertNotNull(it);
 
         Assert.assertEquals(expectedUserId, it.getUserId());
         Assert.assertEquals(expectedStatus, it.getCurrentStatus());
+
+        Assert.assertEquals(expHotelBookingQuantity, it.getHotelBookingList().size());
+        Assert.assertEquals(expFlightBookingQuantity, it.getFlightBookingList().size());
+
+        BookingStatus expBookingStatus;
+        if (expectedStatus == ItineraryStatus.PLANNING) {
+            expBookingStatus = BookingStatus.UNCONFIRMED;
+
+        } else {
+            expBookingStatus = BookingStatus.CONFIRMED;
+
+        }
 
         for (Booking b : it.getHotelBookingList()) {
             Assert.assertEquals(expBookingStatus, b.getBookingStatus());

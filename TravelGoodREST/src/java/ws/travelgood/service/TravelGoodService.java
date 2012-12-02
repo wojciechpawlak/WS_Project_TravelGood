@@ -244,18 +244,22 @@ public class TravelGoodService implements ItineraryService {
         }
 
         try {
-            // book every single hotel
+            // book every single hotel (if not already booked)
             for (HotelBookingEntity hbe : ite.getHotelBookingList()) {
-                this.niceViewManager.bookHotel(hbe.getBookingNumber(), ccInfo);
-                hbe.setBookingStatus(BookingStatus.CONFIRMED);
+                if (!BookingStatus.CONFIRMED.equals(hbe.getBookingStatus())) {
+                    this.niceViewManager.bookHotel(hbe.getBookingNumber(), ccInfo);
+                    hbe.setBookingStatus(BookingStatus.CONFIRMED);
 
+                }
             }
 
-            // book every single flight
+            // book every single flight (if not already booked)
             for (FlightBookingEntity fbe : ite.getFlightBookingList()) {
-                this.lameDuckManager.bookFlight(fbe.getBookingNumber(), ccInfo);
-                fbe.setBookingStatus(BookingStatus.CONFIRMED);
+                if (!BookingStatus.CONFIRMED.equals(fbe.getBookingStatus())) {
+                    this.lameDuckManager.bookFlight(fbe.getBookingNumber(), ccInfo);
+                    fbe.setBookingStatus(BookingStatus.CONFIRMED);
 
+                }
             }
 
         } catch (BookingException e) {
@@ -270,13 +274,13 @@ public class TravelGoodService implements ItineraryService {
                 // change status back to BOOKED, as some bookings could not have been cancelled
                 ite.setCurrentStatus(ItineraryStatus.BOOKED);
                 
-                throw new BookingException("Itinerary cancel failed for the following bookings: " +
+                throw new BookingException("Itinerary booking failed , but the following bookings could not have been rolled back: " +
                         failedBookingCancels);
             }
 
             // keep status as PLANNING
 
-            return false;
+            throw new BookingException("Itinerary booking failed, reverted to PLANNING status.");
 
         }
 
@@ -321,27 +325,33 @@ public class TravelGoodService implements ItineraryService {
 
         // cancel all hotels
         for (HotelBookingEntity hbe : ite.getHotelBookingList()) {
-            try {
-                niceViewManager.cancelHotel(hbe.getBookingNumber());
-                hbe.setBookingStatus(BookingStatus.UNCONFIRMED);
 
-            } catch (BookingException e) {
-                failedBookingCancels.add(hbe);
+            if (BookingStatus.CONFIRMED.equals(hbe.getBookingStatus())) {
+                try {
+                    niceViewManager.cancelHotel(hbe.getBookingNumber());
+                    hbe.setBookingStatus(BookingStatus.CANCELLED);
+
+                } catch (BookingException e) {
+                    failedBookingCancels.add(hbe);
+                }
+
             }
-
         }
 
         // cancel all flights
         for (FlightBookingEntity fbe : ite.getFlightBookingList()) {
-            try {
-                lameDuckManager.cancelFlight(fbe.getBookingNumber(), fbe.getPrice(), ccInfo);
-                fbe.setBookingStatus(BookingStatus.UNCONFIRMED);
 
-            } catch (BookingException e) {
-                failedBookingCancels.add(fbe);
+            if (BookingStatus.CONFIRMED.equals(fbe.getBookingStatus())) {
+                try {
+                    lameDuckManager.cancelFlight(fbe.getBookingNumber(), fbe.getPrice(), ccInfo);
+                    fbe.setBookingStatus(BookingStatus.CANCELLED);
+
+                } catch (BookingException e) {
+                    failedBookingCancels.add(fbe);
+
+                }
 
             }
-
         }
 
         return failedBookingCancels;

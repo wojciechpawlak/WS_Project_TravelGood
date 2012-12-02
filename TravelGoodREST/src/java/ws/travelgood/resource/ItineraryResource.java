@@ -93,6 +93,7 @@ public class ItineraryResource {
             boolean booked = TravelGoodService.getInstance().bookItinerary(id, ccInfo);
 
             if (!booked) {
+                // cannot book (invalid status)
                 return Response.status(Status.BAD_REQUEST).build();
             }
 
