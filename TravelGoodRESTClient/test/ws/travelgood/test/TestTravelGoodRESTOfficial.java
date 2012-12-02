@@ -5,19 +5,10 @@
 
 package ws.travelgood.test;
 
-import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientResponse;
-import com.sun.jersey.api.client.GenericType;
-import com.sun.jersey.api.client.WebResource;
-import com.sun.jersey.core.util.MultivaluedMapImpl;
-import java.net.URI;
 import java.util.List;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.MultivaluedMap;
-import javax.ws.rs.core.UriBuilder;
-import org.junit.After;
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
 import ws.travelgood.states.BookingStatus;
 import ws.travelgood.states.ItineraryStatus;
@@ -32,30 +23,15 @@ import ws.travelgood.types.hotel.HotelBooking;
  *
  * @author mkucharek
  */
-public class TestTravelGoodRESTOfficial {
+public class TestTravelGoodRESTOfficial extends AbstractTravelGoodRESTTest {
 
     private final static String ITINERARY_RESOURCE_STR = "http://localhost:8080/TravelGoodREST/resources/itineraries";
 
-    private WebResource itinerariesWebResource;
-
-    private Client client;
-
-    public TestTravelGoodRESTOfficial() {
+    @Override
+    protected String getItineraryResourceLocation() {
+        return ITINERARY_RESOURCE_STR;
     }
-
-    @Before
-    public void setUp() {
-        client = Client.create();
-        client.setFollowRedirects(false);
-
-        itinerariesWebResource = client.resource(ITINERARY_RESOURCE_STR);
-
-    }
-
-    @After
-    public void tearDown() {
-    }
-
+    
     @Test
     public void testP1() {
 
@@ -72,7 +48,7 @@ public class TestTravelGoodRESTOfficial {
         // getting our itinerary to verify
         Itinerary itRet = client.resource(createResponse.getLocation()).get(Itinerary.class);
 
-        testItinerary(itRet, it.getUserId(), ItineraryStatus.PLANNING, 0, 0);
+        testValidItinerary(itRet, it.getUserId(), ItineraryStatus.PLANNING, 0, 0);
 
         // getting itinerary id
         String idStr = getId(createResponse.getLocation());
@@ -109,7 +85,7 @@ public class TestTravelGoodRESTOfficial {
 
         // getting our itinerary to verify
         itRet = client.resource(createResponse.getLocation()).get(Itinerary.class);
-        testItinerary(itRet, it.getUserId(), ItineraryStatus.PLANNING, 2, 3);
+        testValidItinerary(itRet, it.getUserId(), ItineraryStatus.PLANNING, 2, 3);
 
 
         // booking
@@ -121,7 +97,7 @@ public class TestTravelGoodRESTOfficial {
 
         // verifying that the status has changed
         itRet = client.resource(createResponse.getLocation()).get(Itinerary.class);
-        testItinerary(itRet, it.getUserId(), ItineraryStatus.BOOKED, 2, 3);
+        testValidItinerary(itRet, it.getUserId(), ItineraryStatus.BOOKED, 2, 3);
 
     }
 
@@ -140,7 +116,7 @@ public class TestTravelGoodRESTOfficial {
 
         // getting our itinerary
         Itinerary itRet = client.resource(createResponse.getLocation()).get(Itinerary.class);
-        testItinerary(itRet, it.getUserId(), ItineraryStatus.PLANNING, 0, 0);
+        testValidItinerary(itRet, it.getUserId(), ItineraryStatus.PLANNING, 0, 0);
         
         // getting itinerary id
         String idStr = getId(createResponse.getLocation());
@@ -153,7 +129,7 @@ public class TestTravelGoodRESTOfficial {
 
         // getting our itinerary
         itRet = client.resource(createResponse.getLocation()).get(Itinerary.class);
-        testItinerary(itRet, it.getUserId(), ItineraryStatus.PLANNING, 0, 1);
+        testValidItinerary(itRet, it.getUserId(), ItineraryStatus.PLANNING, 0, 1);
 
         // cancel planning
         ClientResponse cancelPlanningResponse = cancelPlanning(idStr);
@@ -180,7 +156,7 @@ public class TestTravelGoodRESTOfficial {
 
         // getting our itinerary
         Itinerary itRet = client.resource(createResponse.getLocation()).get(Itinerary.class);
-        testItinerary(itRet, it.getUserId(), ItineraryStatus.PLANNING, 0, 0);
+        testValidItinerary(itRet, it.getUserId(), ItineraryStatus.PLANNING, 0, 0);
 
         // getting itinerary id
         String idStr = getId(createResponse.getLocation());
@@ -208,7 +184,7 @@ public class TestTravelGoodRESTOfficial {
 
         // getting our itinerary
         itRet = client.resource(createResponse.getLocation()).get(Itinerary.class);
-        testItinerary(itRet, it.getUserId(), ItineraryStatus.PLANNING, 1, 2);
+        testValidItinerary(itRet, it.getUserId(), ItineraryStatus.PLANNING, 1, 2);
 
 
         // booking (should fail)
@@ -257,7 +233,7 @@ public class TestTravelGoodRESTOfficial {
 
         // getting our itinerary
         Itinerary itRet = client.resource(createResponse.getLocation()).get(Itinerary.class);
-        testItinerary(itRet, it.getUserId(), ItineraryStatus.PLANNING, 0, 0);
+        testValidItinerary(itRet, it.getUserId(), ItineraryStatus.PLANNING, 0, 0);
 
         // getting itinerary id
         String idStr = getId(createResponse.getLocation());
@@ -284,7 +260,7 @@ public class TestTravelGoodRESTOfficial {
 
         // getting our itinerary
         itRet = client.resource(createResponse.getLocation()).get(Itinerary.class);
-        testItinerary(itRet, it.getUserId(), ItineraryStatus.PLANNING, 1, 2);
+        testValidItinerary(itRet, it.getUserId(), ItineraryStatus.PLANNING, 1, 2);
 
 
         // booking
@@ -295,7 +271,7 @@ public class TestTravelGoodRESTOfficial {
 
         // getting our itinerary to verify
         itRet = client.resource(createResponse.getLocation()).get(Itinerary.class);
-        testItinerary(itRet, it.getUserId(), ItineraryStatus.BOOKED, 1, 2);
+        testValidItinerary(itRet, it.getUserId(), ItineraryStatus.BOOKED, 1, 2);
 
         // cancelling
         ClientResponse cancelItineraryResponse = cancelItinerary(idStr, ccInfo);
@@ -321,7 +297,7 @@ public class TestTravelGoodRESTOfficial {
 
         // getting our itinerary
         Itinerary itRet = client.resource(createResponse.getLocation()).get(Itinerary.class);
-        testItinerary(itRet, it.getUserId(), ItineraryStatus.PLANNING, 0, 0);
+        testValidItinerary(itRet, it.getUserId(), ItineraryStatus.PLANNING, 0, 0);
 
         // getting itinerary id
         String idStr = getId(createResponse.getLocation());
@@ -347,7 +323,7 @@ public class TestTravelGoodRESTOfficial {
 
         // getting our itinerary
         itRet = client.resource(createResponse.getLocation()).get(Itinerary.class);
-        testItinerary(itRet, it.getUserId(), ItineraryStatus.PLANNING, 1, 2);
+        testValidItinerary(itRet, it.getUserId(), ItineraryStatus.PLANNING, 1, 2);
 
 
         // booking
@@ -358,7 +334,7 @@ public class TestTravelGoodRESTOfficial {
 
         // getting our itinerary to verify
         itRet = client.resource(createResponse.getLocation()).get(Itinerary.class);
-        testItinerary(itRet, it.getUserId(), ItineraryStatus.BOOKED, 1, 2);
+        testValidItinerary(itRet, it.getUserId(), ItineraryStatus.BOOKED, 1, 2);
 
         // cancelling (should fail)
         ClientResponse cancelItineraryResponse = cancelItinerary(idStr, ccInfo);
@@ -392,162 +368,6 @@ public class TestTravelGoodRESTOfficial {
 
             }
         }
-
-
-    }
-
-    private String getId(URI resourceLocation) {
-        URI uri = resourceLocation;
-        String path = uri.getPath();
-        return path.substring(path.lastIndexOf('/') + 1);
-
-    }
-
-    private ClientResponse getItinerary(String itineraryId) {
-        URI uri = UriBuilder.fromUri(itinerariesWebResource.getURI())
-                .segment(itineraryId)
-                .build();
-
-        return client.resource(uri)
-                .get(ClientResponse.class);
-    }
-
-    private ClientResponse cancelPlanning(String itineraryId) {
-        URI uri = UriBuilder.fromUri(itinerariesWebResource.getURI())
-                .segment(itineraryId)
-                .build();
-
-        return client.resource(uri)
-                .delete(ClientResponse.class);
-    }
-
-    private ClientResponse bookItinerary(String itineraryId, CreditCardInfo ccInfo) {
-        URI uri = UriBuilder.fromUri(itinerariesWebResource.getURI())
-                .segment(itineraryId)
-                .segment("book")
-                .build();
-
-        return client.resource(uri)
-                .entity(ccInfo, MediaType.APPLICATION_XML)
-                .put(ClientResponse.class);
-    }
-
-    private ClientResponse cancelItinerary(String itineraryId, CreditCardInfo ccInfo) {
-        URI uri = UriBuilder.fromUri(itinerariesWebResource.getURI())
-                .segment(itineraryId)
-                .segment("status")
-                .build();
-
-        return client.resource(uri)
-                .entity(ccInfo, MediaType.APPLICATION_XML)
-                .put(ClientResponse.class);
-    }
-
-    private ClientResponse addHotel(String itineraryId, HotelBooking fb) {
-
-        URI uri = UriBuilder.fromUri(itinerariesWebResource.getURI())
-                .segment(itineraryId)
-                .segment("hotels")
-                .build();
-
-        return client.resource(uri)
-                .entity(fb, MediaType.APPLICATION_XML)
-                .post(ClientResponse.class);
-    }
-
-    private ClientResponse addFlight(String itineraryId, FlightBooking fb) {
-
-        URI uri = UriBuilder.fromUri(itinerariesWebResource.getURI())
-                .segment(itineraryId)
-                .segment("flights")
-                .build();
-
-        return client.resource(uri)
-                .entity(fb, MediaType.APPLICATION_XML)
-                .post(ClientResponse.class);
-    }
-
-    private List<FlightBooking> getFlightList(String itineraryId, String cityFrom, String cityTo, String dateStr) {
-        // getting the list of flights
-        MultivaluedMap<String, String> params = new MultivaluedMapImpl();
-        params.add("cityFrom", cityFrom);
-        params.add("cityTo", cityTo);
-        params.add("date", dateStr);
-
-
-        URI uri = UriBuilder.fromUri(itinerariesWebResource.getURI())
-                .segment(itineraryId)
-                .segment("flights")
-                .build();
-
-        List<FlightBooking> fbList = client.resource(uri)
-                .queryParams(params)
-                .get(new GenericType<List<FlightBooking>>(){});
-
-        Assert.assertNotNull(fbList);
-        Assert.assertTrue(!fbList.isEmpty());
-
-        return fbList;
-
-    }
-
-    private List<HotelBooking> getHotelList(String itineraryId, String city, String dateFromStr, String dateToStr) {
-        // getting the list of flights
-        MultivaluedMap<String, String> params = new MultivaluedMapImpl();
-        params.add("city", city);
-        params.add("dateFrom", dateFromStr);
-        params.add("dateTo", dateToStr);
-
-
-        URI uri = UriBuilder.fromUri(itinerariesWebResource.getURI())
-                .segment(itineraryId)
-                .segment("hotels")
-                .build();
-
-        List<HotelBooking> fbList = client.resource(uri)
-                .queryParams(params)
-                .get(new GenericType<List<HotelBooking>>(){});
-
-        Assert.assertNotNull(fbList);
-        Assert.assertTrue(!fbList.isEmpty());
-
-        return fbList;
-
-    }
-
-    private void testItinerary(Itinerary it, String expectedUserId, ItineraryStatus expectedStatus, int expHotelBookingQuantity, int expFlightBookingQuantity) {
-        Assert.assertNotNull(it);
-
-        Assert.assertEquals(expectedUserId, it.getUserId());
-        Assert.assertEquals(expectedStatus, it.getCurrentStatus());
-
-        Assert.assertEquals(expHotelBookingQuantity, it.getHotelBookingList().size());
-        Assert.assertEquals(expFlightBookingQuantity, it.getFlightBookingList().size());
-
-        BookingStatus expBookingStatus;
-        if (expectedStatus == ItineraryStatus.PLANNING) {
-            expBookingStatus = BookingStatus.UNCONFIRMED;
-
-        } else {
-            expBookingStatus = BookingStatus.CONFIRMED;
-
-        }
-
-        for (Booking b : it.getHotelBookingList()) {
-            Assert.assertEquals(expBookingStatus, b.getBookingStatus());
-        }
-
-        for (Booking b : it.getFlightBookingList()) {
-            Assert.assertEquals(expBookingStatus, b.getBookingStatus());
-        }
-
-    }
-
-    private void printClientRespone(ClientResponse response) {
-        System.out.println("Status: " + response.getStatus());
-        System.out.println("Location: " + response.getLocation());
-        System.out.println("ResponseType: " + response.getType());
-        System.out.println();
 
     }
 
