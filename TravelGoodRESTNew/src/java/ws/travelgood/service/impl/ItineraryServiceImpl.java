@@ -12,6 +12,7 @@ import ws.travelgood.dao.TravelGoodDAO;
 import ws.travelgood.domain.Itinerary;
 import ws.travelgood.domain.ItineraryStatus;
 import ws.travelgood.domain.banking.CreditCardInfo;
+import ws.travelgood.domain.banking.ExpirationDate;
 import ws.travelgood.domain.booking.AbstractBooking;
 import ws.travelgood.domain.booking.BookingStatus;
 import ws.travelgood.domain.booking.FlightBooking;
@@ -54,12 +55,42 @@ public class ItineraryServiceImpl implements ItineraryService {
         return SingletonHolder.INSTANCE;
     }
 
-    public List<Itinerary> getUserItineraries(String customerId) {
-        return itineraryDao.getItineraries(customerId);
+    public List<Itinerary> getUserItineraries(String cid) {
+        
+        List<Itinerary> itList = itineraryDao.getItineraries(cid);
+
+        if (ExpirationUtils.ENABLED) {
+
+            boolean changed = false;
+
+            for (Itinerary it : itList) {
+                if (ExpirationUtils.isExpired(it)) {
+                    itineraryDao.deleteItinerary(cid, it.getId());
+                    changed = true;
+                }
+            }
+            
+            if (changed) {
+                return itineraryDao.getItineraries(cid);
+            } else {
+                return itList;
+            }
+
+        } else {
+            return itList;
+        }
     }
 
     public Itinerary getItinerary(String cid, String iid) {
-        return itineraryDao.getItinerary(cid, iid);
+        Itinerary it = itineraryDao.getItinerary(cid, iid);
+
+        if (ExpirationUtils.isExpired(it)) {
+            itineraryDao.deleteItinerary(cid, iid);
+            return null;
+
+        }
+
+        return it;
     }
 
     public Itinerary createItinerary(String cid, final Itinerary it) {
@@ -169,6 +200,13 @@ public class ItineraryServiceImpl implements ItineraryService {
             // cannot cancel as it is not in booked phase
             return false;
 
+        }
+
+        if (!ExpirationUtils.canBeCancelled(it)) {
+            // remove
+            itineraryDao.deleteItinerary(cid, iid);
+
+            throw new NullPointerException();
         }
 
         List<AbstractBooking> failedBookingCancels = cancelAllBookings(it, ccInfo);

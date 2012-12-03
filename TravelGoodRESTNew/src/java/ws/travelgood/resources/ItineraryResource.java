@@ -190,6 +190,9 @@ public class ItineraryResource {
 
             return Response.ok(new ItineraryStatusRepresentation(null)).build();
 
+        } catch (NullPointerException e) {
+            return Response.status(Status.NOT_FOUND).build();
+
         } catch (BookingException e) {
             // cancel failed
             return Response.status(502).entity(e.getMessage()).type(

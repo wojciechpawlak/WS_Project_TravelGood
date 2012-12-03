@@ -66,7 +66,7 @@ public class NiceViewManager implements HotelManager {
         List<HotelBooking> hbList = new ArrayList<HotelBooking>();
 
         for (HotelType ht : result.getHotel()) {
-            hbList.add(toHotelBooking(ht));
+            hbList.add(toHotelBooking(ht, dateFrom, dateTo, cityName));
 
         }
 
@@ -114,7 +114,7 @@ public class NiceViewManager implements HotelManager {
         }
     }
 
-    private HotelBooking toHotelBooking(HotelType ht) {
+    private HotelBooking toHotelBooking(HotelType ht, Date dateFrom, Date dateTo, String city) {
         return new HotelBooking(
                 null,
                 ht.getBookingNumber(),
@@ -123,6 +123,9 @@ public class NiceViewManager implements HotelManager {
                 new Address(ht.getHotelAddress().getStreet(),
                     ht.getHotelAddress().getPostcode(),
                     ht.getHotelAddress().getCity())
-                , ht.isIfCreditCardRequired());
+                , ht.isIfCreditCardRequired(),
+                dateFrom,
+                dateTo,
+                city);
     }
 }
