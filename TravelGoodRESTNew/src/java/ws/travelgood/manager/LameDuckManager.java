@@ -74,12 +74,12 @@ public class LameDuckManager implements FlightManager {
 
     }
 
-    public boolean bookFlight(String bookingNumber, CreditCardInfo ccInfo) throws
+    public boolean book(FlightBooking booking, CreditCardInfo ccInfo) throws
             BookingException {
 
         try {
             RequestBookFlightType input = new RequestBookFlightType();
-            input.setBookingNumber(bookingNumber);
+            input.setBookingNumber(booking.getBookingNumber());
 
             CreditCardInfoWrapperType ccit = new CreditCardInfoWrapperType();
             ccit.setName(ccInfo.getName());
@@ -97,19 +97,19 @@ public class LameDuckManager implements FlightManager {
         } catch (BookFlightFault e) {
             // booking failed due to wrong credit card info
             throw new BookingException("Flight Booking [bookingNumber=" +
-                    bookingNumber + "] failed", e);
+                    booking.getBookingNumber() + "] failed", e);
             
         }
 
     }
 
-    public boolean cancelFlight(String bookingNumber, double price, CreditCardInfo ccInfo) throws BookingException {
+    public boolean cancel(FlightBooking booking, CreditCardInfo ccInfo) throws BookingException {
 
         try {
             
             RequestCancelFlightType input = new RequestCancelFlightType();
-            input.setBookingNumber(bookingNumber);
-            input.setPrice(price);
+            input.setBookingNumber(booking.getBookingNumber());
+            input.setPrice(booking.getPrice());
 
             CreditCardInfoWrapperType ccInfoWrapper = new CreditCardInfoWrapperType();
             ccInfoWrapper.setName(ccInfo.getName());
@@ -127,8 +127,8 @@ public class LameDuckManager implements FlightManager {
             return true;
 
         } catch (CancelFlightFault e) {
-            throw new BookingException("Cancel failed for HotelBooking[bookingNumber=" +
-                    bookingNumber + "]", e);
+            throw new BookingException("Cancel failed for FlightBooking[bookingNumber=" +
+                    booking.getBookingNumber() + "]", e);
 
         }
 

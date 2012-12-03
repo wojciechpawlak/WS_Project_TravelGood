@@ -111,7 +111,7 @@ public class ItineraryServiceImpl implements ItineraryService {
             for (HotelBooking hb : it.getHotelBookingList()) {
                 if (!BookingStatus.CONFIRMED.equals(hb.getBookingStatus())) {
 
-                    this.niceViewManager.bookHotel(hb.getBookingNumber(), ccInfo);
+                    this.niceViewManager.book(hb, ccInfo);
                     hb.setBookingStatus(BookingStatus.CONFIRMED);
 
                 }
@@ -121,7 +121,7 @@ public class ItineraryServiceImpl implements ItineraryService {
             for (FlightBooking fb : it.getFlightBookingList()) {
                 if (!BookingStatus.CONFIRMED.equals(fb.getBookingStatus())) {
 
-                    this.lameDuckManager.bookFlight(fb.getBookingNumber(), ccInfo);
+                    this.lameDuckManager.book(fb, ccInfo);
                     fb.setBookingStatus(BookingStatus.CONFIRMED);
 
                 }
@@ -215,7 +215,7 @@ public class ItineraryServiceImpl implements ItineraryService {
             if (BookingStatus.CONFIRMED.equals(hb.getBookingStatus())) {
                 try {
                     
-                    niceViewManager.cancelHotel(hb.getBookingNumber());
+                    niceViewManager.cancel(hb, ccInfo);
                     hb.setBookingStatus(BookingStatus.CANCELLED);
 
                 } catch (BookingException e) {
@@ -231,7 +231,7 @@ public class ItineraryServiceImpl implements ItineraryService {
             if (BookingStatus.CONFIRMED.equals(fb.getBookingStatus())) {
                 try {
 
-                    lameDuckManager.cancelFlight(fb.getBookingNumber(), fb.getPrice(), ccInfo);
+                    lameDuckManager.cancel(fb, ccInfo);
                     fb.setBookingStatus(BookingStatus.CANCELLED);
 
                 } catch (BookingException e) {

@@ -74,7 +74,7 @@ public class NiceViewManager implements HotelManager {
 
     }
 
-    public boolean bookHotel(String bookingNumber, CreditCardInfo ccInfo) throws
+    public boolean book(HotelBooking booking, CreditCardInfo ccInfo) throws
             BookingException {
 
         try {
@@ -88,28 +88,28 @@ public class NiceViewManager implements HotelManager {
             edt.setYear(ccInfo.getExpirationDate().getYear());
             ccit.setExpirationDate(edt);
 
-            return port.bookHotel(bookingNumber, ccit);
+            return port.bookHotel(booking.getBookingNumber(), ccit);
 
         } catch (BookHotelCreditCardFault e) {
             // booking failed due to wrong credit card info
             throw new BookingException("Hotel Booking [bookingNumber=" +
-                    bookingNumber + "] failed - credit card info rejected", e);
+                    booking.getBookingNumber() + "] failed - credit card info rejected", e);
 
         } catch (BookHotelFault e) {
             throw new BookingException("Hotel Booking [bookingNumber=" +
-                    bookingNumber + "] failed - internal error", e);
+                    booking.getBookingNumber() + "] failed - internal error", e);
         }
 
     }
 
-    public boolean cancelHotel(String bookingNumber) throws BookingException {
+    public boolean cancel(HotelBooking booking, CreditCardInfo ccInfo) throws BookingException {
         try {
-            port.cancelHotel(bookingNumber);
+            port.cancelHotel(booking.getBookingNumber());
             return true;
 
         } catch (CancelHotelFault e) {
             throw new BookingException("Cancel failed for HotelBooking[bookingNumber=" +
-                    bookingNumber + "]", e);
+                    booking.getBookingNumber() + "]", e);
 
         }
     }
