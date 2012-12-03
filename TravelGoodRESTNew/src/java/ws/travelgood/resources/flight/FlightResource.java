@@ -5,17 +5,14 @@
 
 package ws.travelgood.resources.flight;
 
-import java.net.URI;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
-import javax.ws.rs.core.UriBuilder;
 import javax.ws.rs.core.UriInfo;
 import ws.travelgood.domain.booking.FlightBooking;
-import ws.travelgood.resources.ItinerariesResource;
 import ws.travelgood.service.FlightService;
 import ws.travelgood.service.impl.FlightBookingServiceImpl;
 import ws.travelgood.statuses.FlightStatusRepresentation;

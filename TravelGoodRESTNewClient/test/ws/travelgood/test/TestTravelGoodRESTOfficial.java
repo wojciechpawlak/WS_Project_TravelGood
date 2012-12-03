@@ -22,6 +22,7 @@ import ws.travelgood.statuses.ItineraryStatusRepresentation;
 /**
  *
  * @author mkucharek
+ * @author wpawlak
  */
 public class TestTravelGoodRESTOfficial extends AbstractTravelGoodRESTTest {
 

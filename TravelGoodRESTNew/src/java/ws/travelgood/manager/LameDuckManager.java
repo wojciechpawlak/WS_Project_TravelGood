@@ -28,7 +28,7 @@ import ws.travelgood.domain.booking.FlightBooking;
 
 /**
  *
- * @author mkucharek
+ * @author tgherghescu
  */
 public class LameDuckManager implements FlightManager {
 

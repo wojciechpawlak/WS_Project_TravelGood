@@ -18,6 +18,7 @@ import ws.travelgood.service.FlightService;
 /**
  *
  * @author mkucharek
+ * @author tgherghescu
  */
 public class FlightBookingServiceImpl extends AbstractBookingService<FlightBooking> implements FlightService {
 

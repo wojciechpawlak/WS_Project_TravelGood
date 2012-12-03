@@ -32,6 +32,9 @@ import ws.travelgood.statuses.ItineraryStatusStatusRepresentation;
  * REST Web Service
  *
  * @author mkucharek
+ * @author wpawlak
+ * @author tgherghescu
+ * @author kbarre
  */
 public class ItineraryResource {
 

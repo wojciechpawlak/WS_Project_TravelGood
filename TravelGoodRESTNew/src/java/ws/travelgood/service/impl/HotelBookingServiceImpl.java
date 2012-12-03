@@ -18,6 +18,7 @@ import ws.travelgood.service.HotelService;
 /**
  *
  * @author mkucharek
+ * @author wpawlak
  */
 public class HotelBookingServiceImpl extends AbstractBookingService<HotelBooking> implements HotelService {
 

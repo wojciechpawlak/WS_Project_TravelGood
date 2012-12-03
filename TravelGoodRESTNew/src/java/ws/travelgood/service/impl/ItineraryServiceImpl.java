@@ -12,7 +12,6 @@ import ws.travelgood.dao.TravelGoodDAO;
 import ws.travelgood.domain.Itinerary;
 import ws.travelgood.domain.ItineraryStatus;
 import ws.travelgood.domain.banking.CreditCardInfo;
-import ws.travelgood.domain.banking.ExpirationDate;
 import ws.travelgood.domain.booking.AbstractBooking;
 import ws.travelgood.domain.booking.BookingStatus;
 import ws.travelgood.domain.booking.FlightBooking;
@@ -26,6 +25,9 @@ import ws.travelgood.service.ItineraryService;
 /**
  *
  * @author mkucharek
+ * @author wpawlak
+ * @author tgherghescu
+ * @author kbarre
  */
 public class ItineraryServiceImpl implements ItineraryService {
 
