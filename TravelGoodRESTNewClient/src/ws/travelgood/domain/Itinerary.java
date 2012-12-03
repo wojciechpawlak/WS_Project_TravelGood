@@ -5,6 +5,7 @@
 package ws.travelgood.domain;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
 import ws.travelgood.domain.booking.FlightBooking;
 import ws.travelgood.domain.booking.HotelBooking;
@@ -32,7 +33,7 @@ public class Itinerary extends AbstractEntity {
     }
 
     public Itinerary(String id, ItineraryStatus status) {
-        this(id, status, new ArrayList<HotelBooking>(),  new ArrayList<FlightBooking>());
+        this(id, status, new ArrayList<HotelBooking>(), new ArrayList<FlightBooking>());
 
     }
 
@@ -48,8 +49,16 @@ public class Itinerary extends AbstractEntity {
     public Itinerary(Itinerary it) {
         this(it.getId(),
                 it.currentStatus,
-                it.hotelBookingList,
-                it.flightBookingList);
+                new ArrayList<HotelBooking>(),
+                new ArrayList<FlightBooking>());
+
+        for (HotelBooking hb : it.hotelBookingList) {
+            this.hotelBookingList.add(new HotelBooking(hb));
+        }
+
+        for (FlightBooking fb : it.flightBookingList) {
+            this.flightBookingList.add(new FlightBooking(fb));
+        }
     }
 
     @Override
@@ -175,5 +184,5 @@ public class Itinerary extends AbstractEntity {
                 "hotelBookingList = " + this.hotelBookingList + "; " +
                 "flightBookingList = " + this.flightBookingList +"]";
     }
-
+    
 }

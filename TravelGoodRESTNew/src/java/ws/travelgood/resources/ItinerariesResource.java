@@ -4,15 +4,19 @@
  */
 package ws.travelgood.resources;
 
+import java.util.List;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.Path;
 import javax.ws.rs.GET;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
+import ws.travelgood.domain.Itinerary;
 import ws.travelgood.service.ItineraryService;
 import ws.travelgood.service.impl.ItineraryServiceImpl;
-import ws.travelgood.types.ItinerariesRepresentation;
+import ws.travelgood.statuses.ItinerariesStatusRepresentation;
 
 /**
  * REST Web Service
@@ -33,13 +37,22 @@ public class ItinerariesResource {
 
     @GET
     @Produces("application/xml")
-    public ItinerariesRepresentation getCurrentItineraries(@PathParam("cid") String cid) {
+    public Response getCurrentItineraries(@PathParam("cid") String cid) {
 
-        ItinerariesRepresentation isr = new ItinerariesRepresentation(itService.getUserItineraries(cid));
+        List<Itinerary> itList = itService.getUserItineraries(cid);
         
-        // set links
+        if (itList == null) {
+            return Response
+                    .status(Status.NOT_FOUND)
+                    .entity("User not found")
+                    .build();
+        }
 
-        return isr;
+        ItinerariesStatusRepresentation isr = new ItinerariesStatusRepresentation(itList);
+        
+        // set up links
+
+        return Response.ok(isr).build();
     }
 
     /**

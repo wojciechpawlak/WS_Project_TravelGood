@@ -1,4 +1,4 @@
-package ws.travelgood.types;
+package ws.travelgood.statuses;
 
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlRootElement;

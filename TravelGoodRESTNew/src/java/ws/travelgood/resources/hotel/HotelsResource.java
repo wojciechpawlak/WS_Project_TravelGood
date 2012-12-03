@@ -25,6 +25,8 @@ import javax.ws.rs.core.UriInfo;
 import ws.travelgood.domain.booking.HotelBooking;
 import ws.travelgood.service.HotelService;
 import ws.travelgood.service.impl.HotelBookingServiceImpl;
+import ws.travelgood.statuses.HotelStatusRepresentation;
+import ws.travelgood.statuses.HotelsStatusRepresentation;
 
 /**
  *
@@ -66,9 +68,11 @@ public class HotelsResource {
 
         List<HotelBooking> hbList = hbService.getAvailableBookings(dateFrom, dateTo, city);
 
-        // nasty hack - we need to return an array, because returning a list throws errors..
-        // probably because of old jersey library..
-        return Response.ok(hbList.toArray(new HotelBooking[hbList.size()])).build();
+        HotelsStatusRepresentation hs = new HotelsStatusRepresentation(hbList);
+
+        // set up links
+
+        return Response.ok(hs).build();
 
     }
 
@@ -80,13 +84,16 @@ public class HotelsResource {
 
         HotelBooking hb = hbService.addBooking(cid, iid, hotelBooking);
 
-        URI uri = UriBuilder
-                .fromPath(hb.getId())
-                .build();
+        if (hb == null) {
+            return Response.status(Status.BAD_REQUEST).build();
 
-        // we should return hotel here, not itinerary
+        }
 
-        return Response.created(uri).build();
+        HotelStatusRepresentation hs = new HotelStatusRepresentation(hb);
+
+        // set up links
+
+        return Response.status(Status.CREATED).entity(hs).build();
 
     }
 

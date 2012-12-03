@@ -24,8 +24,8 @@ import ws.travelgood.resources.hotel.HotelsResource;
 import ws.travelgood.service.InvalidStatusException;
 import ws.travelgood.service.ItineraryService;
 import ws.travelgood.service.impl.ItineraryServiceImpl;
-import ws.travelgood.types.ItineraryRepresentation;
-import ws.travelgood.types.ItineraryStatusRepresentation;
+import ws.travelgood.statuses.ItineraryStatusRepresentation;
+import ws.travelgood.statuses.ItineraryStatusStatusRepresentation;
 
 
 /**
@@ -61,7 +61,7 @@ public class ItineraryResource {
             
         }
 
-        ItineraryRepresentation ir = new ItineraryRepresentation(itService.
+        ItineraryStatusRepresentation ir = new ItineraryStatusRepresentation(itService.
                 getItinerary(cid, iid));
 
         // set up links
@@ -88,7 +88,11 @@ public class ItineraryResource {
 
         }
 
-        return Response.status(Status.CREATED).entity(itNew).build();
+        ItineraryStatusRepresentation is = new ItineraryStatusRepresentation(itNew);
+
+        // set up links
+
+        return Response.ok(is).build();
 
     }
 
@@ -101,7 +105,10 @@ public class ItineraryResource {
                     itService.deleteItinerary(cid, iid);
 
             if (deleted) {
-                return Response.ok().build();
+
+                // set up links
+
+                return Response.ok(new ItineraryStatusRepresentation(null)).build();
 
             } else {
                 return Response.status(Status.NOT_FOUND).build();
@@ -130,11 +137,10 @@ public class ItineraryResource {
                 return Response.status(Status.BAD_REQUEST).build();
             }
 
-//            URI uri = UriBuilder.fromResource(ItinerariesResource.class)
-//                    .segment(iid)
-//                    .build();
+            // set up links
 
-            return Response.ok().build();
+            return Response.ok(new ItineraryStatusStatusRepresentation(
+                    ws.travelgood.domain.ItineraryStatus.BOOKED)).build();
 
         } catch (BookingException e) {
             // booking failed, exception contains all the info
@@ -148,16 +154,21 @@ public class ItineraryResource {
     @GET
     @Path("status")
     @Produces("application/xml")
-    public ItineraryStatusRepresentation getStatus(@PathParam("cid") String cid,
+    public Response getStatus(@PathParam("cid") String cid,
             @PathParam("iid") String iid) {
 
         Itinerary it = itService.getItinerary(cid, iid);
 
-        ItineraryStatusRepresentation isr = new ItineraryStatusRepresentation(it.getCurrentStatus());
+        if (it == null) {
+            return Response.status(Status.NOT_FOUND).build();
+
+        }
+
+        ItineraryStatusStatusRepresentation iss = new ItineraryStatusStatusRepresentation(it.getCurrentStatus());
 
         // set up links
 
-        return isr;
+        return Response.ok(iss).build();
 
     }
 
@@ -175,7 +186,9 @@ public class ItineraryResource {
                 return Response.status(Status.BAD_REQUEST).build();
             }
 
-            return Response.ok().build();
+            // set up links
+
+            return Response.ok(new ItineraryStatusRepresentation(null)).build();
 
         } catch (BookingException e) {
             // cancel failed

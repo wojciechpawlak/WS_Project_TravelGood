@@ -1,17 +1,17 @@
-package ws.travelgood.types;
+package ws.travelgood.statuses;
 
 import javax.xml.bind.annotation.XmlRootElement;
 import ws.travelgood.domain.ItineraryStatus;
 
 @XmlRootElement()
-public class ItineraryStatusRepresentation extends Representation {
+public class ItineraryStatusStatusRepresentation extends AbstractStatusRepresentation {
 
     private ItineraryStatus itineraryStatus;
 
-    public ItineraryStatusRepresentation() {
+    public ItineraryStatusStatusRepresentation() {
     }
 
-    public ItineraryStatusRepresentation(ItineraryStatus itineraryStatus) {
+    public ItineraryStatusStatusRepresentation(ItineraryStatus itineraryStatus) {
         this.itineraryStatus = itineraryStatus;
     }
 

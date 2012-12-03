@@ -3,7 +3,7 @@
  * and open the template in the editor.
  */
 
-package ws.travelgood.types;
+package ws.travelgood.statuses;
 
 import java.util.List;
 import javax.xml.bind.annotation.XmlElement;
@@ -16,14 +16,14 @@ import ws.travelgood.domain.Itinerary;
  * @author mkucharek
  */
 @XmlRootElement
-public class ItinerariesRepresentation extends Representation {
+public class ItinerariesStatus extends AbstractStatus {
 
     private List<Itinerary> itineraryList;
 
-    public ItinerariesRepresentation() {
+    public ItinerariesStatus() {
     }
 
-    public ItinerariesRepresentation(List<Itinerary> itineraryList) {
+    public ItinerariesStatus(List<Itinerary> itineraryList) {
         this.itineraryList = itineraryList;
     }
 

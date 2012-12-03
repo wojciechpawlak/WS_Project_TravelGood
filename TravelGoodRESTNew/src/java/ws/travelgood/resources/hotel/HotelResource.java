@@ -14,6 +14,7 @@ import javax.ws.rs.core.UriInfo;
 import ws.travelgood.domain.booking.HotelBooking;
 import ws.travelgood.service.HotelService;
 import ws.travelgood.service.impl.HotelBookingServiceImpl;
+import ws.travelgood.statuses.HotelStatusRepresentation;
 
 /**
  *
@@ -30,11 +31,22 @@ public class HotelResource {
     }
 
     @GET
-    public HotelBooking getHotel(@PathParam("cid") String cid,
+    public Response getHotel(@PathParam("cid") String cid,
             @PathParam("iid") String iid,
             @PathParam("bid") String bid) {
 
-        return hbService.getBooking(cid, iid, bid);
+        HotelBooking hb = hbService.getBooking(cid, iid, bid);
+
+        if (hb == null) {
+            return Response.status(Status.NOT_FOUND).build();
+
+        }
+
+        HotelStatusRepresentation hs = new HotelStatusRepresentation(hb);
+
+        // set up links
+
+        return Response.ok(hs).build();
     }
 
     @DELETE
@@ -48,7 +60,11 @@ public class HotelResource {
             return Response.status(Status.BAD_REQUEST).build();
         }
 
-        return Response.ok().build();
+        HotelStatusRepresentation hs = new HotelStatusRepresentation(null);
+        
+        // set up links
+
+        return Response.ok(hs).build();
 
     }
 }

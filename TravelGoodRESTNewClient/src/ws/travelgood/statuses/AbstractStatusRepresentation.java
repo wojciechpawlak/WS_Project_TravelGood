@@ -1,10 +1,10 @@
-package ws.travelgood.types;
+package ws.travelgood.statuses;
 
 import java.util.ArrayList;
 import java.util.List;
 import javax.xml.bind.annotation.XmlElement;
 
-public abstract class Representation {
+public abstract class AbstractStatusRepresentation {
 
     @XmlElement(name = "link")
     private List<Link> links = new ArrayList<Link>();

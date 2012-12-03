@@ -17,7 +17,7 @@ import ws.travelgood.domain.booking.AbstractBooking;
 import ws.travelgood.domain.booking.BookingStatus;
 import ws.travelgood.domain.booking.FlightBooking;
 import ws.travelgood.domain.booking.HotelBooking;
-import ws.travelgood.types.ItineraryRepresentation;
+import ws.travelgood.statuses.ItineraryStatusRepresentation;
 
 /**
  *
@@ -49,7 +49,7 @@ public class SimpleTest extends AbstractTravelGoodRESTTest {
         // getting our itinerary to verify
         ClientResponse itRep = getItinerary(cid, iid);
 
-        ItineraryRepresentation ir = itRep.getEntity(ItineraryRepresentation.class);
+        ItineraryStatusRepresentation ir = itRep.getEntity(ItineraryStatusRepresentation.class);
 
         testValidItinerary(it, "", ItineraryStatus.PLANNING, 0, 0);
 
@@ -75,7 +75,7 @@ public class SimpleTest extends AbstractTravelGoodRESTTest {
         Assert.assertEquals(201, addFlightResponse.getStatus());
 
         // getting our itinerary to verify
-        Itinerary itRet = getItinerary(cid, iid).getEntity(ItineraryRepresentation.class).getItinerary();
+        Itinerary itRet = getItinerary(cid, iid).getEntity(ItineraryStatusRepresentation.class).getItinerary();
         testValidItinerary(itRet, "", ItineraryStatus.PLANNING, 1, 2);
 
 
@@ -87,7 +87,7 @@ public class SimpleTest extends AbstractTravelGoodRESTTest {
         Assert.assertEquals(200, bookItineraryResponse.getStatus());
 
         // verifying that the status has changed
-        itRet = getItinerary(cid, iid).getEntity(ItineraryRepresentation.class).getItinerary();
+        itRet = getItinerary(cid, iid).getEntity(ItineraryStatusRepresentation.class).getItinerary();
         testValidItinerary(itRet, "", ItineraryStatus.BOOKED, 1, 2);
 
         // cancelling (should fail)
@@ -95,7 +95,7 @@ public class SimpleTest extends AbstractTravelGoodRESTTest {
         Assert.assertEquals(502, cancelItineraryResponse.getStatus());
 
         // verifying manually
-        itRet = getItinerary(cid, iid).getEntity(ItineraryRepresentation.class).getItinerary();
+        itRet = getItinerary(cid, iid).getEntity(ItineraryStatusRepresentation.class).getItinerary();
 
         Assert.assertNotNull(itRet);
 

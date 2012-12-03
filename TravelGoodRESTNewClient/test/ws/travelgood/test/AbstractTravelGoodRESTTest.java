@@ -24,6 +24,8 @@ import ws.travelgood.domain.booking.AbstractBooking;
 import ws.travelgood.domain.booking.BookingStatus;
 import ws.travelgood.domain.booking.FlightBooking;
 import ws.travelgood.domain.booking.HotelBooking;
+import ws.travelgood.statuses.FlightsStatusRepresentation;
+import ws.travelgood.statuses.HotelsStatusRepresentation;
 
 /**
  *
@@ -162,14 +164,14 @@ public abstract class AbstractTravelGoodRESTTest {
                 .segment(FLIGHTS_SEGMENT)
                 .build();
 
-        List<FlightBooking> fbList = client.resource(uri)
+        FlightsStatusRepresentation fsr = client.resource(uri)
                 .queryParams(params)
-                .get(new GenericType<List<FlightBooking>>(){});
+                .get(FlightsStatusRepresentation.class);
 
-        Assert.assertNotNull(fbList);
-        Assert.assertTrue(!fbList.isEmpty());
+        Assert.assertNotNull(fsr.getBookingList());
+        Assert.assertTrue(!fsr.getBookingList().isEmpty());
 
-        return fbList;
+        return fsr.getBookingList();
 
     }
 
@@ -189,7 +191,7 @@ public abstract class AbstractTravelGoodRESTTest {
 
         List<HotelBooking> fbList = client.resource(uri)
                 .queryParams(params)
-                .get(new GenericType<List<HotelBooking>>(){});
+                .get(HotelsStatusRepresentation.class).getBookingList();
 
         Assert.assertNotNull(fbList);
         Assert.assertTrue(!fbList.isEmpty());

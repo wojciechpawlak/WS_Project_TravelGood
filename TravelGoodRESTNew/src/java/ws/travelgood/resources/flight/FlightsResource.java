@@ -4,7 +4,6 @@
  */
 package ws.travelgood.resources.flight;
 
-import java.net.URI;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -20,11 +19,12 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
-import javax.ws.rs.core.UriBuilder;
 import javax.ws.rs.core.UriInfo;
 import ws.travelgood.domain.booking.FlightBooking;
 import ws.travelgood.service.FlightService;
 import ws.travelgood.service.impl.FlightBookingServiceImpl;
+import ws.travelgood.statuses.FlightStatusRepresentation;
+import ws.travelgood.statuses.FlightsStatusRepresentation;
 
 /**
  *
@@ -64,10 +64,11 @@ public class FlightsResource {
 
         List<FlightBooking> fbList = fbService.getAvailableBookings(date, cityFrom, cityTo);
 
-        // nasty hack - we need to return an array, because returning a list throws errors..
-        // probably because of old jersey library..
-        return Response.ok(fbList.toArray(new FlightBooking[fbList.size()])).
-                build();
+        FlightsStatusRepresentation fs = new FlightsStatusRepresentation(fbList);
+
+        // set up links
+
+        return Response.ok(fs).build();
 
     }
 
@@ -82,11 +83,11 @@ public class FlightsResource {
             return Response.status(Status.BAD_REQUEST).build();
         }
 
-        URI uri = UriBuilder.fromPath(fb.getId()).build();
+        FlightStatusRepresentation fs = new FlightStatusRepresentation(fb);
 
-        // we should return flight here, not itinerary
+        // set up links
 
-        return Response.created(uri).build();
+        return Response.status(Status.CREATED).entity(fs).build();
 
 
     }

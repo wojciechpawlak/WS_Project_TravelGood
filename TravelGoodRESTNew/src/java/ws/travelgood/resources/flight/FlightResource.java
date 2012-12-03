@@ -18,6 +18,7 @@ import ws.travelgood.domain.booking.FlightBooking;
 import ws.travelgood.resources.ItinerariesResource;
 import ws.travelgood.service.FlightService;
 import ws.travelgood.service.impl.FlightBookingServiceImpl;
+import ws.travelgood.statuses.FlightStatusRepresentation;
 
 /**
  *
@@ -35,15 +36,27 @@ public class FlightResource {
     }
 
     @GET
-    public FlightBooking getHotel(@PathParam("cid") String cid,
+    public Response getFlight(@PathParam("cid") String cid,
             @PathParam("iid") String iid,
             @PathParam("bid") String bid) {
 
-        return fbService.getBooking(cid, iid, bid);
+        FlightBooking fb = fbService.getBooking(cid, iid, bid);
+
+        if (fb == null) {
+            return Response.status(Status.NOT_FOUND).build();
+
+        }
+
+        FlightStatusRepresentation fs = new FlightStatusRepresentation(fb);
+
+        // set up links
+
+        return Response.ok(fs).build();
+
     }
 
     @DELETE
-    public Response deleteHotel(@PathParam("cid") String cid, @PathParam("iid") String id, @PathParam(
+    public Response deleteFlight(@PathParam("cid") String cid, @PathParam("iid") String id, @PathParam(
             "bid") String bid) {
 
         boolean deleted = fbService.deleteBooking(cid, id, bid);
@@ -52,12 +65,11 @@ public class FlightResource {
             return Response.status(Status.BAD_REQUEST).build();
         }
 
-        URI uri = UriBuilder
-                .fromResource(ItinerariesResource.class)
-                .segment(id.toString())
-                .build();
+        FlightStatusRepresentation fs = new FlightStatusRepresentation(null);
 
-        return Response.temporaryRedirect(uri).build();
+        // set up links
+
+        return Response.ok(fs).build();
 
     }
     
