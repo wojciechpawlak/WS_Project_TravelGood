@@ -25,7 +25,7 @@ import ws.travelgood.statuses.ItineraryStatusRepresentation;
  */
 public class TestTravelGoodRESTOfficial extends AbstractTravelGoodRESTTest {
 
-    private final static String ITINERARY_RESOURCE_STR = "http://localhost:8080/TravelGoodRESTNew/resources";
+    private final static String ITINERARY_RESOURCE_STR = "http://localhost:8080/TravelGoodRESTNew/resources/itineraries";
 
     @Override
     protected String getItineraryResourceLocation() {

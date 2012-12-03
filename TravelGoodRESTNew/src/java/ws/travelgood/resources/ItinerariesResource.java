@@ -23,7 +23,7 @@ import ws.travelgood.statuses.ItinerariesStatusRepresentation;
  *
  * @author mkucharek
  */
-@Path("/{cid}")
+@Path("/itineraries/{cid}")
 public class ItinerariesResource {
 
     @Context
