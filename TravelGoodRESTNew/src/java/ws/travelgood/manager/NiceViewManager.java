@@ -26,6 +26,7 @@ import ws.travelgood.domain.booking.HotelBooking;
 
 /**
  *
+ * @author mkucharek
  * @author wpawlak
  */
 public class NiceViewManager implements HotelManager {

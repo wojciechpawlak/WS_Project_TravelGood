@@ -22,6 +22,7 @@ import ws.travelgood.statuses.ItinerariesStatusRepresentation;
  * REST Web Service
  *
  * @author mkucharek
+ * @author wpawlak
  */
 @Path("/itineraries/{cid}")
 public class ItinerariesResource {

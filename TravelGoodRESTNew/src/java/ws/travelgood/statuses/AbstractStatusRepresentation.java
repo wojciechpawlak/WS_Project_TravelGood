@@ -4,6 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.xml.bind.annotation.XmlElement;
 
+/**
+ *
+ * @author hub
+ */
 public abstract class AbstractStatusRepresentation {
 
     @XmlElement(name = "link")

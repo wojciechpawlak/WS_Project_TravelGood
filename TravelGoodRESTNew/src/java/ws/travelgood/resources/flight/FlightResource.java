@@ -20,6 +20,7 @@ import ws.travelgood.statuses.FlightStatusRepresentation;
 /**
  *
  * @author mkucharek
+ * @author kbarre
  */
 public class FlightResource {
 

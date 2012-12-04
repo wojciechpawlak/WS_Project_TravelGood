@@ -29,6 +29,7 @@ import ws.travelgood.statuses.HotelsStatusRepresentation;
 /**
  *
  * @author mkucharek
+ * @author kbarre
  */
 public class HotelsResource {
 

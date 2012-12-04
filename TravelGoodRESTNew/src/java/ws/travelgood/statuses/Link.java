@@ -3,6 +3,10 @@ package ws.travelgood.statuses;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlRootElement;
 
+/**
+ *
+ * @author hub
+ */
 @XmlRootElement()
 public class Link {
 
